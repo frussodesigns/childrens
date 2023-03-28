@@ -31,7 +31,7 @@ useEffect(() => {
   return (
     <Pressable style={{height:'100%', backgroundColor:'red'}} onHoverIn={handlePressableHoverIn} onHoverOut={handlePressableHoverOut}>
     <View style={{flexDirection:'column', justifyContent:'center', backgroundColor:'#F9F9F9', height: '100%'}}>
-        <View>{isHovered ? <Text>The Pressable is being hovered over!</Text> : null}</View>
+        <View>{isHovered ? <Text>The menu is being hovered over!</Text> : null}</View>
         <View style={{height: 20}} ></View>
         <View style={{width: width, height: 80, backgroundColor: '', alignSelf:'center'}} >
         <Image source={require('../assets/-logo.png')} style={{flex: 1, width: null, height: null, resizeMode: 'contain'}} />
