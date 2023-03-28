@@ -20,6 +20,7 @@ import LineChart from '../components/LineChart';
 import NodePolyfillPlugin from "node-polyfill-webpack-plugin";
 import { WithSkiaWeb } from "@shopify/react-native-skia/lib/module/web";
 import { version } from 'canvaskit-wasm/package.json';
+import { useFonts } from 'expo-font';
 
 
 const specs = {
@@ -441,6 +442,9 @@ const color1 = '#F9F9F9'
 
 
 const index = () => {
+  const [fontsLoaded] = useFonts({
+    'Rubik': require('../assets/fonts/Rubik-Regular.ttf'),
+  });
 
   const [modalVisible, setModalVisible] = useState(false)
   const [modalId, setModalId] = useState(-1)
@@ -460,7 +464,7 @@ const index = () => {
             <View style={{flexDirection:'row',}}>
 
               <View style={{left: 11, margin: 10}}>
-                <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17}} >ENTRIES</Text>
+                <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >ENTRIES</Text>
               </View>
               <View style={{height:'1em', width:'1em', backgroundColor:'', alignSelf:'center', marginLeft:'auto', marginRight:0}}>
                 <SvgArrow style={{transform: [{ rotateZ: '-90deg' }], color: 'green' }} />
@@ -485,7 +489,7 @@ const index = () => {
               <View style={{flexDirection:'row',}}>
 
                 <View style={{left: 11, margin: 10}}>
-                  <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17}} >PASSPORTS</Text>
+                  <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >PASSPORTS</Text>
                 </View>
                 <View style={{height:'1em', width:'1em', backgroundColor:'', alignSelf:'center', marginLeft:'auto', marginRight:0}}>
                   <SvgArrow style={{transform: [{ rotateZ: '90deg' }], color: 'red' }} />
@@ -510,7 +514,7 @@ const index = () => {
               <View style={{flexDirection:'row',}}>
 
                 <View style={{left: 11, margin: 10, flex:1}}>
-                  <Text numberOfLines={1} style={{color:'grey', fontWeight: 'bold', fontSize: 17,}} >SOCIAL SECURITY CARDS</Text>
+                  <Text numberOfLines={1} style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >SOCIAL SECURITY CARDS</Text>
                 </View>
                 <View style={{height:'1em', width:'1em', backgroundColor:'', alignSelf:'center', marginLeft:'auto', marginRight:0}}>
                   <SvgArrow style={{transform: [{ rotateZ: '-90deg' }], color: 'green' }} />
@@ -535,7 +539,7 @@ const index = () => {
               <View style={{flexDirection:'row',}}>
 
                 <View style={{left: 11, margin: 10}}>
-                  <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17}} >PASSPORTS</Text>
+                  <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >STATE ID's</Text>
                 </View>
                 <View style={{height:'1em', width:'1em', backgroundColor:'', alignSelf:'center', marginLeft:'auto', marginRight:0}}>
                   <SvgArrow style={{transform: [{ rotateZ: '-90deg' }], color: 'green' }} />
@@ -568,7 +572,7 @@ const index = () => {
         <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
           <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
               <View style={{left: 11, margin: 10}}>
-                <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17}} >OVERVIEW</Text>
+                <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >OVERVIEW</Text>
               </View>
               <View style={{alignSelf:'center', marginTop:30}}>
                 <AnimatedCircularProgress
@@ -579,7 +583,7 @@ const index = () => {
                 rotation={0}
                 tintColor="#00e0ff"
                 onAnimationComplete={() => console.log('onAnimationComplete')}
-                backgroundColor="#3d5875">
+                backgroundColor="#7795b5">
                    {
                       (fill) => (
                         <Text style={{fontSize:30, color:"#00e0ff"}}>
@@ -613,10 +617,16 @@ const index = () => {
         <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
           <View style={{flexDirection:'column', width: '100%', height: '100%'}}>
               <View style={{left: 11, margin: 10}}>
-                <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17}} >CHART</Text>
+                <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >CHART</Text>
               </View>
               <View style={{width:'100%', height:'80%', backgroundColor:'', flex:1, alignContent:'center'}}>
                 <MyChart data={data} />
+                {/* <LineChart /> */}
+                {/* <WithSkiaWeb
+                  opts={{ locateFile: (file) => `https://cdn.jsdelivr.net/npm/canvaskit-wasm@${version}/bin/full/${file}` }}
+                  getComponent={() => import("../components/LineChart")}
+                  fallback={<Text>Loading Skia...</Text>}
+                /> */}
               </View>
           </View>
         </View>
@@ -627,7 +637,7 @@ const index = () => {
         <View style={[styles.secondShadow, {flex:1, flexDirection:'row', borderRadius:12}]}>
             <View style={{flexDirection:'column', width: '100%'}}>
               <View style={{left: 11, margin: 10}}>
-                <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17}} >DATA</Text>
+                <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >DATA</Text>
               </View>
               <MyTable obj={obj} columns={columns} width='100%' height='90%' sc={4} sr={0} handlePress={handlePress} />
             </View>

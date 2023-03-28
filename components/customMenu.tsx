@@ -1,8 +1,14 @@
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native'
 import { Link } from "expo-router"
 import React, {useState, useEffect} from 'react'
+import { useFonts } from 'expo-font';
+
 
 const CustomMenu = () => {
+    const [fontsLoaded] = useFonts({
+        'Rubik': require('../assets/fonts/Rubik-Regular.ttf'),
+      });
+
     const [isHovered, setIsHovered] = useState(false)
     const [width, setWidth] = useState('4em')
 
@@ -36,28 +42,28 @@ useEffect(() => {
             <Link href="/">
                 <View style={[styles.neu, {flex: 1, justifyContent: 'center', alignSelf: 'center', backgroundColor: 'white', width: '90%', height: '2.5em', borderRadius: 6, marginLeft: 10, marginRight: 10, marginTop: 10, }]}>
                     <View style={[styles.secondShadow, {padding:0, margin:0, flex: 1, borderRadius: 6, justifyContent: 'center',}]}>
-                    <Text style={{textAlign: 'center'}}>Home</Text>
+                    <Text style={{textAlign: 'center', fontFamily: 'Rubik', color:'grey'}}>Home</Text>
                 </View>
                 </View>
             </Link>
             <Link href="/documents">
                 <View style={[styles.neu, {flex: 1, justifyContent: 'center', alignSelf: 'center', backgroundColor: 'white', width: '90%', height: '2.5em', borderRadius: 6, marginLeft: 10, marginRight: 10, marginTop: 10, }]}>
                     <View style={[styles.secondShadow, {padding:0, margin:0, flex: 1, borderRadius: 6, justifyContent: 'center',}]}>
-                    <Text style={{textAlign: 'center'}}>Document Tracking</Text>
+                    <Text style={{textAlign: 'center', fontFamily: 'Rubik', color:'grey'}}>Document Tracking</Text>
                 </View>
                 </View>
             </Link>
             <Link href="/adoption">
                 <View style={[styles.neu, {flex: 1, justifyContent: 'center', alignSelf: 'center', backgroundColor: 'white', width: '90%', height: '2.5em', borderRadius: 6, marginLeft: 10, marginRight: 10, marginTop: 10, }]}>
                     <View style={[styles.secondShadow, {padding:0, margin:0, flex: 1, borderRadius: 6, justifyContent: 'center',}]}>
-                    <Text style={{textAlign: 'center'}}>Adoption</Text>
+                    <Text style={{textAlign: 'center', fontFamily: 'Rubik', color:'grey'}}>Adoption</Text>
                     </View>
                 </View>
             </Link>
             <Link href="/kingap">
                 <View style={[styles.neu, {flex: 1, justifyContent: 'center', alignSelf: 'center', backgroundColor: 'white', width: '90%', height: '2.5em', borderRadius: 6, marginLeft: 10, marginRight: 10, marginTop: 10, }]}>
                     <View style={[styles.secondShadow, {padding:0, margin:0, flex: 1, borderRadius: 6, justifyContent: 'center',}]}>
-                    <Text style={{textAlign: 'center'}}>KinGap</Text>
+                    <Text style={{textAlign: 'center', fontFamily: 'Rubik', color:'grey'}}>KinGap</Text>
                     </View>
                 </View>
             </Link>
@@ -69,7 +75,7 @@ useEffect(() => {
                     <View style={[styles.secondShadow, {flexDirection: 'row', padding:0, margin:0, flex: 1, borderRadius: 65, justifyContent: 'flex-start'}]}>
                         <View style={{backgroundColor:'rgb(242,242,242)', top: 8, left: 8, height: 50, width: 50, borderRadius: 65, }}></View>
                         <View style={{alignSelf: 'center', marginLeft:15}}>
-                        <Text style={{alignSelf: 'center', textAlign: 'center'}}>Account</Text>
+                        <Text style={{alignSelf: 'center', textAlign: 'center', fontFamily: 'Rubik', color:'black'}}>Account</Text>
                         </View>
                     </View>
                     </View>

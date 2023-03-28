@@ -10,7 +10,7 @@ const circularProgress = () => {
     size={120}
     width={15}
     fill={100}
-    tintColor="#00e0ff"
+    tintColor="red"
     onAnimationComplete={() => console.log('onAnimationComplete')}
     backgroundColor="#3d5875" />
   )

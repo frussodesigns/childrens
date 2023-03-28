@@ -48,7 +48,7 @@ const MyChart = (data) => {
     }
   }, [data])
   
-  
+  const screenWidth = Dimensions.get("window").width;
 
 
   return (
@@ -62,20 +62,20 @@ const MyChart = (data) => {
             datasets: [
               {
                 data: [
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100,
-                  Math.random() * 100
+                  120,
+                  210,
+                  240,
+                  288,
+                  340,
+                  450
                 ]
               }
             ]
           }}
-          width={Dimensions.get("window").width/2} // from react-native
+          width={screenWidth/2} // from react-native
           height={280}
-          yAxisLabel="$"
-          yAxisSuffix="k"
+          yAxisLabel=""
+          yAxisSuffix=""
           yAxisInterval={1} // optional, defaults to 1
           chartConfig={{
             backgroundColor: "#e26a00",

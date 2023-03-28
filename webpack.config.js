@@ -1,33 +1,26 @@
-const createExpoWebpackConfigAsync = require('@expo/webpack-config');
-const CopyPlugin = require("copy-webpack-plugin");
-const NodePolyfillPlugin = require('node-polyfill-webpack-plugin');
+import CopyPlugin from "copy-webpack-plugin";
+import NodePolyfillPlugin from "node-polyfill-webpack-plugin";
 
-// Expo CLI will await this method so you can optionally return a promise.
-module.exports = async function (env, argv) {
+const newConfiguration = {
+  ...currentConfiguration,
   plugins: [
+    ...currentConfiguration.plugins,
+    // 1. Make the wasm file available to the build system
     new CopyPlugin({
       patterns: [
-        { from: "source", to: "dest" },
-        { from: "other", to: "public" },
+        {
+          from: "node_modules/canvaskit-wasm/bin/full/canvaskit.wasm",
+        },
       ],
     }),
+    // 2. Polyfill fs and path module from node
     new NodePolyfillPlugin()
-  ]
-
-  const config = await createExpoWebpackConfigAsync(env, argv);
-  // If you want to add a new alias to the config.
-  config.resolve.alias['moduleA'] = 'moduleB';
-
-  // Maybe you want to turn off compression in dev mode.
-  if (config.mode === 'development') {
-    config.devServer.compress = false;
-  }
-
-  // Or prevent minimizing the bundle when you build.
-  if (config.mode === 'production') {
-    config.optimization.minimize = false;
-  }
-
-  // Finally return the new config for the CLI to use.
-  return config;
-};
+  ],
+  externals: {
+    ...currentConfiguration.externals,
+    // 3. Avoid warning if reanimated is not present
+    "react-native-reanimated": "require('react-native-reanimated')",
+    "react-native-reanimated/lib/reanimated2/core":
+      "require('react-native-reanimated/lib/reanimated2/core')",
+  },
+}

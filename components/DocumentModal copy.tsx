@@ -60,7 +60,10 @@ export default function DocumentModal(props) {
                 <View>
                   {
                     props.columns.slice(0, props.specs.groupings[index].fields).map((question, indexx) =>
+                    <View>
                     <Text style={{marginLeft:100}}>{question}</Text>
+                    {setGroupCount()}
+                    </View>
                     )
                   }
                 </View>
