@@ -59,7 +59,7 @@ const MyTable = ({obj, columns, width, height, sc, sr, handlePress, viewWidth}) 
   return (
     <View style={{borderWidth: 0, borderColor: "black", borderRadius: 0, padding: 0, backgroundColor: '#F9F9F9', width: width, height: height, alignSelf: 'center', flexDirection: 'row'}}>
     {/* <ScrollView showsVerticalScrollIndicator={false} style={{height: height, width: width}}> */}
-    <ScrollView horizontal={true} showsVerticalScrollIndicator={false} style={{minWidth: prefs.stickyRowWidth(), marginRight:-7, backgroundColor:'', maxWidth: viewWidth}}>
+    <ScrollView horizontal={true} showsVerticalScrollIndicator={false} style={{minWidth: viewWidth > 800 ? prefs.stickyRowWidth() : viewWidth/2, marginRight:-7, backgroundColor:'', maxWidth: viewWidth}}>
       <View style={{flexDirection:'column'}}>
         <View style={{flexDirection: 'row', margin: 0, marginBottom:0, backgroundColor:''}}>
           
@@ -102,7 +102,7 @@ const MyTable = ({obj, columns, width, height, sc, sr, handlePress, viewWidth}) 
       </View>
     </ScrollView>
     
-    <ScrollView horizontal={true} showsVerticalScrollIndicator={false} style={{}}>
+    <ScrollView nestedScrollEnabled={true} horizontal={true} showsVerticalScrollIndicator={false} style={{}}>
       <View style={{flexDirection:'column'}}>
         <View style={{flexDirection: 'row', margin: 0, marginBottom:0, backgroundColor:''}}>
           
