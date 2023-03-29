@@ -2,7 +2,7 @@ import React, {Component, useEffect, useState, useRef} from 'react'
 import { View, Text, ScrollView, Pressable } from 'react-native'
 // import { ScrollView } from 'react-native-gesture-handler'
 
-const MyTable = ({obj, columns, width, height, sc, sr, handlePress}) => {
+const MyTable = ({obj, columns, width, height, sc, sr, handlePress, viewWidth}) => {
   // const [stickyCols, setStickyCols] = useState(4)
   const [stickyColsWidth, setStickyColsWidth] = useState()
   const [leftIsScrolling, setLeftScrolling] = useState(false)
@@ -59,7 +59,7 @@ const MyTable = ({obj, columns, width, height, sc, sr, handlePress}) => {
   return (
     <View style={{borderWidth: 0, borderColor: "black", borderRadius: 0, padding: 0, backgroundColor: '#F9F9F9', width: width, height: height, alignSelf: 'center', flexDirection: 'row'}}>
     {/* <ScrollView showsVerticalScrollIndicator={false} style={{height: height, width: width}}> */}
-    <ScrollView horizontal={true} showsVerticalScrollIndicator={false} style={{minWidth: prefs.stickyRowWidth(), marginRight:-7, backgroundColor:''}}>
+    <ScrollView horizontal={true} showsVerticalScrollIndicator={false} style={{minWidth: prefs.stickyRowWidth(), marginRight:-7, backgroundColor:'', maxWidth: viewWidth}}>
       <View style={{flexDirection:'column'}}>
         <View style={{flexDirection: 'row', margin: 0, marginBottom:0, backgroundColor:''}}>
           
@@ -101,6 +101,7 @@ const MyTable = ({obj, columns, width, height, sc, sr, handlePress}) => {
         </ScrollView>
       </View>
     </ScrollView>
+    
     <ScrollView horizontal={true} showsVerticalScrollIndicator={false} style={{}}>
       <View style={{flexDirection:'column'}}>
         <View style={{flexDirection: 'row', margin: 0, marginBottom:0, backgroundColor:''}}>

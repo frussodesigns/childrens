@@ -438,6 +438,48 @@ const data = [
   },
 ]
 
+const summaries = {
+  topRow: [
+    {
+      title: 'Entries',
+      change: 5/100,
+      entries: 748
+    },
+    {
+      title: 'Passports',
+      change: -5/100,
+      entries: 489
+    },
+    {
+      title: 'Social Security Cards',
+      change: 5/100,
+      entries: 548
+    },
+    {
+      title: "State ID's",
+      change: 8/100,
+      entries: 648
+    },
+  ],
+  overview: {
+    addedThisWeek: 120,
+    percent: 70/100
+  },
+  chart: {
+    xAxis: [
+      "January", "February", "March", "April", "May", "June"
+    ],
+    yAxis: [
+      120,
+      210,
+      240,
+      288,
+      340,
+      450
+    ]
+  }
+}
+
 const color1 = '#F9F9F9'
 
 
@@ -463,118 +505,70 @@ const index = () => {
   }
 
   const [firstWidth, setWidth] = useState(0);
+  const [graphWidth, setGWidth] = useState(0);
+  const [tableWidth, setTWidth] = useState(0);
 
   const onLayout = (event) => {
     const { width } = event.nativeEvent.layout;
     setWidth(width);
     // console.log(width)
   };
+  const graphLayout = (event) => {
+    const { width } = event.nativeEvent.layout;
+    setGWidth(width);
+    // console.log(width)
+  };
+  const tableLayout = (event) => {
+    const { width } = event.nativeEvent.layout;
+    setTWidth(width);
+    // console.log(width)
+  };
+
+  const buildTopRow = () => {
+    let topRowContent = []
+
+    for (let i = 0; i < summaries.topRow.length; i++) {
+      topRowContent.push(
+        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: i==summaries.topRow.length-1?null:1 , minWidth:200, width: i==summaries.topRow.length-1?firstWidth:null }]} onLayout={i==0 ? onLayout : null}>
+          <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
+            <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
+              <View style={{flexDirection:'row',}}>
+
+                <View style={{left: 11, margin: 10, flex:1}}>
+                  <Text numberOfLines={1} style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >{summaries.topRow[i].title.toUpperCase()}</Text>
+                </View>
+                <View style={{height:'1em', width:'1em', backgroundColor:'', alignSelf:'center', marginLeft:'auto', marginRight:0}}>
+                  <SvgArrow style={{transform: [{ rotateZ: summaries.topRow[i].change>0?'-90deg':'90deg' }], color: summaries.topRow[i].change>0?'green':'red' }} />
+                </View>
+                <View style={{height:'1em', backgroundColor:'', alignSelf:'center', margin:4, bottom:5, marginRight:20}}>
+                  <Text style={{color: summaries.topRow[i].change>0?'green':'red', fontWeight: '', fontSize: 17}} >{summaries.topRow[i].change>0?"+"+summaries.topRow[i].change*100+'%':summaries.topRow[i].change*100+'%'}</Text>
+                </View>
+              </View>
+              <View style={{left: 11, margin: 10, marginTop: 0}}>
+                <Text style={{color:'black', fontWeight: '200', fontSize: 45}} >{summaries.topRow[i].entries}</Text>
+              </View>
+              <View style={{left: 11, margin: 10}}>
+                <Text style={{textDecorationLine: 'underline', fontWeight: '200', fontSize: 14}} >Add New Entry</Text>
+              </View>
+            </View>
+          </View>
+        </View>
+      )
+    }
+
+    return topRowContent
+  }
 
   return (
     <View style={{height:'100%', width:'100%'}}>
     <ScrollView style={styles.page}>
+      
+      {/* First Row */}
       <View style={{flexDirection:'row',flexWrap:'wrap', width: '100%', backgroundColor:'', height: '', padding: 20, gap: 20}}>
-        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, minWidth:200, }]} onLayout={onLayout}>
-          <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
-          <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
-            <View style={{flexDirection:'row',}}>
-
-              <View style={{left: 11, margin: 10}}>
-                <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >ENTRIES</Text>
-              </View>
-              <View style={{height:'1em', width:'1em', backgroundColor:'', alignSelf:'center', marginLeft:'auto', marginRight:0}}>
-                <SvgArrow style={{transform: [{ rotateZ: '-90deg' }], color: 'green' }} />
-              </View>
-              <View style={{height:'1em', backgroundColor:'', alignSelf:'center', margin:4, bottom:5, marginRight:20}}>
-                <Text style={{color:'green', fontWeight: '', fontSize: 17}} >+5%</Text>
-              </View>
-            </View>
-              <View style={{left: 11, margin: 10, marginTop: 0}}>
-                <Text style={{color:'black', fontWeight: '200', fontSize: 45}} >748</Text>
-              </View>
-              <View style={{left: 11, margin: 10}}>
-                <Text style={{textDecorationLine: 'underline', fontWeight: '200', fontSize: 14}} >Add New Entry</Text>
-              </View>
-          </View>
-        </View>
-        </View>
-
-        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, minWidth:200,}]}>
-          <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
-          <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
-              <View style={{flexDirection:'row',}}>
-
-                <View style={{left: 11, margin: 10}}>
-                  <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >PASSPORTS</Text>
-                </View>
-                <View style={{height:'1em', width:'1em', backgroundColor:'', alignSelf:'center', marginLeft:'auto', marginRight:0}}>
-                  <SvgArrow style={{transform: [{ rotateZ: '90deg' }], color: 'red' }} />
-                </View>
-                <View style={{height:'1em', backgroundColor:'', alignSelf:'center', margin:4, bottom:5, marginRight:20}}>
-                  <Text style={{color:'red', fontWeight: '', fontSize: 17}} >-5%</Text>
-                </View>
-              </View>
-              <View style={{left: 11, margin: 10, marginTop: 0}}>
-                <Text style={{color:'black', fontWeight: '200', fontSize: 45}} >489</Text>
-              </View>
-              <View style={{left: 11, margin: 10}}>
-                <Text style={{textDecorationLine: 'underline', fontWeight: '200', fontSize: 14}} >Add New Entry</Text>
-              </View>
-          </View>
-        </View>
-        </View>
-
-        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, minWidth:200,}]}>
-          <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
-          <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
-              <View style={{flexDirection:'row',}}>
-
-                <View style={{left: 11, margin: 10, flex:1}}>
-                  <Text numberOfLines={1} style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >SOCIAL SECURITY CARDS</Text>
-                </View>
-                <View style={{height:'1em', width:'1em', backgroundColor:'', alignSelf:'center', marginLeft:'auto', marginRight:0}}>
-                  <SvgArrow style={{transform: [{ rotateZ: '-90deg' }], color: 'green' }} />
-                </View>
-                <View style={{height:'1em', backgroundColor:'', alignSelf:'center', margin:4, bottom:5, marginRight:20}}>
-                  <Text style={{color:'green', fontWeight: '', fontSize: 17}} >+5%</Text>
-                </View>
-              </View>
-              <View style={{left: 11, margin: 10, marginTop: 0}}>
-                <Text style={{color:'black', fontWeight: '200', fontSize: 45}} >548</Text>
-              </View>
-              <View style={{left: 11, margin: 10}}>
-                <Text style={{textDecorationLine: 'underline', fontWeight: '200', fontSize: 14}} >Add New Entry</Text>
-              </View>
-          </View>
-        </View>
-        </View>
-
-        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', minWidth:200, width: firstWidth}]}>
-          <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
-          <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
-              <View style={{flexDirection:'row',}}>
-
-                <View style={{left: 11, margin: 10}}>
-                  <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >STATE ID's</Text>
-                </View>
-                <View style={{height:'1em', width:'1em', backgroundColor:'', alignSelf:'center', marginLeft:'auto', marginRight:0}}>
-                  <SvgArrow style={{transform: [{ rotateZ: '-90deg' }], color: 'green' }} />
-                </View>
-                <View style={{height:'1em', backgroundColor:'', alignSelf:'center', margin:4, bottom:5, marginRight:20}}>
-                  <Text style={{color:'green', fontWeight: '', fontSize: 17}} >+8%</Text>
-                </View>
-              </View>
-              <View style={{left: 11, margin: 10, marginTop: 0}}>
-                <Text style={{color:'black', fontWeight: '200', fontSize: 45}} >648</Text>
-              </View>
-              <View style={{left: 11, margin: 10}}>
-                <Text style={{textDecorationLine: 'underline', fontWeight: '200', fontSize: 14}} >Add New Entry</Text>
-              </View>
-          </View>
-        </View>
-        </View>
+        {buildTopRow()}
       </View>
 
+      {/* Second Row */}
       <View style={{flexDirection:'row', width: '100%', backgroundColor:'', height: '', padding: 20, paddingTop:0, gap: 20, flexWrap:'wrap', }}>
         <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, minWidth:200,}]}>
           <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
@@ -621,14 +615,14 @@ const index = () => {
           </View>
         </View>
 
-        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 2, minWidth:500 }]}>
+        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 2, minWidth:300 }]} onLayout={graphLayout}>
           <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
             <View style={{flexDirection:'column', width: '100%', height: '100%'}}>
                 <View style={{left: 11, margin: 10}}>
                   <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >CHART</Text>
                 </View>
                 <View style={{width:'100%', height:'80%', backgroundColor:'', flex:1, alignContent:'center'}}>
-                  <MyChart data={data} />
+                  <MyChart data={data} width={graphWidth} />
                   {/* <LineChart /> */}
                   {/* <WithSkiaWeb
                     opts={{ locateFile: (file) => `https://cdn.jsdelivr.net/npm/canvaskit-wasm@${version}/bin/full/${file}` }}
@@ -641,21 +635,25 @@ const index = () => {
         </View>
       </View>
 
-      <View style={{flexDirection:'row', width: '100%', backgroundColor:'', height: '70vh', padding: 20, paddingTop:0, gap: 20}}>
+      {/* Table */}
+      <View style={{flexDirection:'row', width: '100%', backgroundColor:'', height: '70vh', padding: 20, paddingTop:0, gap: 20}} onLayout={tableLayout}>
         <View style={[styles.neu, {flexDirection:'row', borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, display: 'flex', alignContent: 'center', justifyContent: 'center'}]}>
         <View style={[styles.secondShadow, {flex:1, flexDirection:'row', borderRadius:12}]}>
             <View style={{flexDirection:'column', width: '100%'}}>
               <View style={{left: 11, margin: 10}}>
                 <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >DATA</Text>
               </View>
-              <MyTable obj={obj} columns={columns} width='100%' height='90%' sc={4} sr={0} handlePress={handlePress} />
+              <MyTable obj={obj} columns={columns} width='100%' height='90%' sc={4} sr={0} handlePress={handlePress} viewWidth={tableWidth} />
             </View>
           </View>
         </View>
       </View>
+
       <View style={{height:60}}></View>
     </ScrollView>
     <View style={{height: 0}}>
+
+    {/* Table Page Navigation */}
     {width < 800 ? null :
     <View style={{flexDirection:'row', backgroundColor: '', width: '100%', height: 40, bottom: 60, justifyContent: 'center', gap: 20 }}>
           <View style={[styles.neu, {borderRadius: 100, backgroundColor:'#F9F9F9', width: '40px', height: '100%', alignSelf: 'center'}]}></View>

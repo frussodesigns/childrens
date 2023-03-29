@@ -26,7 +26,7 @@ function generateSinusGraphData(length: number): GraphPoint[] {
     }))
 }
 
-const MyChart = (data) => {
+const MyChart = (props) => {
 
   const [points, setPoints] = useState(null)
 
@@ -46,7 +46,7 @@ const MyChart = (data) => {
     return () => {
       
     }
-  }, [data])
+  }, [])
   
   const screenWidth = Dimensions.get("window").width;
 
@@ -72,7 +72,7 @@ const MyChart = (data) => {
               }
             ]
           }}
-          width={screenWidth/2} // from react-native
+          width={props.width} // from react-native
           height={280}
           yAxisLabel=""
           yAxisSuffix=""

@@ -51,23 +51,25 @@ export default function DocumentModal(props) {
     let formContent = []
     let count = 0
 
+    //build section inputs
     for (let i = 0; i < props.specs.groupings.length; i++){
       let localGroup = []
 
+      //build single input
       for (let j = 0; j < props.specs.groupings[i].fields; j++){
         const id = count
 
         if (props.types[count] == 'bool') {
           localGroup.push(
-          <View style={{width:'50%', height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
-            <View style={{height:60, alignSelf:'center', alignContent:'center', width: '80%', flexDirection:'row'}}>
-              <Text style={{alignSelf:'center'}}>{props.columns[count] + ':'}</Text>
-              {/* <input type="checkbox" checked={formData[props.columns[count]]} onChange={() => bool(id)}/>  */}
-              {/* <Text>{id}</Text> */}
-              <Checkbox style={styles.checkbox} value={formData[props.columns[id]]} onValueChange={() => bool(id)}/>
-              <View style={{height:10}}></View>
+            <View style={{width:'50%', height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
+              <View style={{height:60, alignSelf:'center', alignContent:'center', width: '80%', flexDirection:'row'}}>
+                <Text style={{alignSelf:'center'}}>{props.columns[count] + ':'}</Text>
+                {/* <input type="checkbox" checked={formData[props.columns[count]]} onChange={() => bool(id)}/>  */}
+                {/* <Text>{id}</Text> */}
+                <Checkbox style={styles.checkbox} value={formData[props.columns[id]]} onValueChange={() => bool(id)}/>
+                <View style={{height:10}}></View>
+              </View>
             </View>
-          </View>
           )
         }
         else {
@@ -85,16 +87,17 @@ export default function DocumentModal(props) {
         
         count ++
       }
-
+      
+      //build new section w title
       formContent.push(
-        <View style={{width:'100%', flexDirection:'row', flexWrap: 'wrap', backgroundColor:''}}>
-        <View style={{height:50, width: '50%', justifyContent:'center', backgroundColor:''}}>
-          <View style={{width:'80%', alignSelf:'center', backgroundColor:''}}>
-          <Text style={styles.sectionTitle}>{props.specs.groupings[i].section + ':'}</Text>
+          <View style={{width:'100%', flexDirection:'row', flexWrap: 'wrap', backgroundColor:''}}>
+            <View style={{height:50, width: '50%', justifyContent:'center', backgroundColor:''}}>
+              <View style={{width:'80%', alignSelf:'center', backgroundColor:''}}>
+                <Text style={styles.sectionTitle}>{props.specs.groupings[i].section + ':'}</Text>
+              </View>
+            </View>
+            <View style={{width:'50%'}}></View>
           </View>
-        </View>
-        <View style={{width:'50%'}}></View>
-        </View>
         )
       formContent.push(<View style={{width:'100%', flexDirection:'row', flexWrap: 'wrap', backgroundColor:''}}>{localGroup}</View>)
     }
