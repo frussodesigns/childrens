@@ -34,7 +34,7 @@ export default function Layout() {
     
   </View>
     {width > 800 ? null : 
-    <View  style={[{width:'90%', height:'10%', backgroundColor:'#F9F9F9', bottom: '11%', left: '5%', borderRadius:20, zIndex:1}, styles.neu]}>
+    <View  style={[{width:'90%', height:90, backgroundColor:'#F9F9F9', bottom: 190, left: '5%', borderRadius:20, zIndex:1}, styles.neu]}>
         <MobileMenu/>
     </View>
     }
