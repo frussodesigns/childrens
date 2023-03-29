@@ -33,11 +33,12 @@ export default function Layout() {
 
     
   </View>
+
     {width > 800 ? null : 
-    <View style={{height:0}}>
-    <View  style={[{width:'90%', height:90, backgroundColor:'#F9F9F9', bottom: 100, left: '5%', borderRadius:20, zIndex:1}, styles.neu]}>
-        <MobileMenu/>
-    </View>
+    <View style={{height:0, bottom:0}}>
+      <View  style={[{width:'90%', height:90, backgroundColor:'#F9F9F9', bottom: 10, left: '5%', borderRadius:20, zIndex:1, position:'fixed'}, styles.neu]}>
+          <MobileMenu/>
+      </View>
     </View>
     }
     </>
