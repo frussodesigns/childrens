@@ -602,11 +602,12 @@ const index = () => {
             
                 </View>
                 <View style={{alignSelf:'center', marginTop:30}}>
-                    <Text>Total Documents Added This Week:</Text>
+                    <Text style={{textAlign:'center'}}>Total Documents Added This Week:</Text>
                 </View>
                 <View style={{alignSelf:'center', marginTop:5}}>
                     <Text style={{fontSize:40, fontWeight:'400'}}>120</Text>
                 </View>
+                {/* <View style={{height:10}}></View> */}
                 {/* <View style={{left: 11, margin: 10, marginTop: 0}}>
                   <Text style={{color:'black', fontWeight: '200', fontSize: 45}} >748</Text>
                 </View> */}
