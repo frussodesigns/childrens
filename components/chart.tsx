@@ -41,7 +41,7 @@ const MyChart = (data) => {
   }, [])
 
   useEffect(() => {
-    console.log(data)
+    // console.log(data)
   
     return () => {
       

@@ -5,24 +5,40 @@ import {
     View,
     Button,
     Pressable,
+    Dimensions
 } from 'react-native'
 import CustomMenu from "../components/customMenu";
+import MobileMenu from "../components/MobileMenu";
+import {useWindowDimensions} from 'react-native';
 
 export default function Layout() {
-  return (
+  const {height, width} = useWindowDimensions();
+  
+
+
+  return (<>
   <View style={{flexDirection:'row', height:'100%', backgroundColor:''}}>
     
-    <View  style={[{width:'20%', maxWidth:'12.5em', zIndex:1 }, styles.neu]}>
+    {width < 800 ? null : 
+    <View  style={[{width:'20%', maxWidth:'12.5em', zIndex:1}, styles.neu]}>
         <CustomMenu/>
     </View>
+    }
 
     <View  style={{backgroundColor: '', flex: 1}}>
       <View style={{height:'100%', backgroundColor:'rgb(242,242,242)'}}>
         <Slot />
       </View>
     </View>
+
     
   </View>
+    {width > 800 ? null : 
+    <View  style={[{width:'90%', height:'10%', backgroundColor:'#F9F9F9', bottom: '11%', left: '5%', borderRadius:20, zIndex:1}, styles.neu]}>
+        <MobileMenu/>
+    </View>
+    }
+    </>
   )
 }
 

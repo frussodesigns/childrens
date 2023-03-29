@@ -21,7 +21,7 @@ import NodePolyfillPlugin from "node-polyfill-webpack-plugin";
 import { WithSkiaWeb } from "@shopify/react-native-skia/lib/module/web";
 import { version } from 'canvaskit-wasm/package.json';
 import { useFonts } from 'expo-font';
-import {useWindowDimensions} from 'react-native';
+
 
 const specs = {
   groupings: [
@@ -446,14 +446,6 @@ const index = () => {
     'Rubik': require('../assets/fonts/Rubik-Regular.ttf'),
   });
 
-  const {height, width} = useWindowDimensions();
-  const [pageBottom, setPageBottom] = useState(60)
-
-  useEffect(() => {
-    width > 800 ? setPageBottom(60) : setPageBottom(200)
-  }, [width])
-  
-
   const [modalVisible, setModalVisible] = useState(false)
   const [modalId, setModalId] = useState(-1)
 
@@ -462,19 +454,11 @@ const index = () => {
     setModalId(id)
   }
 
-  const [firstWidth, setWidth] = useState(0);
-
-  const onLayout = (event) => {
-    const { width } = event.nativeEvent.layout;
-    setWidth(width);
-    // console.log(width)
-  };
-
   return (
     <View style={{height:'100%', width:'100%'}}>
     <ScrollView style={styles.page}>
-      <View style={{flexDirection:'row',flexWrap:'wrap', width: '100%', backgroundColor:'', height: '', padding: 20, gap: 20}}>
-        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, minWidth:200, }]} onLayout={onLayout}>
+      <View style={{flexDirection:'row', width: '100%', backgroundColor:'', height: '12em', padding: 20, gap: 20}}>
+        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, }]}>
           <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
           <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
             <View style={{flexDirection:'row',}}>
@@ -499,7 +483,7 @@ const index = () => {
         </View>
         </View>
 
-        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, minWidth:200,}]}>
+        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, }]}>
           <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
           <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
               <View style={{flexDirection:'row',}}>
@@ -524,7 +508,7 @@ const index = () => {
         </View>
         </View>
 
-        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, minWidth:200,}]}>
+        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, }]}>
           <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
           <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
               <View style={{flexDirection:'row',}}>
@@ -549,7 +533,7 @@ const index = () => {
         </View>
         </View>
 
-        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', minWidth:200, width: firstWidth}]}>
+        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, }]}>
           <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
           <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
               <View style={{flexDirection:'row',}}>
@@ -573,74 +557,81 @@ const index = () => {
           </View>
         </View>
         </View>
-      </View>
 
-      <View style={{flexDirection:'row', width: '100%', backgroundColor:'', height: '', padding: 20, paddingTop:0, gap: 20, flexWrap:'wrap', }}>
-        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, minWidth:200,}]}>
-          <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
-            <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
-                <View style={{left: 11, margin: 10}}>
-                  <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >OVERVIEW</Text>
-                </View>
-                <View style={{alignSelf:'center', marginTop:30}}>
-                  <AnimatedCircularProgress
-                  size={150}
-                  width={10}
-                  fill={75}
-                  duration={2000}
-                  rotation={0}
-                  tintColor="#00e0ff"
-                  onAnimationComplete={() => console.log('onAnimationComplete')}
-                  backgroundColor="#7795b5">
-                    {
-                        (fill) => (
-                          <Text style={{fontSize:30, color:"#00e0ff"}}>
-                            { '75%' }
-                          </Text>
-                        )
-                      }
-                  </AnimatedCircularProgress>
-                  {/* <WithSkiaWeb 
-                    opts={{ locateFile: (file) => `https://cdn.jsdelivr.net/npm/canvaskit-wasm@${version}/bin/full/${file}` }}
-                    getComponent={() => import('../components/Breathe')}
-                    fallback={<Text>Loading Skia...</Text>}
-                  /> */}
-            
-                </View>
-                <View style={{alignSelf:'center', marginTop:30}}>
-                    <Text>Total Documents Added This Week:</Text>
-                </View>
-                <View style={{alignSelf:'center', marginTop:5}}>
-                    <Text style={{fontSize:40, fontWeight:'400'}}>120</Text>
-                </View>
-                {/* <View style={{left: 11, margin: 10, marginTop: 0}}>
-                  <Text style={{color:'black', fontWeight: '200', fontSize: 45}} >748</Text>
-                </View> */}
-                
-            </View>
+      
+
+        
+          {/* <View style={{marginBottom:'auto', backgroundColor:'red',}} >
+            <Text>Title</Text>
+          </View> */}
+          {/* <MyTable obj={obj} width='95%' height='90%' /> */}
+        
+      </View>
+      <View style={{flexDirection:'row', width: '100%', backgroundColor:'', height: '50vh', padding: 20, paddingTop:0, gap: 20}}>
+        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, }]}>
+        <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
+          <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
+              <View style={{left: 11, margin: 10}}>
+                <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >OVERVIEW</Text>
+              </View>
+              <View style={{alignSelf:'center', marginTop:30}}>
+                <AnimatedCircularProgress
+                size={150}
+                width={10}
+                fill={75}
+                duration={2000}
+                rotation={0}
+                tintColor="#00e0ff"
+                onAnimationComplete={() => console.log('onAnimationComplete')}
+                backgroundColor="#7795b5">
+                   {
+                      (fill) => (
+                        <Text style={{fontSize:30, color:"#00e0ff"}}>
+                          { '75%' }
+                        </Text>
+                      )
+                    }
+                </AnimatedCircularProgress>
+                {/* <WithSkiaWeb 
+                  opts={{ locateFile: (file) => `https://cdn.jsdelivr.net/npm/canvaskit-wasm@${version}/bin/full/${file}` }}
+                  getComponent={() => import('../components/Breathe')}
+                  fallback={<Text>Loading Skia...</Text>}
+                /> */}
+          
+              </View>
+              <View style={{alignSelf:'center', marginTop:30}}>
+                  <Text>Total Documents Added This Week:</Text>
+              </View>
+              <View style={{alignSelf:'center', marginTop:5}}>
+                  <Text style={{fontSize:40, fontWeight:'400'}}>120</Text>
+              </View>
+              {/* <View style={{left: 11, margin: 10, marginTop: 0}}>
+                <Text style={{color:'black', fontWeight: '200', fontSize: 45}} >748</Text>
+              </View> */}
+              
           </View>
         </View>
+        </View>
 
-        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 2, minWidth:500 }]}>
-          <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
-            <View style={{flexDirection:'column', width: '100%', height: '100%'}}>
-                <View style={{left: 11, margin: 10}}>
-                  <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >CHART</Text>
-                </View>
-                <View style={{width:'100%', height:'80%', backgroundColor:'', flex:1, alignContent:'center'}}>
-                  <MyChart data={data} />
-                  {/* <LineChart /> */}
-                  {/* <WithSkiaWeb
-                    opts={{ locateFile: (file) => `https://cdn.jsdelivr.net/npm/canvaskit-wasm@${version}/bin/full/${file}` }}
-                    getComponent={() => import("../components/LineChart")}
-                    fallback={<Text>Loading Skia...</Text>}
-                  /> */}
-                </View>
-            </View>
+        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 2, }]}>
+        <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
+          <View style={{flexDirection:'column', width: '100%', height: '100%'}}>
+              <View style={{left: 11, margin: 10}}>
+                <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >CHART</Text>
+              </View>
+              <View style={{width:'100%', height:'80%', backgroundColor:'', flex:1, alignContent:'center'}}>
+                <MyChart data={data} />
+                {/* <LineChart /> */}
+                {/* <WithSkiaWeb
+                  opts={{ locateFile: (file) => `https://cdn.jsdelivr.net/npm/canvaskit-wasm@${version}/bin/full/${file}` }}
+                  getComponent={() => import("../components/LineChart")}
+                  fallback={<Text>Loading Skia...</Text>}
+                /> */}
+              </View>
           </View>
         </View>
       </View>
-
+      </View>
       <View style={{flexDirection:'row', width: '100%', backgroundColor:'', height: '70vh', padding: 20, paddingTop:0, gap: 20}}>
         <View style={[styles.neu, {flexDirection:'row', borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, display: 'flex', alignContent: 'center', justifyContent: 'center'}]}>
         <View style={[styles.secondShadow, {flex:1, flexDirection:'row', borderRadius:12}]}>
@@ -656,13 +647,11 @@ const index = () => {
       <View style={{height:60}}></View>
     </ScrollView>
     <View style={{height: 0}}>
-    {width < 800 ? null :
     <View style={{flexDirection:'row', backgroundColor: '', width: '100%', height: 40, bottom: 60, justifyContent: 'center', gap: 20 }}>
           <View style={[styles.neu, {borderRadius: 100, backgroundColor:'#F9F9F9', width: '40px', height: '100%', alignSelf: 'center'}]}></View>
           <View style={[styles.neu, {borderRadius: 100, backgroundColor:'#F9F9F9', width: '100px', height: '100%', alignSelf: 'center'}]}></View>
           <View style={[styles.neu, {borderRadius: 100, backgroundColor:'#F9F9F9', width: '40px', height: '100%', alignSelf: 'center'}]}></View>
     </View>
-    }
     </View>
 
     <Modal

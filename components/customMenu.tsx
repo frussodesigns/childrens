@@ -24,16 +24,16 @@ const handlePressableHoverOut = () => {
 
 useEffect(() => {
   setWidth(isHovered ? '4em' : '11em')
-  console.log(width)
+//   console.log(width)
 }, [isHovered])
 
 
   return (
-    <Pressable style={{height:'100%', backgroundColor:'red'}} onHoverIn={handlePressableHoverIn} onHoverOut={handlePressableHoverOut}>
+    <Pressable style={{height:'100%', backgroundColor:''}} onHoverIn={handlePressableHoverIn} onHoverOut={handlePressableHoverOut}>
     <View style={{flexDirection:'column', justifyContent:'center', backgroundColor:'#F9F9F9', height: '100%'}}>
-        <View>{isHovered ? <Text>The menu is being hovered over!</Text> : null}</View>
+        
         <View style={{height: 20}} ></View>
-        <View style={{width: width, height: 80, backgroundColor: '', alignSelf:'center'}} >
+        <View style={{width: '10em', height: 80, backgroundColor: '', alignSelf:'center'}} >
         <Image source={require('../assets/-logo.png')} style={{flex: 1, width: null, height: null, resizeMode: 'contain'}} />
         </View>
         <View style={{height: 20}} ></View>
@@ -67,6 +67,9 @@ useEffect(() => {
                     </View>
                 </View>
             </Link>
+            <View style={{height: 50}} ></View>
+
+            <View>{isHovered ? <Text style={{textAlign:'center', color: 'red'}}>//hover detected!</Text> : null}</View>
             {/* gap: */}
             <View style={{flex:1}}></View>
             <Link href="/kingap">
@@ -81,6 +84,7 @@ useEffect(() => {
                     </View>
                 </View>
             </Link>
+            
     </View>
     </Pressable>
   )

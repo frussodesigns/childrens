@@ -34,7 +34,7 @@ const MyTable = ({obj, columns, width, height, sc, sr, handlePress}) => {
   };
 
   useEffect(() => {
-    console.log(currentIndex)
+    // console.log(currentIndex)
   
     return () => {
       

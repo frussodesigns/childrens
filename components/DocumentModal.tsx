@@ -20,7 +20,8 @@ export default function DocumentModal(props) {
   const { width, height } = useWindowDimensions();
 
   useEffect(() => {
-    console.log(props.data)
+    console.log("Form javascript object loaded")
+    // console.log(props.data)
   
     for (let i = 0; i < props.columns.length; i++){
       const newName = props.columns[i]
@@ -30,18 +31,18 @@ export default function DocumentModal(props) {
       // console.log(formData)
     }
     setFormDataInit(true)
-    console.log(formData)
   }, [])
 
   const bool = (index) => {
-    console.log(index)
-    console.log(props.columns[index])
+    // console.log(index)
+    // console.log(props.columns[index])
     // const keys = Object.keys(formData);
     const i = props.columns[index];
     const newFormData = {
       ...formData,
       [i]: formData[i] ? !formData[i] : true,
     };
+    console.log(i + ' set to ' + newFormData[i])
     setFormData(newFormData);
     // console.log(formData)
   }
