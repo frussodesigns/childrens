@@ -5,24 +5,51 @@ import {
     View,
     Button,
     Pressable,
-    Dimensions
+    Dimensions,
+    Modal
 } from 'react-native'
+import { Link } from "expo-router"
 import CustomMenu from "../components/customMenu";
 import MobileMenu from "../components/MobileMenu";
 import {useWindowDimensions} from 'react-native';
+import {useState, useEffect} from "react"
+import ReportsModal from "../components/ReportsModal";
 
 export default function Layout() {
   const {height, width} = useWindowDimensions();
-  
 
+  const [reportsModalVisible, setReportsModalVisible] = useState(false)
+  
+  const [isHovered, setIsHovered] = useState(false)
+  const [auth, setAuth] = useState(true)
+  const [menuWidth, setMenuWidth] = useState('20%')
+
+  // useEffect(() => {
+  //   isHovered==true ? setMenuWidth('20%') : setMenuWidth('8%')
+  // }, [isHovered])
+  
 
   return (<>
   <View style={{flexDirection:'row', height:'100%', backgroundColor:''}}>
     
-    {width < 800 ? null : 
+    {width < 800 || auth == false ? null : <>
     <View  style={[{width:'20%', maxWidth:'12.5em', zIndex:1}, styles.neu]}>
-        <CustomMenu/>
+        <CustomMenu setIsHovered={setIsHovered} setReportsModalVisible={setReportsModalVisible} />
     </View>
+
+    {/* <Link href="/kingap">
+      <View style={{bottom:10, left:0, position:'fixed', zIndex:2, width:'14em', height: 65, backgroundColor: ''}}>
+          <View style={[styles.neu, {backgroundColor: 'white', width: '90%', height: 65, borderRadius: 65, marginLeft: 10, marginRight: 10, marginBottom: 30}]}>
+          <View style={[styles.secondShadow, {flexDirection: 'row', padding:0, margin:0, flex: 1, borderRadius: 65, justifyContent: 'flex-start'}]}>
+              <View style={{backgroundColor:'rgb(242,242,242)', top: 8, left: 8, height: 50, width: 50, borderRadius: 65, }}></View>
+              <View style={{alignSelf: 'center', marginLeft:15}}>
+              <Text style={{alignSelf: 'center', textAlign: 'center', fontFamily: 'Rubik', color:'black'}}>Account</Text>
+              </View>
+          </View>
+          </View>
+      </View>
+    </Link> */}
+    </>
     }
 
     <View  style={{backgroundColor: '', flex: 1}}>
@@ -34,13 +61,25 @@ export default function Layout() {
     
   </View>
 
-    {width > 800 ? null : 
+    {width > 800 || auth == false ? null : 
     <View style={{height:0, bottom:90}}>
       <View  style={[{width:'90%', height:90, backgroundColor:'#F9F9F9', bottom: 10, left: '5%', borderRadius:20, zIndex:1, position:'fixed'}, styles.neu]}>
           <MobileMenu/>
       </View>
     </View>
     }
+
+      <Modal
+        transparent
+        visible={reportsModalVisible}
+        animationType="fade"
+        onRequestClose={() => {
+            setReportsModalVisible(false);
+            }}
+            >
+            <ReportsModal setModalVisible={setReportsModalVisible} />
+        </Modal>
+
     </>
   )
 }

@@ -3,6 +3,10 @@ import NodePolyfillPlugin from "node-polyfill-webpack-plugin";
 
 const newConfiguration = {
   ...currentConfiguration,
+  entry: [
+    'babel-polyfill', 
+    './index.js'
+  ],
   plugins: [
     ...currentConfiguration.plugins,
     // 1. Make the wasm file available to the build system
@@ -14,7 +18,9 @@ const newConfiguration = {
       ],
     }),
     // 2. Polyfill fs and path module from node
-    new NodePolyfillPlugin()
+    new NodePolyfillPlugin(),
+    new webpack.EnvironmentPlugin({ JEST_WORKER_ID: null }),
+    new webpack.DefinePlugin({ process: { env: {} } })
   ],
   externals: {
     ...currentConfiguration.externals,

@@ -2,14 +2,15 @@ import { View, Text, Image, StyleSheet, Pressable } from 'react-native'
 import { Link } from "expo-router"
 import React, {useState, useEffect} from 'react'
 import { useFonts } from 'expo-font';
+import NeuView from './NeuView';
 
 
-const CustomMenu = () => {
+const CustomMenu = ({setIsHovered, setReportsModalVisible}) => {
     const [fontsLoaded] = useFonts({
         'Rubik': require('../assets/fonts/Rubik-Regular.ttf'),
       });
 
-    const [isHovered, setIsHovered] = useState(false)
+    
     const [width, setWidth] = useState('4em')
 
 const handlePressableHoverIn = () => {
@@ -22,10 +23,10 @@ const handlePressableHoverOut = () => {
     console.log('hover-out')
     }
 
-useEffect(() => {
-  setWidth(isHovered ? '4em' : '11em')
-//   console.log(width)
-}, [isHovered])
+// useEffect(() => {
+//   setWidth(isHovered ? '4em' : '11em')
+// //   console.log(width)
+// }, [isHovered])
 
 
   return (
@@ -40,18 +41,14 @@ useEffect(() => {
         <View style={{height: 0, width:'90%', alignSelf: 'center', borderColor:'lightgrey', borderBottomWidth:.2}} />
         <View style={{height: 10}} ></View>
             <Link href="/">
-                <View style={[styles.neu, {flex: 1, justifyContent: 'center', alignSelf: 'center', backgroundColor: 'white', width: '90%', height: '2.5em', borderRadius: 6, marginLeft: 10, marginRight: 10, marginTop: 10, }]}>
-                    <View style={[styles.secondShadow, {padding:0, margin:0, flex: 1, borderRadius: 6, justifyContent: 'center',}]}>
-                    <Text style={{textAlign: 'center', fontFamily: 'Rubik', color:'grey'}}>Home</Text>
-                </View>
-                </View>
+                <NeuView style={{width:'90%', height:'2.5em', borderRadius: 6, flex: 1, justifyContent: 'center', alignSelf: 'center', backgroundColor: 'white',  marginLeft: 10, marginRight: 10, marginTop: 10, }}>
+                    <Text style={{textAlign: 'center', fontFamily: 'Rubik', color:'grey'}}>Overview</Text>
+                </NeuView>
             </Link>
             <Link href="/documents">
-                <View style={[styles.neu, {flex: 1, justifyContent: 'center', alignSelf: 'center', backgroundColor: 'white', width: '90%', height: '2.5em', borderRadius: 6, marginLeft: 10, marginRight: 10, marginTop: 10, }]}>
-                    <View style={[styles.secondShadow, {padding:0, margin:0, flex: 1, borderRadius: 6, justifyContent: 'center',}]}>
+                <NeuView style={{width:'90%', height:'2.5em', borderRadius: 6, flex: 1, justifyContent: 'center', alignSelf: 'center', backgroundColor: 'white',  marginLeft: 10, marginRight: 10, marginTop: 10, }}>
                     <Text style={{textAlign: 'center', fontFamily: 'Rubik', color:'grey'}}>Document Tracking</Text>
-                </View>
-                </View>
+                </NeuView>
             </Link>
             <Link href="/adoption">
                 <View style={[styles.neu, {flex: 1, justifyContent: 'center', alignSelf: 'center', backgroundColor: 'white', width: '90%', height: '2.5em', borderRadius: 6, marginLeft: 10, marginRight: 10, marginTop: 10, }]}>
@@ -67,9 +64,26 @@ useEffect(() => {
                     </View>
                 </View>
             </Link>
+            <Link href="/kingap">
+                <View style={[styles.neu, {flex: 1, justifyContent: 'center', alignSelf: 'center', backgroundColor: 'white', width: '90%', height: '2.5em', borderRadius: 6, marginLeft: 10, marginRight: 10, marginTop: 10, }]}>
+                    <View style={[styles.secondShadow, {padding:0, margin:0, flex: 1, borderRadius: 6, justifyContent: 'center',}]}>
+                    <Text style={{textAlign: 'center', fontFamily: 'Rubik', color:'grey'}}>Reports</Text>
+                    </View>
+                </View>
+            </Link>
+            <Link href="/kingap">
+                <View style={[styles.neu, {flex: 1, justifyContent: 'center', alignSelf: 'center', backgroundColor: 'white', width: '90%', height: '2.5em', borderRadius: 6, marginLeft: 10, marginRight: 10, marginTop: 10, }]}>
+                    <View style={[styles.secondShadow, {padding:0, margin:0, flex: 1, borderRadius: 6, justifyContent: 'center',}]}>
+                    <Text style={{textAlign: 'center', fontFamily: 'Rubik', color:'grey'}}>About</Text>
+                    </View>
+                </View>
+            </Link>
+            <NeuView onPress={()=>setReportsModalVisible(true)} style={{width:'90%', height:'2.5em', borderRadius: 6, justifyContent: 'center', alignSelf: 'center', backgroundColor: 'white',  marginLeft: 10, marginRight: 10, marginTop: 10, }}>
+                <Text style={{textAlign: 'center', fontFamily: 'Rubik', color:'grey'}}>New Report</Text>
+            </NeuView>
             <View style={{height: 50}} ></View>
 
-            <View>{isHovered ? <Text style={{textAlign:'center', color: 'red'}}>//hover detected!</Text> : null}</View>
+            {/* <View>{isHovered ? <Text style={{textAlign:'center', color: 'red'}}>//hover detected!</Text> : null}</View> */}
             {/* gap: */}
             <View style={{flex:1}}></View>
             <Link href="/kingap">

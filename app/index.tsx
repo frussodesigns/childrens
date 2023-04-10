@@ -22,6 +22,7 @@ import { WithSkiaWeb } from "@shopify/react-native-skia/lib/module/web";
 import { version } from 'canvaskit-wasm/package.json';
 import { useFonts } from 'expo-font';
 import {useWindowDimensions} from 'react-native';
+import NeuView from '../components/NeuView';
 
 const specs = {
   groupings: [
@@ -529,9 +530,10 @@ const index = () => {
 
     for (let i = 0; i < summaries.topRow.length; i++) {
       topRowContent.push(
-        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: i==summaries.topRow.length-1?null:1 , minWidth:200, width: i==summaries.topRow.length-1?firstWidth:null }]} onLayout={i==0 ? onLayout : null}>
-          <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
-            <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
+        <View style={{borderRadius: 12, padding:0, margin:0, backgroundColor:'#F9F9F9', flex: i==summaries.topRow.length-1?null:1 , minWidth:200, width: i==summaries.topRow.length-1?firstWidth:null }} onLayout={i==0 ? onLayout : null}>
+          <NeuView style={{borderRadius: 12, backgroundColor:'#F9F9F9', flex: i==summaries.topRow.length-1?null:1 , minWidth:200, width:'100%' }} onLayout={i==0 ? onLayout : null}>
+          {/* <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}> */}
+            <View style={{flexDirection:'column', width: '100%', height: '80%', backgroundColor:''}}>
               <View style={{flexDirection:'row',}}>
 
                 <View style={{left: 11, margin: 10, flex:1}}>
@@ -551,7 +553,7 @@ const index = () => {
                 <Text style={{textDecorationLine: 'underline', fontWeight: '200', fontSize: 14}} >Add New Entry</Text>
               </View>
             </View>
-          </View>
+          </NeuView>
         </View>
       )
     }
@@ -570,8 +572,8 @@ const index = () => {
 
       {/* Second Row */}
       <View style={{flexDirection:'row', width: '100%', backgroundColor:'', height: '', padding: 20, paddingTop:0, gap: 20, flexWrap:'wrap', }}>
-        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, minWidth:200,}]}>
-          <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
+        <View style={[{borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, minWidth:200,}]}>
+          <NeuView style={{flex:1, borderRadius:12}}>
             <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
                 <View style={{left: 11, margin: 10}}>
                   <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >OVERVIEW</Text>
@@ -613,11 +615,11 @@ const index = () => {
                 </View> */}
                 
             </View>
-          </View>
+          </NeuView>
         </View>
 
-        <View style={[styles.neu, {borderRadius: 12, backgroundColor:'#F9F9F9', flex: 2, minWidth:300 }]} onLayout={graphLayout}>
-          <View style={[styles.secondShadow, {flex:1, borderRadius:12}]}>
+        <View style={{borderRadius: 12, backgroundColor:'#F9F9F9', flex: 2, minWidth:300 }} onLayout={graphLayout}>
+          <NeuView style={{flex:1, borderRadius:12}}>
             <View style={{flexDirection:'column', width: '100%', height: '100%'}}>
                 <View style={{left: 11, margin: 10}}>
                   <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >CHART</Text>
@@ -632,14 +634,14 @@ const index = () => {
                   /> */}
                 </View>
             </View>
-          </View>
+          </NeuView>
         </View>
       </View>
 
       {/* Table */}
       <View style={{flexDirection:'row', width: '100%', backgroundColor:'', height: '70vh', padding: 20, paddingTop:0, gap: 20}} onLayout={tableLayout}>
         <View style={[styles.neu, {flexDirection:'row', borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, display: 'flex', alignContent: 'center', justifyContent: 'center'}]}>
-        <View style={[styles.secondShadow, {flex:1, flexDirection:'row', borderRadius:12}]}>
+          <View style={[styles.secondShadow, {flex:1, flexDirection:'row', borderRadius:12}]}>
             <View style={{flexDirection:'column', width: '100%'}}>
               <View style={{left: 11, margin: 10}}>
                 <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >DATA</Text>
