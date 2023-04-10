@@ -3,6 +3,7 @@ import { ScrollView, Pressable } from 'react-native';
 import React, {useEffect, useState} from 'react'
 import Checkbox from 'expo-checkbox';
 import CloseComponent from '../assets/x';
+import ResponsiveModal from './ResponsiveModal';
 
 
 export default function NewUserModal(props) {
@@ -19,6 +20,8 @@ export default function NewUserModal(props) {
   // })
 
   const { width, height } = useWindowDimensions();
+
+  const justify = width < 660 ? 'center' : null
 
   useEffect(() => {
     console.log("Form javascript object loaded")
@@ -106,34 +109,21 @@ export default function NewUserModal(props) {
   }
 
   return (
-    <View style={{width:'100%', height:'100%', backgroundColor:'rgba(255, 255, 255, 0.8)'}}>
-        <View style={[styles.modalContainer, styles.neu, {backgroundColor:'white'}]}>
-          <View style={[styles.neu, {backgroundColor:'#F9F9F9', height: 40, width: '100%', padding:0, margin:0, marginBottom:'auto', flexDirection: 'row', borderTopLeftRadius:10, borderTopRightRadius:10,}]}>
-            <View style={{backgroundColor:'', flex:1, height:'100%'}}>
-              <View style={{flex:1, justifyContent:'center', alignContent:'center', marginLeft:20}}>
-                <Text style={{fontWeight:'bold'}}>{'New User'}</Text>
-              </View>
-            </View>
-            <View style={{width: 90, height: 35, backgroundColor: '', alignSelf:'center', alignItems:'center', justifyContent:'center', marginLeft:'auto', marginRight:15}}>
-              {/* <Button title="Close" onPress={() => props.setModalVisible(false)}/> */}
-              <Pressable style={{backgroundColor:'', width:35, height:35, marginLeft:'auto'}} onPress={() => props.setModalVisible(false)}><CloseComponent style={{width:'100%', marginLeft:'auto'}}/></Pressable>
-            </View>
-          </View>
-          <View style={{flexDirection:'row', flex:1, marginTop:0, justifyContent:'flex-start', backgroundColor:'', width:'80%', minWidth:700, flexWrap: 'wrap', alignItems:'flex-start', }}>
-            <ScrollView showsVerticalScrollIndicator={false}  style={{height:'100%',}}>
+        <ResponsiveModal title={'User Settings'} setModalVisible={props.setModalVisible}>
+
             <View style={{height:20}}></View>
               {/* <Text>{props.modalId}</Text> */}
               <View style={{width:'100%', flexDirection:'row', flexWrap: 'wrap', backgroundColor:''}}>
-                <View style={{height:50, width: '50%', justifyContent:'center', backgroundColor:''}}>
-                  <View style={{width:'80%', alignSelf:'center', backgroundColor:''}}>
+                <View style={{height:50, width: '100%', justifyContent:'center', backgroundColor:''}}>
+                  <View style={{width:'100%', alignSelf:'start', backgroundColor:''}}>
                     <Text style={styles.sectionTitle}>{"Create New User:"}</Text>
                   </View>
                 </View>
                 <View style={{width:'50%'}}></View>
               </View>
 
-            <View style={{width:'100%', flexDirection:'row', flexWrap: 'wrap', backgroundColor:''}}>
-              <View style={{width:'50%', height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
+            <View style={{width:'100%', justifyContent:justify, flexDirection:'row', flexWrap: 'wrap', backgroundColor:''}}>
+              <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
                 <View style={{backgroundColor:'', height:60, alignSelf:'center', width: '80%'}}>
                   <Text>{'First Name'}</Text>
                   <View style={{height:5}}/>
@@ -142,7 +132,7 @@ export default function NewUserModal(props) {
                 </View>
               </View>
               
-              <View style={{width:'50%', height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
+              <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
                 <View style={{backgroundColor:'', height:60, alignSelf:'center', width: '80%'}}>
                   <Text>{'Last Name'}</Text>
                   <View style={{height:5}}/>
@@ -151,7 +141,7 @@ export default function NewUserModal(props) {
                 </View>
               </View>
               
-              <View style={{width:'50%', height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
+              <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
                 <View style={{backgroundColor:'', height:60, alignSelf:'center', width: '80%'}}>
                   <Text>{'Email'}</Text>
                   <View style={{height:5}}/>
@@ -160,7 +150,7 @@ export default function NewUserModal(props) {
                 </View>
               </View>
               
-              <View style={{width:'50%', height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
+              <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
                 <View style={{backgroundColor:'', height:60, alignSelf:'center', width: '80%'}}>
                   <Text>{'Confirm Email'}</Text>
                   <View style={{height:5}}/>
@@ -169,8 +159,8 @@ export default function NewUserModal(props) {
                 </View>
               </View>
 
-              <View style={{width:'50%', height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
-                <View style={{backgroundColor:'', height:60, alignSelf:'center', width: '80%'}}>
+              <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
+                <View style={{backgroundColor:'', alignSelf:'center', width: '80%'}}>
                   <Text>{'Permissions:'}</Text>
                   <View style={{height:5}}/>
                   <View style={{flexDirection:'row'}}>
@@ -197,8 +187,8 @@ export default function NewUserModal(props) {
                 </View>
               </View>
               
-              <View style={{width:'50%', height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
-                <View style={{backgroundColor:'', height:60, alignSelf:'center', width: '80%'}}>
+              <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
+                <View style={{backgroundColor:'', alignSelf:'center', width: '80%'}}>
                   <Text>{'Boroughs:'}</Text>
                   <View style={{height:5}}/>
                   <View style={{flexDirection:'row'}}>
@@ -232,16 +222,13 @@ export default function NewUserModal(props) {
             
             {/* <View style={{height:80, width:150, alignSelf:'center', justifyContent:'center'}}><Button title="Submit" ></Button></View> */}
             
-            </ScrollView>
             
             
             {/* <Text>Modal content goes here</Text>
             <Text>{props.modalId}</Text> */}
-          </View>
             {/* <View style={{height:10}}></View> */}
 
-        </View>
-      </View>
+        </ResponsiveModal>
   )
 }
 

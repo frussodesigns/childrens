@@ -3,6 +3,7 @@ import { ScrollView, Pressable } from 'react-native';
 import React, {useEffect, useState} from 'react'
 import Checkbox from 'expo-checkbox';
 import CloseComponent from '../assets/x';
+import ResponsiveModal from './ResponsiveModal';
 
 export default function DocumentModal(props) {
   
@@ -18,6 +19,8 @@ export default function DocumentModal(props) {
   // })
 
   const { width, height } = useWindowDimensions();
+
+  const justify = width < 660 ? 'center' : null
 
   useEffect(() => {
     console.log("Form javascript object loaded")
@@ -61,9 +64,9 @@ export default function DocumentModal(props) {
 
         if (props.types[count] == 'bool') {
           localGroup.push(
-            <View style={{width:'50%', height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
+            <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'', alignContent:'', alignSelf:'flex-start'}}>
               <View style={{height:60, alignSelf:'center', alignContent:'center', width: '80%', flexDirection:'row'}}>
-                <Text style={{alignSelf:'center'}}>{props.columns[count] + ':'}</Text>
+                <Text style={{alignSelf:'center', marginBottom:15}}>{props.columns[count] + ':'}</Text>
                 {/* <input type="checkbox" checked={formData[props.columns[count]]} onChange={() => bool(id)}/>  */}
                 {/* <Text>{id}</Text> */}
                 <Checkbox style={styles.checkbox} value={formData[props.columns[id]]} onValueChange={() => bool(id)}/>
@@ -74,7 +77,7 @@ export default function DocumentModal(props) {
         }
         else {
         localGroup.push(
-          <View style={{width:'50%', height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
+          <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
             <View style={{backgroundColor:'', height:60, alignSelf:'center', width: '80%'}}>
               <Text>{props.columns[count] + ':'}</Text>
               <View style={{height:5}}/>
@@ -89,54 +92,31 @@ export default function DocumentModal(props) {
       }
       
       //build new section w title
+      //title:
       formContent.push(
           <View style={{width:'100%', flexDirection:'row', flexWrap: 'wrap', backgroundColor:''}}>
-            <View style={{height:50, width: '50%', justifyContent:'center', backgroundColor:''}}>
-              <View style={{width:'80%', alignSelf:'center', backgroundColor:''}}>
+            <View style={{height:50, width: '100%', justifyContent:'center', backgroundColor:''}}>
+              <View style={{width:'100%', alignSelf:'center', backgroundColor:''}}>
                 <Text style={styles.sectionTitle}>{props.specs.groupings[i].section + ':'}</Text>
               </View>
             </View>
             <View style={{width:'50%'}}></View>
           </View>
         )
-      formContent.push(<View style={{width:'100%', flexDirection:'row', flexWrap: 'wrap', backgroundColor:''}}>{localGroup}</View>)
+      //inputs:
+      formContent.push(<View style={{width:'100%', flexDirection:'row', flexWrap: 'wrap', justifyContent:justify, backgroundColor:''}}>{localGroup}</View>)
     }
     return (formContent)
   }
 
   return (
-    <View style={{width:'100%', height:'100%', backgroundColor:'rgba(255, 255, 255, 0.8)'}}>
-        <View style={[styles.modalContainer, styles.neu, {backgroundColor:'white'}]}>
-          <View style={[styles.neu, {backgroundColor:'#F9F9F9', height: 40, width: '100%', padding:0, margin:0, marginBottom:'auto', flexDirection: 'row', borderTopLeftRadius:10, borderTopRightRadius:10,}]}>
-            <View style={{backgroundColor:'', flex:1, height:'100%'}}>
-              <View style={{flex:1, justifyContent:'center', alignContent:'center', marginLeft:20}}>
-                <Text>{}</Text>
-              </View>
-            </View>
-            <View style={{width: 90, height: 35, backgroundColor: '', alignSelf:'center', alignItems:'center', justifyContent:'center', marginLeft:'auto', marginRight:15}}>
-              {/* <Button title="Close" onPress={() => props.setModalVisible(false)}/> */}
-              <Pressable style={{backgroundColor:'', width:35, height:35, marginLeft:'auto'}} onPress={() => props.setModalVisible(false)}><CloseComponent style={{width:'100%', marginLeft:'auto'}}/></Pressable>
-            </View>
-          </View>
-          <View style={{flexDirection:'row', flex:1, marginTop:0, justifyContent:'flex-start', backgroundColor:'', width:'80%', minWidth:700, flexWrap: 'wrap', alignItems:'flex-start', }}>
-            <ScrollView showsVerticalScrollIndicator={false}  style={{height:'100%',}}>
+    <ResponsiveModal setModalVisible={props.setModalVisible}>
+
             <View style={{height:20}}></View>
-            
-              {formDataInit ? <View>{buildTable()}</View> : null}
-              {/* <View>{buildTable()}</View> */}
-            
+            {formDataInit ? <View style={{width:'100%', backgroundColor:''}}>{buildTable()}</View> : null}
             <View style={{height:80, width:150, alignSelf:'center', justifyContent:'center'}}><Button title="Submit" ></Button></View>
             
-            </ScrollView>
-            
-            
-            {/* <Text>Modal content goes here</Text>
-            <Text>{props.modalId}</Text> */}
-          </View>
-            {/* <View style={{height:10}}></View> */}
-
-        </View>
-      </View>
+    </ResponsiveModal>
   )
 }
 
@@ -189,6 +169,7 @@ const styles = StyleSheet.create({
     checkbox: {
       margin: 8,
       marginTop:9,
+      marginBottom:25,
       marginLeft:'auto',
       alignSelf:'center'
     },
