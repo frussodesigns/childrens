@@ -1,5 +1,6 @@
+import { LOGIN_SUCCESS_URL } from '@env'
 import { getAuth, sendSignInLinkToEmail, onAuthStateChanged } from "firebase/auth"
-import { StyleSheet, View, Text, ImageBackground, TextInput, Button, Pressable, TouchableOpacity } from 'react-native'
+import { StyleSheet, View, Text, ImageBackground, TextInput, Button, Pressable, TouchableOpacity, Modal } from 'react-native'
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
 import { Link, Stack, useRouter, useFocusEffect, Redirect } from "expo-router";
@@ -51,7 +52,7 @@ export default function index() {
     const actionCodeSettings = {
         // URL you want to redirect back to. The domain (www.example.com) for this
         // URL must be in the authorized domains list in the Firebase Console.
-        url: 'http://localhost:19000/login/success',
+        url: LOGIN_SUCCESS_URL,
         // This must be true.
         handleCodeInApp: true,
         // iOS: {
@@ -101,10 +102,19 @@ export default function index() {
 
   return (
     <View style={{backgroundColor:'red', width: '100%', height: '100%', justifyContent:'center', alignItems:'center'}}>
-        <ResponsiveModal small={true} setModalVisible={success}>
+      <Modal
+        transparent
+        visible={success}
+        animationType="fade"
+        onRequestClose={() => {
+            setSuccess(false);
+            }}
+            >
+        <ResponsiveModal small={true} setModalVisible={setSuccess}>
           <Text style={[styles.sectionTitle, {marginTop:30, color:'green'}]}>E-Mail Successfully Sent:</Text>
           <Text style={{color: 'green'}}>Check your E-Mail for your login link.</Text>
         </ResponsiveModal>
+      </Modal>
 
         <ImageBackground source={img} style={{width:'100%', height:'100%', justifyContent:'center', alignItems:'center'}}>
             <View style={{backgroundColor:'rgba(255, 255, 255, 0.28)', width: height, minWidth:350, maxWidth:450, height: '70%', minHeight:350, maxHeight:450, borderRadius:16, justifyContent:'center'}}>
