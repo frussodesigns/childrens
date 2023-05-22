@@ -75,8 +75,8 @@ export default function index() {
                 console.log('successfully sent')
                 // Save the email locally so you don't need to ask the user for it again
                 // if they open the link on the same device.
-                setSuccess(true)
                 window.localStorage.setItem('emailForSignIn', email);
+                setSuccess(true)
                 // ...
             })
             .catch((error) => {
@@ -101,7 +101,7 @@ export default function index() {
       })
 
   return (
-    <View style={{backgroundColor:'red', width: '100%', height: '100%', justifyContent:'center', alignItems:'center'}}>
+    <View style={{backgroundColor:'white', width: '100%', height: '100%', justifyContent:'center', alignItems:'center'}}>
       <Modal
         transparent
         visible={success}
@@ -116,7 +116,7 @@ export default function index() {
         </ResponsiveModal>
       </Modal>
 
-        <ImageBackground source={img} style={{width:'100%', height:'100%', justifyContent:'center', alignItems:'center'}}>
+        <ImageBackground source={require("../../assets/image.jpg")} style={{width:'100%', height:'100%', justifyContent:'center', alignItems:'center'}}>
             <View style={{backgroundColor:'rgba(255, 255, 255, 0.28)', width: height, minWidth:350, maxWidth:450, height: '70%', minHeight:350, maxHeight:450, borderRadius:16, justifyContent:'center'}}>
             <BlurView intensity={40} onLayout={onLayout} style={{backgroundColor:'', width: height, minWidth:350, maxWidth:450, height: '100%', minHeight:350, maxHeight:450, borderRadius:16, justifyContent:'center'}}>
                 <View style={{width:'55%', height:'100%', justifyContent:'center', alignSelf:'center', flexDirection:'column', flexWrap:'wrap', backgroundColor:''}}>

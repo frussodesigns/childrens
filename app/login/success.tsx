@@ -89,7 +89,7 @@ export default function success() {
 
   return (
     <View style={{backgroundColor:'red', width: '100%', height: '100%', justifyContent:'center', alignItems:'center'}}>
-        <ImageBackground source={img} style={{width:'100%', height:'100%', justifyContent:'center', alignItems:'center'}}>
+        <ImageBackground source={require("../../assets/image.jpg")} style={{width:'100%', height:'100%', justifyContent:'center', alignItems:'center'}}>
             <View style={{backgroundColor:'rgba(255, 255, 255, 0.28)', width: height, minWidth:350, maxWidth:450, height: '70%', minHeight:350, maxHeight:450, borderRadius:16, justifyContent:'center'}}>
             <BlurView intensity={40} onLayout={onLayout} style={{backgroundColor:'', width: height, minWidth:350, maxWidth:450, height: '100%', minHeight:350, maxHeight:450, borderRadius:16, justifyContent:'center'}}>
                 <View style={{width:'90%', height:'100%', justifyContent:'center', alignSelf:'center', flexDirection:'column', flexWrap:'wrap', backgroundColor:''}}>
