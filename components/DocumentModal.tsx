@@ -1,15 +1,25 @@
-import { StyleSheet, View, Text, Button, useWindowDimensions, TextInput } from 'react-native'
+import { StyleSheet, View, Text, Button, useWindowDimensions, TextInput, Modal } from 'react-native'
 import { ScrollView, Pressable } from 'react-native';
 import React, {useEffect, useState} from 'react'
+import { useAppContext } from '../hooks/useAppContext';
 import Checkbox from 'expo-checkbox';
 import CloseComponent from '../assets/x';
 import ResponsiveModal from './ResponsiveModal';
+import NeuView from './NeuView';
+import { LoadFonts, color2 } from '../presets';
+import CustomButton from './customButton';
+import { postFormData, patchFormData } from '../apiCalls';
 
 export default function DocumentModal(props) {
+  
+  const { state, dispatch } = useAppContext()
   
   // let formData = {}
   const [formData, setFormData] = useState({})
   const [formDataInit, setFormDataInit] = useState(false)
+  const [properties, setProperties] = useState([])
+  const [error, setError] = useState(null)
+  const [confirmation, setConfirmation] = useState(false)
   // const [formData, setFormData] = useState(()=>{
   //   const initialFormData = {};
   //   props.columns.forEach((columnName) => {
@@ -23,24 +33,68 @@ export default function DocumentModal(props) {
   const justify = width < 660 ? 'center' : null
 
   useEffect(() => {
+    LoadFonts()
+
     console.log("Form javascript object loaded")
-    // console.log(props.data)
+    console.log(props.data)
+    console.log(props.index)
+    console.log(props.data[props.data.length - 1])
+    const keys = Object.keys(props.data[props.data.length - 1])
+    setProperties(keys)
+    console.log(properties)
+    
   
-    for (let i = 0; i < props.columns.length; i++){
-      const newName = props.columns[i]
-      const newObj = {}
-      newObj[newName] = false
-      setFormData(formData => ({...formData, ...newObj}))
-      // console.log(formData)
-    }
-    setFormDataInit(true)
   }, [])
+
+  //initial form init
+  useEffect(() => {
+    
+    if (props.newEntry == true){
+
+      for (let i = 0; i < properties.length; i++){
+        const newName = properties[i]
+        const newObj = {}
+
+        if (props.types[i-1] == 'bool') newObj[newName] = false
+        else if (props.types[i-1] == 'status') newObj[newName] = 'In Progress'
+        else newObj[newName] = ''
+
+        setFormData(formData => ({...formData, ...newObj}))
+        // console.log(formData)
+      }
+      setFormDataInit(true)
+    }
+    else if (props.newEntry == false) {
+      const obj = props.data[props.index]
+      console.log(props.index)
+
+      for (let i = 0; i < properties.length; i++){
+        const newProperty = properties[i]
+        let newObj = {}
+        // console.log(obj[keys[i]])
+        newObj[newProperty] = obj[properties[i]]
+        // console.log(newObj)
+        setFormData(formData => ({...formData, ...newObj}))
+      }
+      console.log(formData)
+      setFormDataInit(true)
+    }
+
+  }, [properties])
+  
+
+  const onChange = (text, id) => {
+    const newObj = {}
+    newObj[properties[id]] = text
+    // console.log(newObj)
+    setFormData(formData => ({...formData, ...newObj}))
+  }
 
   const bool = (index) => {
     // console.log(index)
     // console.log(props.columns[index])
     // const keys = Object.keys(formData);
-    const i = props.columns[index];
+    const i = properties[index];
     const newFormData = {
       ...formData,
       [i]: formData[i] ? !formData[i] : true,
@@ -48,6 +102,55 @@ export default function DocumentModal(props) {
     console.log(i + ' set to ' + newFormData[i])
     setFormData(newFormData);
     // console.log(formData)
+  }
+
+  const checkDates = () => {
+    const arr = Object.keys(formData)
+    var dateFormat = /^\d{1,2}\/\d{1,2}\/\d{4}$/
+
+    for (let i = 0; i < arr.length; i++) {
+      const formInput = formData[arr[i+1]]
+      
+      if(props.types[i] === 'date'){
+
+        if (dateFormat.test(formInput) || formInput === '' || !formInput) {}
+        else {
+          setError('All Dates Must Match MM/DD/YYYY Format')
+          console.log('error')
+          return false
+        }
+      }
+    }
+    return true
+  }
+
+  const confirmCIN = () => {
+    console.log(formData.cIN)
+
+    if (!formData.cIN) {
+      setError("'CIN' must have a value")
+      return false
+    }
+    else return true
+  }
+
+  const submitForm = async () => {
+
+    const cinValid = confirmCIN()
+    const datesValid = checkDates()
+
+
+    if (!datesValid || !cinValid) return
+
+    if (props.newEntry == true) postFormData(formData, setError, setConfirmation, dispatch, state)
+
+    if (props.newEntry == false) patchFormData(formData, setError, setConfirmation, dispatch, state)
+
+  }
+
+  const closeConfirmation = () => {
+    setConfirmation(false)
+    props.setModalVisible(false)
   }
   
   const buildTable = () => {
@@ -69,11 +172,23 @@ export default function DocumentModal(props) {
                 <Text style={{alignSelf:'center', marginBottom:15}}>{props.columns[count] + ':'}</Text>
                 {/* <input type="checkbox" checked={formData[props.columns[count]]} onChange={() => bool(id)}/>  */}
                 {/* <Text>{id}</Text> */}
-                <Checkbox style={styles.checkbox} value={formData[props.columns[id]]} onValueChange={() => bool(id)}/>
+                <Checkbox style={styles.checkbox} value={formData[properties[id+1]]} onValueChange={() => bool(id+1)}/>
                 <View style={{height:10}}></View>
               </View>
             </View>
           )
+        }
+        else if (props.types[count] === 'date' || props.types[count] === 'number') {
+        localGroup.push(
+          <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
+            <View style={{backgroundColor:'', height:60, alignSelf:'center', width: '80%'}}>
+              <Text>{props.columns[count] + ':'}</Text>
+              <View style={{height:5}}/>
+              <TextInput value={formData[properties[id+1]]} inputMode={'numeric'} onChangeText={text => onChange(text, id+1)} style={{backgroundColor:color2, paddingLeft: 10, height:'2em', borderRadius: 5, width:'100%'}} />
+              <View style={{height:10}}></View>
+            </View>
+          </View>
+        )
         }
         else {
         localGroup.push(
@@ -81,7 +196,7 @@ export default function DocumentModal(props) {
             <View style={{backgroundColor:'', height:60, alignSelf:'center', width: '80%'}}>
               <Text>{props.columns[count] + ':'}</Text>
               <View style={{height:5}}/>
-              <TextInput style={{backgroundColor:'#F9F9F9', paddingLeft: 10, height:'2em', borderRadius: 5, width:'100%'}} />
+              <TextInput value={formData[properties[id+1]]} onChangeText={text => onChange(text, id+1)} style={{backgroundColor:color2, paddingLeft: 10, height:'2em', borderRadius: 5, width:'100%'}} />
               <View style={{height:10}}></View>
             </View>
           </View>
@@ -110,13 +225,49 @@ export default function DocumentModal(props) {
   }
 
   return (
-    <ResponsiveModal setModalVisible={props.setModalVisible}>
+    <>
+      <ResponsiveModal setModalVisible={props.setModalVisible}>
 
-            <View style={{height:20}}></View>
-            {formDataInit ? <View style={{width:'100%', backgroundColor:''}}>{buildTable()}</View> : null}
-            <View style={{height:80, width:150, alignSelf:'center', justifyContent:'center'}}><Button title="Submit" ></Button></View>
-            
-    </ResponsiveModal>
+              <View style={{height:20}}></View> {/* <= Top Gap */}
+              {formDataInit ? <View style={{width:'100%', backgroundColor:''}}>{buildTable()}</View> : null}
+              <View style={{height:80, width:150, alignSelf:'center', justifyContent:'center'}}>
+                {/* <Button title="Submit" ></Button> */}
+                <CustomButton title="Submit" onPress={() => submitForm()} color='#8183FF' />
+              </View>
+              
+      </ResponsiveModal>
+
+      {/* Error */}
+      <Modal
+        transparent
+        visible={error ? true : false}
+        animationType="fade"
+        onRequestClose={() => {
+          setError(null);
+          
+        }}
+      >
+        <ResponsiveModal small={true} setModalVisible={setError}>
+          <Text style={[styles.sectionTitle, {marginTop:30, color:'red'}]}>{'Error:'}</Text>
+          <Text style={{color: 'red'}}>{error ? error : null}</Text>
+        </ResponsiveModal>
+        
+      </Modal>
+
+      {/* Confirmation Modal: */}
+      <Modal
+        transparent
+        visible={confirmation}
+        animationType="fade"
+        onRequestClose={() => closeConfirmation()}
+      >
+        <ResponsiveModal small={true} setModalVisible={closeConfirmation}>
+          <Text style={[styles.sectionTitle, {marginTop:30}]}>{'Success!'}</Text>
+          <Text style={{}}>{'Entry has been successfully logged.'}</Text>
+        </ResponsiveModal>
+        
+      </Modal>
+    </>
   )
 }
 

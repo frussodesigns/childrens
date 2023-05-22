@@ -48,9 +48,9 @@ export default function NeuView(props) {
   }, [animation]);
 
   return (
-    <Pressable onPress={props.onPress ? () => props.onPress(props.id) : null} style={[props.style, {cursor: 'default'}]} onHoverIn={()=>setIsHovered(true)} onHoverOut={()=>setIsHovered(false)}>
+    <Pressable onPress={props.onPress ? () => props.onPress(props.id) : null} style={[props.style, {cursor: props.cursor ? props.cursor : 'default'}]} onHoverIn={()=>setIsHovered(true)} onHoverOut={()=>setIsHovered(false)}>
       <View style={[styles.secondShadow, {
-        shadowColor: 'white',
+        shadowColor: props.shadowColor ? props.shadowColor : 'white',
         shadowOffset: {
           width: -3,
           height: -3,
@@ -59,15 +59,16 @@ export default function NeuView(props) {
         // shadowOpacity: 1,
         shadowRadius: 5,
         elevation: 5, // for Android
-        padding:0, margin:0, flex: 1, borderRadius: props.style.borderRadius, justifyContent: 'center', 
-        borderTopLeftRadius: props.style.borderTopLeftRadius ? props.style.borderTopLeftRadius : null,
-        borderTopRightRadius: props.style.borderTopRightRadius ? props.style.borderTopRightRadius : null,
-        borderBottomLeftRadius: props.style.borderBottomLeftRadius ? props.style.borderBottomLeftRadius : null,
-        borderBottomRightRadius: props.style.borderBottomRightRadius ? props.style.borderBottomRightRadius : null,
+        padding:0, margin:0, flex: 1, justifyContent: 'center', 
+        borderRadius: props.style && props.style.borderRadius ? props.style.borderRadius : null,
+        borderTopLeftRadius: props.style && props.style.borderTopLeftRadius ? props.style.borderTopLeftRadius : null,
+        borderTopRightRadius: props.style && props.style.borderTopRightRadius ? props.style.borderTopRightRadius : null,
+        borderBottomLeftRadius: props.style && props.style.borderBottomLeftRadius ? props.style.borderBottomLeftRadius : null,
+        borderBottomRightRadius: props.style && props.style.borderBottomRightRadius ? props.style.borderBottomRightRadius : null,
         
         }]}>
         
-        <View style={{padding:0, margin:0, flex: 1, borderRadius: props.style.borderRadius, justifyContent: props.style.justifyContent ? props.style.justifyContent : null,
+        <View style={{padding:0, margin:0, flex: 1, justifyContent: props.style && props.style.justifyContent ? props.style.justifyContent : null,
           shadowColor: 'grey',
           shadowOffset: {
             width: 2,
@@ -77,10 +78,13 @@ export default function NeuView(props) {
           shadowRadius: 6,
           elevation: 5, // for Android
           transform: [{translateY: -1*animation.value/100}, {translateX: -1*animation.value/100}],
-          borderTopLeftRadius: props.style.borderTopLeftRadius ? props.style.borderTopLeftRadius : null,
-          borderTopRightRadius: props.style.borderTopRightRadius ? props.style.borderTopRightRadius : null,
-          borderBottomLeftRadius: props.style.borderBottomLeftRadius ? props.style.borderBottomLeftRadius : null,
-          borderBottomRightRadius: props.style.borderBottomRightRadius ? props.style.borderBottomRightRadius : null,
+          borderRadius: props.style && props.style.borderRadius ? props.style.borderRadius : null, 
+          borderTopLeftRadius: props.style && props.style.borderTopLeftRadius ? props.style.borderTopLeftRadius : null,
+          borderTopRightRadius: props.style && props.style.borderTopRightRadius ? props.style.borderTopRightRadius : null,
+          borderBottomLeftRadius: props.style && props.style.borderBottomLeftRadius ? props.style.borderBottomLeftRadius : null,
+          borderBottomRightRadius: props.style && props.style.borderBottomRightRadius ? props.style.borderBottomRightRadius : null,
+          // width:'100%',
+          // height:'100%'
         }}>
               {props.children}
               {/* <Text>{animationState}</Text> */}
@@ -104,6 +108,8 @@ const styles = StyleSheet.create({
         // borderWidth: 30,
       },
       secondShadow: {
+        width:'100%',
+        height:'100%',
         shadowColor: 'white',
         shadowOffset: {
           width: -3,

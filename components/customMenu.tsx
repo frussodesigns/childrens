@@ -1,17 +1,19 @@
 import { View, Text, Image, StyleSheet, Pressable } from 'react-native'
+import { getAuth, signOut } from "firebase/auth";
 import { Link } from "expo-router"
 import React, {useState, useEffect} from 'react'
 import { useFonts } from 'expo-font';
 import NeuView from './NeuView';
+import { LoadFonts } from '../presets';
 
 
 const CustomMenu = ({setIsHovered, setReportsModalVisible}) => {
-    const [fontsLoaded] = useFonts({
-        'Rubik': require('../assets/fonts/Rubik-Regular.ttf'),
-      });
-
-    
-    const [width, setWidth] = useState('4em')
+    // const [fontsLoaded] = useFonts({
+    //     'Rubik': require('../assets/fonts/Rubik-Regular.ttf'),
+    //   });
+    LoadFonts
+    const auth = getAuth()
+const [width, setWidth] = useState('4em')
 
 const handlePressableHoverIn = () => {
     setIsHovered(true);
@@ -21,6 +23,17 @@ const handlePressableHoverIn = () => {
 const handlePressableHoverOut = () => {
     setIsHovered(false);
     console.log('hover-out')
+    }
+
+    const signUserOut = () => {
+        signOut(auth).then(() => {
+            console.log('signed out successfully')
+            console.log(auth)
+          }).catch((error) => {
+            console.log('error:')
+            console.log(error)
+            console.log(auth)
+          });
     }
 
 // useEffect(() => {
@@ -78,9 +91,12 @@ const handlePressableHoverOut = () => {
                     </View>
                 </View>
             </Link>
-            <NeuView onPress={()=>setReportsModalVisible(true)} style={{width:'90%', height:'2.5em', borderRadius: 6, justifyContent: 'center', alignSelf: 'center', backgroundColor: 'white',  marginLeft: 10, marginRight: 10, marginTop: 10, }}>
+            <NeuView cursor={'pointer'} onPress={()=>setReportsModalVisible(true)} style={{width:'90%', height:'2.5em', borderRadius: 6, justifyContent: 'center', alignSelf: 'center', backgroundColor: 'white',  marginLeft: 10, marginRight: 10, marginTop: 10, }}>
                 <Text style={{textAlign: 'center', fontFamily: 'Rubik', color:'grey'}}>New Report</Text>
             </NeuView>
+            {auth && <NeuView cursor={'pointer'} onPress={()=>signUserOut()} style={{width:'90%', height:'2.5em', borderRadius: 6, justifyContent: 'center', alignSelf: 'center', backgroundColor: 'white',  marginLeft: 10, marginRight: 10, marginTop: 10, }}>
+                <Text style={{textAlign: 'center', fontFamily: 'Rubik', color:'grey'}}>Sign Out</Text>
+            </NeuView>}
             <View style={{height: 50}} ></View>
 
             {/* <View>{isHovered ? <Text style={{textAlign:'center', color: 'red'}}>//hover detected!</Text> : null}</View> */}

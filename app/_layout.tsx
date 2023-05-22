@@ -1,4 +1,6 @@
+import { getAuth, isSignInWithEmailLink, signInWithEmailLink } from "firebase/auth";
 import { Stack, Slot } from "expo-router";
+import { AppContextProvider } from "../AppContext";
 import { 
     StyleSheet, 
     Text, 
@@ -14,15 +16,36 @@ import MobileMenu from "../components/MobileMenu";
 import {useWindowDimensions} from 'react-native';
 import {useState, useEffect} from "react"
 import ReportsModal from "../components/ReportsModal";
+import { useReactPath } from "../hooks/useReactPath";
+
+
 
 export default function Layout() {
+  const auth = getAuth()
   const {height, width} = useWindowDimensions();
 
   const [reportsModalVisible, setReportsModalVisible] = useState(false)
   
   const [isHovered, setIsHovered] = useState(false)
-  const [auth, setAuth] = useState(true)
   const [menuWidth, setMenuWidth] = useState('20%')
+  const [desktopMenu, setDesktopMenu] = useState(true)
+
+  let path = window.location.pathname
+  
+  useEffect(() => {
+    if (path == '/login' || path == '/login/success') {
+      setDesktopMenu(false)
+    } else {
+      setDesktopMenu(true)
+    }
+  }, [path])
+
+  useEffect(() => {
+    console.log(path)
+  }, [path]);
+
+
+  
 
   // useEffect(() => {
   //   isHovered==true ? setMenuWidth('20%') : setMenuWidth('8%')
@@ -32,7 +55,7 @@ export default function Layout() {
   return (<>
   <View style={{flexDirection:'row', height:'100%', backgroundColor:''}}>
     
-    {width < 800 || auth == false ? null : <>
+    {width < 800 || !desktopMenu ? null : <>
     <View  style={[{width:'20%', maxWidth:'12.5em', zIndex:1}, styles.neu]}>
         <CustomMenu setIsHovered={setIsHovered} setReportsModalVisible={setReportsModalVisible} />
     </View>
@@ -54,7 +77,9 @@ export default function Layout() {
 
     <View  style={{backgroundColor: '', flex: 1}}>
       <View style={{height:'100%', backgroundColor:'rgb(242,242,242)'}}>
-        <Slot />
+        <AppContextProvider>
+          <Slot />
+        </AppContextProvider>
       </View>
     </View>
 

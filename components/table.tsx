@@ -83,15 +83,15 @@ const MyTable = ({obj, columns, width, height, sc, sr, handlePress, viewWidth}) 
             
             
                 <View style={{flex: 1, flexDirection: 'column'}}>
-                    {obj.map((item)=>
+                    {obj.map((item, dex)=>
                       <Pressable
-                      key={item.id}
-                      onPress={() => handlePress(item.id)}
-                      onHoverIn={() => setCurrentIndex(item.id)}
+                      key={item.cIN}
+                      onPress={() => handlePress(item.cIN, dex)}
+                      onHoverIn={() => setCurrentIndex(item.cIN)}
                       onHoverOut={() => setCurrentIndex(null)}
                       >
-                        <View style={[{borderBottomWidth: .2, borderColor: "#E0E0E0", padding: 0, margin: '-.05em', height: prefs.cellHeight, justifyContent: 'center', width: prefs.cellWidth, marginTop: 1, }, currentIndex === item.id && {backgroundColor:'#F3F6F9'}]}>
-                            <Text style={{textAlign: 'center'}}>{extractData(index, item)}</Text>
+                        <View style={[{borderBottomWidth: .2, borderColor: "#E0E0E0", padding: 0, margin: '-.05em', height: prefs.cellHeight, justifyContent: 'center', width: prefs.cellWidth, marginTop: 1, }, currentIndex === item.cIN && {backgroundColor:'#F3F6F9'}]}>
+                            <Text style={{textAlign: 'center'}}>{extractData(index+1, item)}</Text>
                         </View>
                       </Pressable>
                 )}
@@ -125,16 +125,16 @@ const MyTable = ({obj, columns, width, height, sc, sr, handlePress, viewWidth}) 
                 <View style={{flex: 1, flexDirection: 'column'}}>
                     {obj.map((item)=>
                       <Pressable
-                        key={item.id}
-                        onPress={() => handlePress(item.id)}
-                        onHoverIn={() => setCurrentIndex(item.id)}
+                        key={item.cIN}
+                        onPress={() => handlePress(item.cIN)}
+                        onHoverIn={() => setCurrentIndex(item.cIN)}
                         onHoverOut={() => setCurrentIndex(null)}
                         >
-                        <View style={[{borderBottomWidth: .2, borderColor: "#E0E0E0", padding: 0, margin: '-.05em', height: prefs.cellHeight, justifyContent: 'center', width: prefs.cellWidth, marginTop: 1, }, currentIndex === item.id && {backgroundColor:'#F3F6F9'}]}>
+                        <View style={[{borderBottomWidth: .2, borderColor: "#E0E0E0", padding: 0, margin: '-.05em', height: prefs.cellHeight, justifyContent: 'center', width: prefs.cellWidth, marginTop: 1, }, currentIndex === item.cIN && {backgroundColor:'#F3F6F9'}]}>
                             {/* <Text style={{textAlign: 'center'}}>{extractData(index+prefs.stickyCols, item)}</Text> */}
                             {/* <Text style={{textAlign: 'center'}}>{Object.prototype.toString.call(extractData(index+prefs.stickyCols, item))}</Text> */}
                             {Object.prototype.toString.call(extractData(index+prefs.stickyCols, item)) == '[object String]' && 
-                            <Text style={{textAlign: 'center'}}>{extractData(index+prefs.stickyCols, item)}</Text>
+                            <Text style={{textAlign: 'center'}}>{extractData(index+prefs.stickyCols+1, item)}</Text>
                             }
                             {Object.prototype.toString.call(extractData(index+prefs.stickyCols, item)) == '[object Boolean]'
                             && extractData(index+prefs.stickyCols, item) == true &&

@@ -1,10 +1,15 @@
 import { StyleSheet, ScrollView, View, Text, TextInput, Modal, Pressable } from 'react-native'
 import React, {useState, useEffect} from 'react'
+import { getAuth, isSignInWithEmailLink, signInWithEmailLink, onAuthStateChanged } from "firebase/auth";
 import NeuView from '../components/NeuView'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
 import SearchIcon from '../assets/searchIcon'
 import AdminModal from '../components/AdminModal'
 import NewUserModal from '../components/NewUserModal'
+import DischargeModal from '../components/DischargeModal'
+import CsvModal from '../components/CsvModal';
+import { LoadFonts } from '../presets'
+import ResponsiveModal from '../components/ResponsiveModal'
 
 
 const users = [
@@ -45,10 +50,27 @@ const users = [
 
 export default function admin() {
 
+    LoadFonts()
+    const auth = getAuth()
+
+    // getAuth()
+    // .getUser(uid)
+    // .then((userRecord) => {
+    //   // See the UserRecord reference doc for the contents of userRecord.
+    //   console.log(`Successfully fetched user data: ${userRecord.toJSON()}`);
+    // })
+    // .catch((error) => {
+    //   console.log('Error fetching user data:', error);
+    // });
+
     const [modalVisible, setModalVisible] = useState(false)
     const [newUserModalVisible, setNewUserModalVisible] = useState(false)
+    const [supervisorsModalVisible, setSupervisorsModalVisible] = useState(false)
+    const [dischargeModalVisible, setDischargeModalVisible] = useState(false)
+    const [csvModalVisible, setCsvModalVisible] = useState(false)
     const [modalId, setModalId] = useState(-1)
     const [contentWidth, setWidth] = useState()
+    const [searchActive, setSearchActive] = useState(false)
 
     useEffect(() => {
       console.log(modalId)
@@ -143,25 +165,50 @@ export default function admin() {
                     <NeuView style={{flex:1, flexDirection:'row' , borderRadius:0, borderTopLeftRadius: 16, borderTopRightRadius: 16 }}>
                         <View style={{flexDirection:'row', width: '100%', height: '80%'}}>
 
-                            <View style={{left: 11, margin: 10}}>
+                            <View style={{left: 11, margin: 10, marginRight:'auto'}}>
                                 <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >ADMIN PANEL</Text>
                             </View>
 
                             {/* <View style={{height:20}} /> */}
 
-                        <View style={{flexDirection: 'row', marginLeft:'auto', marginRight:'auto', width:350 }}>
-                            <View style={{width:30, height:30, marginTop:7, backgroundColor:'', }}>
-
-                                <SearchIcon style={{width:'100%', height:'100%', fill:'grey'}} />
+                        
+                        {!searchActive &&
+                        <>
+                        <Pressable activeOpacity={1} onPress={()=>setCsvModalVisible(true)}>
+                            <View style={{cursor: 'pointer', width: 120, height:30, marginTop:6, marginRight:10, borderRadius:15, backgroundColor:'lightgrey', alignItems:'center', justifyContent:'center'}}>
+                                <Text>Import CSV</Text>
                             </View>
-                            <TextInput style={{flex:1, backgroundColor:'#e8e8e8', marginTop:7, paddingLeft:10, borderRadius:10,}} />
-                        </View>
+                        </Pressable>
+
+                        <Pressable activeOpacity={1} onPress={()=>setDischargeModalVisible(true)}>
+                            <View style={{cursor: 'pointer', width: 120, height:30, marginTop:6, marginRight:10, borderRadius:15, backgroundColor:'lightgrey', alignItems:'center', justifyContent:'center'}}>
+                                <Text>Discharge List</Text>
+                            </View>
+                        </Pressable>
+
+                        <Pressable activeOpacity={1} onPress={()=>setSupervisorsModalVisible(true)}>
+                            <View style={{cursor: 'pointer', width: 120, height:30, marginTop:6, marginRight:10, borderRadius:15, backgroundColor:'lightgrey', alignItems:'center', justifyContent:'center'}}>
+                                <Text>Supervisors</Text>
+                            </View>
+                        </Pressable>
 
                         <Pressable activeOpacity={1} onPress={()=>setNewUserModalVisible(true)}>
                             <View style={{cursor: 'pointer', width: 120, height:30, marginTop:6, marginRight:10, borderRadius:15, backgroundColor:'lightgrey', alignItems:'center', justifyContent:'center'}}>
                                 <Text>New User</Text>
                             </View>
                         </Pressable>
+                        </>
+                        }
+
+                        <View style={{flexDirection: 'row', marginRight: 12 }}>
+                            <Pressable onPress={() => setSearchActive(!searchActive)}>
+                                <View style={{width:28, height:28, marginTop:8, backgroundColor:'', }}>
+                                    <SearchIcon style={{width:'100%', height:'100%', fill:'grey'}} />
+                                </View>
+                            </Pressable>
+                            {searchActive && <TextInput style={{flex:1, backgroundColor:'#e8e8e8', marginTop:7, paddingLeft:10, borderRadius:10, width:350,}} />}
+                        </View>
+
                         </View>
                     </NeuView>
                 </View>
@@ -232,6 +279,7 @@ export default function admin() {
             <AdminModal modalId={modalId} users={users} setModalVisible={setModalVisible} />
         </Modal>
 
+        {/* New User Modal */}
         <Modal
         transparent
         visible={newUserModalVisible}
@@ -241,6 +289,32 @@ export default function admin() {
             }}
             >
             <NewUserModal modalId={modalId} users={users} setModalVisible={setNewUserModalVisible} />
+        </Modal>
+
+        {/* Discharge List Modal */}
+        <Modal
+        transparent
+        visible={dischargeModalVisible}
+        animationType="fade"
+        onRequestClose={() => {
+            setDischargeModalVisible(false);
+            }}
+            >
+                <DischargeModal modalId={modalId} users={users} setModalVisible={setDischargeModalVisible} />
+
+        </Modal>
+
+        {/* CSV Upload Modal */}
+        <Modal
+        transparent
+        visible={csvModalVisible}
+        animationType="fade"
+        onRequestClose={() => {
+            setCsvModalVisible(false);
+            }}
+            >
+                <CsvModal modalId={modalId} users={users} setModalVisible={setCsvModalVisible} />
+
         </Modal>
 
         <Modal

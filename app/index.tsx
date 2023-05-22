@@ -23,6 +23,9 @@ import { version } from 'canvaskit-wasm/package.json';
 import { useFonts } from 'expo-font';
 import {useWindowDimensions} from 'react-native';
 import NeuView from '../components/NeuView';
+import { LoadFonts } from '../presets';
+import { getData } from '../apiCalls';
+import documents from './documents';
 
 const specs = {
   groupings: [
@@ -481,28 +484,46 @@ const summaries = {
   }
 }
 
-const color1 = '#F9F9F9'
-
-
-const index = () => {
-  const [fontsLoaded] = useFonts({
-    'Rubik': require('../assets/fonts/Rubik-Regular.ttf'),
-  });
+const Index = () => {
+  // const [fontsLoaded] = useFonts({
+  //   'Rubik': require('../assets/fonts/Rubik-Regular.ttf'),
+  // });
+  LoadFonts()
 
   const {height, width} = useWindowDimensions();
   const [pageBottom, setPageBottom] = useState(60)
+  const [docData, setDocData] = useState(null)
+  const [error, setError] = useState(false)
+  const [results, setResults] = useState()
 
   useEffect(() => {
     width > 800 ? setPageBottom(60) : setPageBottom(200)
   }, [width])
+
+  //initial data fetch
+  useEffect(() => {
+    getData(15, 0, setError, setDocData, setResults)
+
+  }, [])
+
+  useEffect(() => {
+    console.log(docData)
+  
+  }, [docData])
+  
+  
   
 
   const [modalVisible, setModalVisible] = useState(false)
+  const [newEntry, setNewEntry] = useState(false)
   const [modalId, setModalId] = useState(-1)
+  const [indexPressed, setIndexPressed] = useState(-1)  
 
-  const handlePress = (id) => {
+  const handlePress = (id, index) => {
+    setNewEntry(false)
     setModalVisible(true)
     setModalId(id)
+    setIndexPressed(index)
   }
 
   const [firstWidth, setWidth] = useState(0);
@@ -524,6 +545,12 @@ const index = () => {
     setTWidth(width);
     // console.log(width)
   };
+
+  const newLog = () => {
+    setNewEntry(true)
+    setModalVisible(true)
+    setModalId(0)
+  }
 
   const buildTopRow = () => {
     let topRowContent = []
@@ -550,7 +577,7 @@ const index = () => {
                 <Text style={{color:'black', fontWeight: '200', fontSize: 45}} >{summaries.topRow[i].entries}</Text>
               </View>
               <View style={{left: 11, margin: 10}}>
-                <Text style={{textDecorationLine: 'underline', fontWeight: '200', fontSize: 14}} >Add New Entry</Text>
+                <Text onPress={()=>newLog()} style={{textDecorationLine: 'underline', fontWeight: '200', fontSize: 14}} >Add New Entry</Text>
               </View>
             </View>
           </NeuView>
@@ -646,7 +673,9 @@ const index = () => {
               <View style={{left: 11, margin: 10}}>
                 <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >DATA</Text>
               </View>
-              <MyTable obj={obj} columns={columns} width='100%' height='90%' sc={4} sr={0} handlePress={handlePress} viewWidth={tableWidth} />
+              {docData &&
+              <MyTable obj={docData} columns={columns} width='100%' height='90%' sc={4} sr={0} handlePress={handlePress} viewWidth={tableWidth} />
+              }
             </View>
           </View>
         </View>
@@ -659,9 +688,19 @@ const index = () => {
     {/* Table Page Navigation */}
     {width < 800 ? null :
     <View style={{flexDirection:'row', backgroundColor: '', width: '100%', height: 40, bottom: 60, justifyContent: 'center', gap: 20 }}>
-          <View style={[styles.neu, {borderRadius: 100, backgroundColor:'#F9F9F9', width: '40px', height: '100%', alignSelf: 'center'}]}></View>
-          <View style={[styles.neu, {borderRadius: 100, backgroundColor:'#F9F9F9', width: '100px', height: '100%', alignSelf: 'center'}]}></View>
-          <View style={[styles.neu, {borderRadius: 100, backgroundColor:'#F9F9F9', width: '40px', height: '100%', alignSelf: 'center'}]}></View>
+          <View style={[styles.neu, {cursor: 'pointer', borderRadius: 100, backgroundColor:'#F9F9F9', width: '40px', height: '100%', alignSelf: 'center', justifyContent: 'center',}]}>
+            <View style={{width:'40%', height:'40%', alignSelf:'center'}}>
+              <SvgArrow style={{transform: [{ rotateZ: '-180deg' }], color:'grey' }} />
+            </View>
+          </View>
+          <View style={[styles.neu, {borderRadius: 100, backgroundColor:'#F9F9F9', width: '100px', height: '100%', alignSelf: 'center', alignItems:'center', justifyContent:'center'}]}>
+            <Text>1 / {results}</Text>
+          </View>
+          <View style={[styles.neu, {cursor: 'pointer', borderRadius: 100, backgroundColor:'#F9F9F9', width: '40px', height: '100%', alignSelf: 'center', justifyContent: 'center',}]}>
+            <View style={{width:'40%', height:'40%', alignSelf:'center'}}>
+              <SvgArrow style={{transform: [{ rotateZ: '0deg' }], color:'grey' }} />
+            </View>
+          </View>
     </View>
     }
     </View>
@@ -675,14 +714,25 @@ const index = () => {
         
       }}
     >
-      <DocumentModal modalId={modalId} setModalVisible={setModalVisible} columns={columns} specs={specs} types={types} data={obj} />
+      <DocumentModal 
+        newEntry={newEntry}
+        modalId={modalId} 
+        index={indexPressed}
+        setModalVisible={setModalVisible} 
+        columns={columns} 
+        specs={specs} 
+        types={types} 
+        data={docData}
+        
+        />
       
     </Modal>
+    
     </View>
   )
 }
 
-export default index
+export default Index
 
 const styles = StyleSheet.create({
     page: {

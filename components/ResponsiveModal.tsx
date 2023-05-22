@@ -5,19 +5,26 @@ import CloseComponent from '../assets/x';
 
 export default function ResponsiveModal(props) {
   
-
   const { width, height } = useWindowDimensions();
-  const modWidth = width > 800 ? '60%' : '95%'
-  const modMinWidth = width > 800 ? 750 : null
-  const modHeight = width > 800 ? '75%' : '80%'
-  
+  let modWidth = width > 800 ? '60%' : '95%'
+  let modMinWidth = width > 800 ? 750 : null
+  let modHeight = width > 800 ? '75%' : '80%'
 
+  if (props.small == true) {
+    const modWidthSmall = parseInt(modWidth.replace('%', '')) / 2
+    modWidth = modWidthSmall.toString() + '%'
+    modMinWidth = modMinWidth / 2
+    const modHeightSmall = parseInt(modHeight.replace('%', '')) / 3
+    modHeight = modHeightSmall.toString() + '%'
+    
 
-  
+  }
 
   return (
     <View style={{width:'100%', height:'100%', backgroundColor:'rgba(255, 255, 255, 0.8)'}}>
         <View style={[styles.modalContainer, styles.neu, {backgroundColor:'white', width: modWidth, minWidth: modMinWidth, height: modHeight}]}>
+          
+          {/* Top Bar: */}
           <View style={[styles.neu, {backgroundColor:'#F9F9F9', height: 40, width: '100%', padding:0, margin:0, marginBottom:'auto', flexDirection: 'row', borderTopLeftRadius:10, borderTopRightRadius:10,}]}>
             <View style={{backgroundColor:'', flex:1, height:'100%'}}>
               <View style={{flex:1, justifyContent:'center', alignContent:'center', marginLeft:20}}>
@@ -29,19 +36,16 @@ export default function ResponsiveModal(props) {
               <Pressable style={{backgroundColor:'', width:35, height:35, marginLeft:'auto'}} onPress={() => props.setModalVisible(false)}><CloseComponent style={{width:'100%', marginLeft:'auto'}}/></Pressable>
             </View>
           </View>
-          <View style={{flexDirection:'row', flex:1, marginTop:0, justifyContent:'flex-start', backgroundColor:'', width:'100%', flexWrap: 'wrap', alignItems:'flex-start', }}>
-            <ScrollView showsVerticalScrollIndicator={false}  style={{height:'100%', width: '100%'}}>
+
+          {/* Passthrough View: */}
+          <View style={{flexDirection:'row', flex:1, marginTop:0, justifyContent:'flex-start', width:'100%', height:'100%', flexWrap: 'wrap', alignItems:'flex-start', backgroundColor:''}}>
+            <ScrollView nestedScrollEnabled={true} scrollEnabled={true} showsVerticalScrollIndicator={false}  style={{width: '100%', height:'100%'}}>
               <View style={{width:'80%', alignItems:'center', alignSelf:'center', justifyContent:'center', backgroundColor:''}}>
-            {props.children}
+          {props.children}
               </View>
             </ScrollView>
-            
-            
-            {/* <Text>Modal content goes here</Text>
-            <Text>{props.modalId}</Text> */}
           </View>
-            {/* <View style={{height:10}}></View> */}
-
+            
         </View>
       </View>
   )
