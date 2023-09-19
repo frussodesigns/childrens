@@ -5,6 +5,7 @@ import NeuView from '../components/NeuView'
 import { AnimatedCircularProgress } from 'react-native-circular-progress'
 import SearchIcon from '../assets/searchIcon'
 import AdminModal from '../components/AdminModal'
+import AdminSupervisorsModal from '../components/AdminSupervisorsModal';
 import NewUserModal from '../components/NewUserModal'
 import DischargeModal from '../components/DischargeModal'
 import CsvModal from '../components/CsvModal';
@@ -67,6 +68,7 @@ export default function admin() {
     const [newUserModalVisible, setNewUserModalVisible] = useState(false)
     const [supervisorsModalVisible, setSupervisorsModalVisible] = useState(false)
     const [dischargeModalVisible, setDischargeModalVisible] = useState(false)
+    const [supModalVisible, setSupModalVisible] = useState(false)
     const [csvModalVisible, setCsvModalVisible] = useState(false)
     const [modalId, setModalId] = useState(-1)
     const [contentWidth, setWidth] = useState()
@@ -186,7 +188,7 @@ export default function admin() {
                             </View>
                         </Pressable>
 
-                        <Pressable activeOpacity={1} onPress={()=>setSupervisorsModalVisible(true)}>
+                        <Pressable activeOpacity={1} onPress={()=>setSupModalVisible(true)}>
                             <View style={{cursor: 'pointer', width: 120, height:30, marginTop:6, marginRight:10, borderRadius:15, backgroundColor:'lightgrey', alignItems:'center', justifyContent:'center'}}>
                                 <Text>Supervisors</Text>
                             </View>
@@ -326,6 +328,17 @@ export default function admin() {
             }}
             >
             <AdminModal modalId={modalId} users={users} setModalVisible={setModalVisible} />
+        </Modal>
+
+        <Modal
+        transparent
+        visible={supModalVisible}
+        animationType="fade"
+        onRequestClose={() => {
+            setModalVisible(false);
+            }}
+            >
+            <AdminSupervisorsModal modalId={modalId} users={users} setModalVisible={setSupModalVisible} />
         </Modal>
 
     </View>

@@ -2,9 +2,10 @@ import { View, Text } from 'react-native'
 import React from 'react'
 import { useAppContext } from './hooks/useAppContext'
 import { REACT_APP_DOCUMENT_API } from '@env'
+import { REACT_APP_DOCUMENT_API_RENDER } from '@env'
 
-// const api = process.env.REACT_APP_DOCUMENT_API
-const api2 = REACT_APP_DOCUMENT_API
+const api = REACT_APP_DOCUMENT_API
+const api2 = REACT_APP_DOCUMENT_API_RENDER
 
 
 
@@ -13,7 +14,7 @@ export async function getData(pgLen, pgData, setError, setData, setResults, disp
   // const { appContext, dispatch } = useAppContext()
 
   // console.log(api)
-  console.log(api2)
+  // console.log(api2)
 
   // console.log(process.env.REACT_APP_DOCUMENT_API)
   // console.log(REACT_APP_DOCUMENT_API)

@@ -10,6 +10,15 @@ import {
     Dimensions,
     Modal
 } from 'react-native'
+import Animated, {
+  useAnimatedStyle,
+  withTiming,
+  useSharedValue,
+  Easing,
+  useDerivedValue,
+  interpolate,
+  Extrapolate
+} from 'react-native-reanimated';
 import { Link } from "expo-router"
 import CustomMenu from "../components/customMenu";
 import MobileMenu from "../components/MobileMenu";
@@ -30,6 +39,12 @@ export default function Layout() {
   const [menuWidth, setMenuWidth] = useState('20%')
   const [desktopMenu, setDesktopMenu] = useState(true)
 
+  const startValue = 3.8; // The starting percent value
+  const endValue = 20; // The ending percent value
+
+  const animation = useSharedValue(startValue);
+  const [animationState, setAnimation] = useState(100);
+
   let path = window.location.pathname
   
   useEffect(() => {
@@ -44,21 +59,47 @@ export default function Layout() {
     console.log(path)
   }, [path]);
 
+  const interpolatedWidth = interpolate(
+    animation.value, 
+    [0, 1],
+    [startValue, endValue],
+    { extrapolateRight: Extrapolate.CLAMP }
+  );
 
+  const hoverOn = () => {
+    animation.value = withTiming(1, { duration: 300, easing: Easing.ease });
+  };
+
+  const hoverOff = () => {
+    animation.value = withTiming(0, { duration: 300, easing: Easing.ease });
+  };
   
 
-  // useEffect(() => {
-  //   isHovered==true ? setMenuWidth('20%') : setMenuWidth('8%')
-  // }, [isHovered])
+  useEffect(() => {
+    if (isHovered) {
+      hoverOn();
+    } else {
+      hoverOff();
+    }
+  }, [isHovered]);
+
+  const derived = useDerivedValue(() => {
+    setAnimation(animation.value)
+  }, [animation]);
+
+//   const reverseInterpolatedValue = animation.value.interpolate({
+//     inputRange: [0, 1],
+//     outputRange: [1, 0],
+// });
   
 
   return (<>
   <View style={{flexDirection:'row', height:'100%', backgroundColor:''}}>
     
     {width < 800 || !desktopMenu ? null : <>
-    <View  style={[{width:'20%', maxWidth:'12.5em', zIndex:1}, styles.neu]}>
-        <CustomMenu setIsHovered={setIsHovered} setReportsModalVisible={setReportsModalVisible} />
-    </View>
+    <Animated.View  style={[{width: `${interpolatedWidth}%`, maxWidth:'12.5em', zIndex:1}, styles.neu]}>
+        <CustomMenu setIsHovered={setIsHovered} setReportsModalVisible={setReportsModalVisible} animationValue={animation.value} winWidth={width} winHeight={height} />
+    </Animated.View>
 
     {/* <Link href="/kingap">
       <View style={{bottom:10, left:0, position:'fixed', zIndex:2, width:'14em', height: 65, backgroundColor: ''}}>

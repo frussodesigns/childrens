@@ -16,9 +16,11 @@ export default function NeuView(props) {
 
   useEffect(() => {
     if (isHovered === true){
+      props.setIsHovered && props.setIsHovered(true)
       aniDown()
     }
     else if (isHovered === false){
+      props.setIsHovered && props.setIsHovered(false)
       aniUp()
     }
 
@@ -49,7 +51,7 @@ export default function NeuView(props) {
 
   return (
     <Pressable onPress={props.onPress ? () => props.onPress(props.id) : null} style={[props.style, {cursor: props.cursor ? props.cursor : 'default'}]} onHoverIn={()=>setIsHovered(true)} onHoverOut={()=>setIsHovered(false)}>
-      <View style={[styles.secondShadow, {
+      <View onHoverIn={()=>setIsHovered(true)} onHoverOut={()=>setIsHovered(false)} style={[styles.secondShadow, {
         shadowColor: props.shadowColor ? props.shadowColor : 'white',
         shadowOffset: {
           width: -3,
