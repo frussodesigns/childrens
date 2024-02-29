@@ -4,6 +4,7 @@ import React, {useEffect, useState} from 'react'
 import Checkbox from 'expo-checkbox';
 import CloseComponent from '../assets/x';
 import ResponsiveModal from './ResponsiveModal';
+import CustomButton from './customButton';
 
 
 export default function AdminModal(props) {
@@ -127,23 +128,30 @@ export default function AdminModal(props) {
               
               <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
                 <View style={{backgroundColor:'', height:60, alignSelf:'center', width: '80%'}}>
+                  <Text>{'Name:'}</Text>
+                  <View style={{height:5}}/>
+                  <TextInput defaultValue={formData.name} style={{ backgroundColor:'#F9F9F9', paddingLeft: 10, height:'2em', borderRadius: 5, width:'100%'}} />
+                  <View style={{height:10}}></View>
+                </View>
+              </View>
+              <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
+                <View style={{backgroundColor:'', height:60, alignSelf:'center', width: '80%'}}>
                   <Text>{'Email:'}</Text>
                   <View style={{height:5}}/>
                   <TextInput defaultValue={formData.email} style={{ backgroundColor:'#F9F9F9', paddingLeft: 10, height:'2em', borderRadius: 5, width:'100%'}} />
                   <View style={{height:10}}></View>
                 </View>
               </View>
-              <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
+              {/* <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
                 <View style={{backgroundColor:'', height:60, alignSelf:'center', width: '80%'}}>
                   <Text>{'Password Recovery:'}</Text>
                   <View style={{height:5}}/>
                   <View style={{cursor: 'pointer', backgroundColor:'#F9F9F9', paddingLeft: 10, height:27, borderRadius: 5, width:'100%', alignItems:'center', justifyContent:'center'}}>
                     <Text>Send Password Revovery Email</Text>
                   </View>
-                  {/* <TextInput style={{backgroundColor:'#F9F9F9', paddingLeft: 10, height:'2em', borderRadius: 5, width:'100%'}} /> */}
                   <View style={{height:10}}></View>
                 </View>
-              </View>
+              </View> */}
               
               <View style={{width:'50%', minWidth:250, backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
                 <View style={{backgroundColor:'', alignSelf:'center', width: '80%'}}>
@@ -229,9 +237,19 @@ export default function AdminModal(props) {
                   <View style={{height:10}}></View>
                 </View>
               </View>
+
+
+              </View>
+              <View style={{alignSelf: 'center', flexDirection:'row', gap: 30}}>
+                <View style={{height:80, width:150, alignSelf:'center', justifyContent:'center'}}>
+                    {/* <Button title="Submit" ></Button> */}
+                    <CustomButton title="Save" onPress={() => saveEdits()} color='#8183FF' />
+                </View>
+                
+              </View>
           
 
-            </View>
+            {/* </View> */}
               {/* {formDataInit ? <View>{buildTable()}</View> : null} */}
               {/* <View>{buildTable()}</View> */}
             

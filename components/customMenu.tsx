@@ -237,7 +237,7 @@ const CustomMenu = ({setIsHovered, setReportsModalVisible, animationValue, winWi
                     <BlurView intensity={40*accountAnimation.value} style={
                         {backgroundColor: 'white', 
                         width: (winWidth*accountAnimation.value), 
-                        height: (winHeight+100), 
+                        height: accountAnimation.value*(winHeight+100), 
                         top: -accountAnimation.value*(winHeight), marginLeft: 5, marginRight: 10, marginBottom: 0, position: 'absolute'}
                     }
                         >

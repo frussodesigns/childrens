@@ -9,8 +9,14 @@ export const contextReducer = (state, action) => {
 		case 'UPDATE':
 			console.log('updating')
 			// console.log(Object.assign(state, action.payload))
-			return Object.assign(state, action.payload)
+			return Object.assign({}, state, action.payload)
+			// bak return Object.assign(state, action.payload)
 			// or return { ...state, ...action.payload }
+		case 'DELETE_SUP':
+			const filteredSupervisors = state.supervisors.filter(
+				supervisor => supervisor._id !== action.payload.id
+			);
+			return { ...state, supervisors: filteredSupervisors };
 		default:
 			return state
 	}

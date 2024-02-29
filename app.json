@@ -2,7 +2,8 @@
   "expo": {
     "scheme": "acme",
     "web": {
-      "bundler": "metro"
+      "bundler": "metro",
+      "favicon": "./assets/favicon.png"
     },
     "name": "Childrens Aid",
     "slug": "Childrens Aid App"

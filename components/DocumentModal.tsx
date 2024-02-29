@@ -9,6 +9,7 @@ import NeuView from './NeuView';
 import { LoadFonts, color2 } from '../presets';
 import CustomButton from './customButton';
 import { postFormData, patchFormData } from '../apiCalls';
+import AutocompleteDropdown from './AutocompleteDropdown';
 
 export default function DocumentModal(props) {
   
@@ -20,6 +21,8 @@ export default function DocumentModal(props) {
   const [properties, setProperties] = useState([])
   const [error, setError] = useState(null)
   const [confirmation, setConfirmation] = useState(false)
+  const [autocompleteActive, setAutocompleteActive] = useState()
+  const [caseWorkerID, setCaseWorkerID] = useState(null)
   // const [formData, setFormData] = useState(()=>{
   //   const initialFormData = {};
   //   props.columns.forEach((columnName) => {
@@ -88,6 +91,16 @@ export default function DocumentModal(props) {
     newObj[properties[id]] = text
     // console.log(newObj)
     setFormData(formData => ({...formData, ...newObj}))
+  }
+
+  const modData = (text, type) => {
+    onChange(text, caseWorkerID)
+  }
+
+  const autocomplete = (type, supervisor, trigger) => {
+    console.log('autocomplete...')
+    console.log(trigger)
+    trigger == true ? setAutocompleteActive(type) : setAutocompleteActive(null)
   }
 
   const bool = (index) => {
@@ -185,6 +198,27 @@ export default function DocumentModal(props) {
               <Text>{props.columns[count] + ':'}</Text>
               <View style={{height:5}}/>
               <TextInput value={formData[properties[id+1]]} inputMode={'numeric'} onChangeText={text => onChange(text, id+1)} style={{backgroundColor:color2, paddingLeft: 10, height:'2em', borderRadius: 5, width:'100%'}} />
+              <View style={{height:10}}></View>
+            </View>
+          </View>
+        )
+        }
+        else if (props.types[count] === 'supervisor'){
+          if (!caseWorkerID) setCaseWorkerID(id+1)
+        localGroup.push(
+          <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
+            <View style={{backgroundColor:'', height:60, alignSelf:'center', width: '80%'}}>
+              <Text>{props.columns[count] + ':'}</Text>
+              <View style={{height:5}}/>
+              <TextInput value={formData[properties[id+1]]} 
+                onChangeText={text => onChange(text, id+1)} 
+                onFocus={(e) => autocomplete('caseWorkers', null, true)}
+                onBlur={(e) => { setTimeout(() => autocomplete('caseWorkers', null, false), 200)}}
+                style={{backgroundColor:color2, paddingLeft: 10, height:'2em', borderRadius: 5, width:'100%'}} 
+                />
+              {autocompleteActive && 
+                <AutocompleteDropdown type={'caseWorker'} supervisor={formData[properties[id+1]]} modData={modData} supervisors={props.supervisors} formdata={formData} autocompleteActive={autocompleteActive} />
+              }
               <View style={{height:10}}></View>
             </View>
           </View>

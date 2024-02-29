@@ -11,7 +11,9 @@ import DischargeModal from '../components/DischargeModal'
 import CsvModal from '../components/CsvModal';
 import { LoadFonts } from '../presets'
 import ResponsiveModal from '../components/ResponsiveModal'
-
+import AdminSingleSupervisorModal from '../components/AdminSingleSupervisorModal';
+import { Link, Stack, useRouter, useFocusEffect, Redirect } from "expo-router";
+import { useAppContext } from '../hooks/useAppContext';
 
 const users = [
     {
@@ -53,6 +55,12 @@ export default function admin() {
 
     LoadFonts()
     const auth = getAuth()
+    const user = auth.currentUser
+    const router = useRouter()
+
+    const [userId, setuserId] = useState(null)
+
+    const { state, dispatch } = useAppContext()
 
     // getAuth()
     // .getUser(uid)
@@ -73,10 +81,34 @@ export default function admin() {
     const [modalId, setModalId] = useState(-1)
     const [contentWidth, setWidth] = useState()
     const [searchActive, setSearchActive] = useState(false)
+    const [modSupModalVisible, setModSupModalVisible] = useState(false)
+    const [modSupModalNew, setModSupModalNew] = useState(false)
+    const [selectedSup, setSelectedSup] = useState(null)
+    const [supervisors, setSupervisors] = useState([])
 
     useEffect(() => {
       console.log(modalId)
     }, [modalId])
+
+    // useEffect(() => {
+    //   console.log(userId)
+    // }, [userId])
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+          // User is signed in, see docs for a list of available properties
+          // https://firebase.google.com/docs/reference/js/firebase.User
+          // setInitialFetch(true) //security concern ? can someone just inject true??
+        //   setuserId(user.email)
+          console.log(user)
+        } else {
+          // User is signed out
+          console.log('not signed in')
+          window.location.pathname = '/login'
+          router.push('/login')
+        }
+      })
+    
     
     const onLayout = (event) => {
         const { width } = event.nativeEvent.layout;
@@ -118,11 +150,11 @@ export default function admin() {
                                     </ScrollView>
                                 </View>
                               
-                                <View style={{flex:1, height:'100%', backgroundColor:'', marginRight:20, minWidth:150}}>
+                                {/* <View style={{flex:1, height:'100%', backgroundColor:'', marginRight:20, minWidth:150}}>
                                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{backgroundColor:''}} >
                                         <Text style={{color:'grey', fontWeight: 'regular', fontSize: 17, fontFamily: 'Rubik'}} >{element.passNovelty}</Text>
                                     </ScrollView>
-                                </View>
+                                </View> */}
                                 
                                 <View style={{flex:1, height:'100%', backgroundColor:'', marginRight:20, minWidth:150}}>
                                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{backgroundColor:''}} >
@@ -233,11 +265,11 @@ export default function admin() {
                                     </ScrollView>
                                 </View>
                               
-                                <View style={{flex:1, height:'100%', backgroundColor:'', marginRight:20, minWidth:150}}>
+                                {/* <View style={{flex:1, height:'100%', backgroundColor:'', marginRight:20, minWidth:150}}>
                                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{backgroundColor:''}} >
                                         <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >LAST PASSWORD CHANGE</Text>
                                     </ScrollView>
-                                </View>
+                                </View> */}
                                 
                                 <View style={{flex:1, height:'100%', backgroundColor:'', marginRight:20, minWidth:150}}>
                                     <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{backgroundColor:''}} >
@@ -319,6 +351,7 @@ export default function admin() {
 
         </Modal>
 
+        {/* Supervisor Modal */}
         <Modal
         transparent
         visible={modalVisible}
@@ -327,9 +360,10 @@ export default function admin() {
             setModalVisible(false);
             }}
             >
-            <AdminModal modalId={modalId} users={users} setModalVisible={setModalVisible} />
+            <AdminModal modalId={modalId} users={users} setModalVisible={setModalVisible} setModSupModalNew={setModSupModalNew} />
         </Modal>
 
+        {/* Mod Supervisor Modal */}
         <Modal
         transparent
         visible={supModalVisible}
@@ -338,7 +372,16 @@ export default function admin() {
             setModalVisible(false);
             }}
             >
-            <AdminSupervisorsModal modalId={modalId} users={users} setModalVisible={setSupModalVisible} />
+            <AdminSupervisorsModal modalId={modalId} users={users} setModSupModalNew={setModSupModalNew} setModalVisible={setSupModalVisible} setModSupModalVisible={setModSupModalVisible} setSelectedSup={setSelectedSup} supervisors={supervisors} setSupervisors={setSupervisors} state={state} dispatch={dispatch} />
+        </Modal>
+
+        <Modal
+          transparent
+          visible={modSupModalVisible}
+          onRequestClose={()=> setModSupModalVisible(false)}
+          animationType="fade"
+          >
+            <AdminSingleSupervisorModal dispatch={dispatch} state={state} setModSupModalVisible={setModSupModalVisible} setSelectedSup={setSelectedSup} modSupModalNew={modSupModalNew} selectedSup={selectedSup} supervisors={supervisors} setSupervisors={setSupervisors} />
         </Modal>
 
     </View>

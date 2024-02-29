@@ -119,29 +119,29 @@ const MyTable = ({obj, columns, width, height, sc, sr, handlePress, viewWidth}) 
         scrollEventThrottle={3} // optional, for smoother scrolling
         >
         <View style={{flexDirection: 'row', margin: 0, marginTop:0, backgroundColor:''}}>
-            {Object.keys(obj[0]).slice(prefs.stickyCols, Object.keys(obj[0]).length).map((column, index)=>
+            {Object.keys(obj[0]).slice(prefs.stickyCols, Object.keys(obj[0]).length-1).map((column, index)=>
             
             
                 <View style={{flex: 1, flexDirection: 'column'}}>
-                    {obj.map((item)=>
+                    {obj.map((item, dex)=>
                       <Pressable
                         key={item.cIN}
-                        onPress={() => handlePress(item.cIN)}
+                        onPress={() => handlePress(item.cIN, dex)}
                         onHoverIn={() => setCurrentIndex(item.cIN)}
                         onHoverOut={() => setCurrentIndex(null)}
                         >
                         <View style={[{borderBottomWidth: .2, borderColor: "#E0E0E0", padding: 0, margin: '-.05em', height: prefs.cellHeight, justifyContent: 'center', width: prefs.cellWidth, marginTop: 1, }, currentIndex === item.cIN && {backgroundColor:'#F3F6F9'}]}>
                             {/* <Text style={{textAlign: 'center'}}>{extractData(index+prefs.stickyCols, item)}</Text> */}
                             {/* <Text style={{textAlign: 'center'}}>{Object.prototype.toString.call(extractData(index+prefs.stickyCols, item))}</Text> */}
-                            {Object.prototype.toString.call(extractData(index+prefs.stickyCols, item)) == '[object String]' && 
+                            {Object.prototype.toString.call(extractData(index+prefs.stickyCols+1, item)) == '[object String]' && 
                             <Text style={{textAlign: 'center'}}>{extractData(index+prefs.stickyCols+1, item)}</Text>
                             }
-                            {Object.prototype.toString.call(extractData(index+prefs.stickyCols, item)) == '[object Boolean]'
-                            && extractData(index+prefs.stickyCols, item) == true &&
+                            {Object.prototype.toString.call(extractData(index+prefs.stickyCols+1, item)) == '[object Boolean]'
+                            && extractData(index+prefs.stickyCols+1, item) == true &&
                             <Text style={{textAlign: 'center'}}>{'✔️'}</Text>
                             }
-                            {Object.prototype.toString.call(extractData(index+prefs.stickyCols, item)) == '[object Boolean]'
-                            && extractData(index+prefs.stickyCols, item) == false &&
+                            {Object.prototype.toString.call(extractData(index+prefs.stickyCols+1, item)) == '[object Boolean]'
+                            && extractData(index+prefs.stickyCols+1, item) == false &&
                             <Text style={{textAlign: 'center'}}>{'❌'}</Text>
                             }
                             

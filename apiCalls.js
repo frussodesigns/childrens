@@ -4,10 +4,28 @@ import { useAppContext } from './hooks/useAppContext'
 import { REACT_APP_DOCUMENT_API } from '@env'
 import { REACT_APP_DOCUMENT_API_RENDER } from '@env'
 
+const api2 = REACT_APP_DOCUMENT_API
 const api = REACT_APP_DOCUMENT_API
-const api2 = REACT_APP_DOCUMENT_API_RENDER
+// const api2 = REACT_APP_DOCUMENT_API_RENDER
 
+export async function getStats(dispatch){
+  const response = await fetch(api2 + 'getStats')
+  const json = await response.json()
 
+  if (response.ok) {
+	  // setError(null) **Add Errors Later**
+
+    
+    console.log(json)
+    
+    dispatch({
+      type: 'UPDATE', 
+      payload: {
+        docStats: json
+      }
+    })
+	}
+}
 
 export async function getData(pgLen, pgData, setError, setData, setResults, dispatch) {
 

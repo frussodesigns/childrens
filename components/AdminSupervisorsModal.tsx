@@ -1,19 +1,129 @@
-import { StyleSheet, View, Text, Button, useWindowDimensions, TextInput } from 'react-native'
+import { StyleSheet, View, Text, Button, useWindowDimensions, TextInput, Modal } from 'react-native'
 import { ScrollView, Pressable } from 'react-native';
 import React, {useEffect, useState} from 'react'
 import Checkbox from 'expo-checkbox';
 import CloseComponent from '../assets/x';
 import ResponsiveModal from './ResponsiveModal';
 import AdminModal from './AdminModal';
+import AdminSingleSupervisorModal from './AdminSingleSupervisorModal';
+import { fetchSupervisors } from '../apiCallsSupervisors';
+import { newSupervisor } from '../apiCallsSupervisors';
+import { useAppContext } from '../hooks/useAppContext';
+
+
+async function getSupervisors () {
+  // let supervisors = {}
+  let supervisors = await fetchSupervisors()
+  return supervisors
+}
 
 
 export default function AdminSupervisorsModal(props) {
 
+  // const { state, dispatch } = useAppContext()
+  const [selectedBorough, setselectedBorough] = useState('all')
+
+  // const [supervisors, setSupervisors] = useState(null)
+  
+  let supervisorsTemp
+
+  // const [supervisors, setSupervisors] = useState([]) //moved to admin.tsx
+
   useEffect(() => {
-    
+
+    if (!props.state.supervisors){
+      fetchSupervisors(props.dispatch)
+    }
+
   }, [])
 
-  const supervisors = [
+  useEffect(() => {
+    console.log(props.supervisors)
+  
+  }, [props.supervisors])
+
+  useEffect(() => {
+    console.log(props.state)
+    console.log(Object.keys(props.state))
+    // console.log(props.state.supervisors)
+  
+  }, [props.state.supervisors])
+  
+  
+
+  const supervisorsBak = [
+    {
+      name: 'Bill Jenkins',
+      borough: 'all',
+      numKids: 20,
+      kidIds: [ 21, 50, 88]
+    },
+    {
+      name: 'Tod Jenkins',
+      borough: 'manhattan',
+      numKids: 21,
+      kidIds: [ 21, 50, 88]
+    },
+    {
+      name: 'Bill Jenkins',
+      borough: 'Queens',
+      numKids: 20,
+      kidIds: [ 21, 50, 88]
+    },
+    {
+      name: 'Bill Jenkins',
+      borough: 'Queens',
+      numKids: 20,
+      kidIds: [ 21, 50, 88]
+    },
+    {
+      name: 'Bill Jenkins',
+      borough: 'Queens',
+      numKids: 20,
+      kidIds: [ 21, 50, 88]
+    },
+    {
+      name: 'Tod Jenkins',
+      borough: 'Queens',
+      numKids: 21,
+      kidIds: [ 21, 50, 88]
+    },
+    {
+      name: 'Bill Jenkins',
+      borough: 'Queens',
+      numKids: 20,
+      kidIds: [ 21, 50, 88]
+    },
+    {
+      name: 'Bill Jenkins',
+      borough: 'Queens',
+      numKids: 20,
+      kidIds: [ 21, 50, 88]
+    },
+    {
+      name: 'Bill Jenkins',
+      borough: 'Queens',
+      numKids: 20,
+      kidIds: [ 21, 50, 88]
+    },
+    {
+      name: 'Tod Jenkins',
+      borough: 'Queens',
+      numKids: 21,
+      kidIds: [ 21, 50, 88]
+    },
+    {
+      name: 'Bill Jenkins',
+      borough: 'Queens',
+      numKids: 20,
+      kidIds: [ 21, 50, 88]
+    },
+    {
+      name: 'Bill Jenkins',
+      borough: 'Queens',
+      numKids: 20,
+      kidIds: [ 21, 50, 88]
+    },
     {
       name: 'Bill Jenkins',
       borough: 'Queens',
@@ -40,6 +150,7 @@ export default function AdminSupervisorsModal(props) {
     },
   ]
 
+  
   
   const buildTable = () => {
     let formContent = []
@@ -76,20 +187,52 @@ export default function AdminSupervisorsModal(props) {
 
 }
 
-const { width, height } = useWindowDimensions();
-  let modWidth = width > 800 ? '60%' : '95%'
-  let modMinWidth = width > 800 ? 750 : null
-  let modHeight = width > 800 ? '75%' : '80%'
+  const selectBorough = (borough) => {
+    console.log(borough)
+    setselectedBorough(borough)
+    console.log(selectedBorough)
+  }
+
+  const newEntry = () => {
+    props.setModSupModalNew(true)
+    props.setModSupModalVisible(true)
+  }
+
+  const openSup = (sup) => {
+    props.setModSupModalNew(false)
+    props.setSelectedSup(sup)
+    props.setModSupModalVisible(true)
+  }
+
+  const { width, height } = useWindowDimensions();
+    let modWidth = width > 800 ? '60%' : '95%'
+    let modMinWidth = width > 800 ? 750 : null
+    let modHeight = width > 800 ? '75%' : '80%'
+
+  function calculateMarginLeft(role) {
+    return role === 'director' ? 0 : (role === 'supervisor' ? '10%' : '20%');
+  }
+
+  function calculateWidth(role) {
+    return role === 'director' ? '100%' : (role === 'supervisor' ? '90%' : '80%');
+  }
+
+  function supName(sup){
+    const formattedBorough = sup.borough.charAt(0).toUpperCase() + sup.borough.slice(1)
+    const formattedName = sup.role == 'director' ? sup.name + " (" + formattedBorough + ")" : sup.name
+    return formattedName
+  }
 
   return (
     <View style={{width:'100%', height:'100%', backgroundColor:'rgba(255, 255, 255, 0.8)'}}>
+
         <View style={[styles.modalContainer, styles.neu, {backgroundColor:'white', width: modWidth, minWidth: modMinWidth, height: modHeight}]}>
           
           {/* Top Bar: */}
           <View style={[styles.neu, {backgroundColor:'#F9F9F9', height: 40, width: '100%', padding:0, margin:0, marginBottom:'auto', flexDirection: 'row', borderTopLeftRadius:10, borderTopRightRadius:10,}]}>
             <View style={{backgroundColor:'', flex:1, height:'100%'}}>
               <View style={{flex:1, justifyContent:'center', alignContent:'center', marginLeft:20}}>
-                <Text>Supervisors Setup</Text>
+                <Text>{}</Text>
               </View>
             </View>
             <View style={{width: 90, height: 35, backgroundColor: '', alignSelf:'center', alignItems:'center', justifyContent:'center', marginLeft:'auto', marginRight:15}}>
@@ -98,36 +241,98 @@ const { width, height } = useWindowDimensions();
             </View>
           </View>
 
-          {/* Passthrough View: */}
-            <View style={{flexDirection: 'row', justifyContent: 'center', gap: 10, alignItems: 'center', height: 40, width: '100%', backgroundColor: ''}}>
-              <View style={{width: 100, height: 30, backgroundColor: 'lightgrey', borderRadius: 20, justifyContent: 'center' }}>
-                <Text style={{textAlign: 'center', justifyContent: 'center', alignSelf: 'center'}}>Manhattan</Text>
-              </View>
-              <View style={{width: 100, height: 30, backgroundColor: 'lightgrey', borderRadius: 20, justifyContent: 'center' }}>
-                <Text style={{textAlign: 'center', justifyContent: 'center', alignSelf: 'center'}}>Bronx</Text>
-              </View>
-              <View style={{width: 100, height: 30, backgroundColor: 'lightgrey', borderRadius: 20, justifyContent: 'center' }}>
-                <Text style={{textAlign: 'center', justifyContent: 'center', alignSelf: 'center'}}>Brooklyn</Text>
-              </View>
-              <View style={{width: 100, height: 30, backgroundColor: 'lightgrey', borderRadius: 20, justifyContent: 'center' }}>
-                <Text style={{textAlign: 'center', justifyContent: 'center', alignSelf: 'center'}}>Staten Island</Text>
-              </View>
-              <View style={{width: 100, height: 30, backgroundColor: 'lightgrey', borderRadius: 20, justifyContent: 'center' }}>
-                <Text style={{textAlign: 'center', justifyContent: 'center', alignSelf: 'center'}}>Queens</Text>
-              </View>
+        {/* Title and New Entry Button */}
+          {/* <View style={{height:10}}></View> */}
+        {/* <Text>{props.modalId}</Text> */}
+        <View style={{width:'80%', flexDirection:'row', flexWrap: 'wrap', backgroundColor:'',}}>
+          <View style={{height:50, width: '100%', justifyContent:'center', backgroundColor:''}}>
+            <View style={{width:'100%', alignSelf:'start', backgroundColor:'', flexDirection:'row'}}>
+              <Text style={[styles.sectionTitle, {marginRight:'auto'}]}>{"Supervisors:"}</Text>
+              <Pressable activeOpacity={1} onPress={()=>newEntry()}>
+                  <View style={{cursor: 'pointer', width: 140, height:30, marginTop:-2, marginRight:10, borderRadius:15, backgroundColor:'lightblue', alignItems:'center', justifyContent:'center'}}>
+                      <Text>New Entry</Text>
+                  </View>
+              </Pressable>
             </View>
+          </View>
+          <View style={{width:'50%'}}></View>
+        </View>
+
+          {/* Passthrough View: */}
+
+          {/* Borough Selection */}
+            <View style={{flexDirection: 'row', justifyContent: 'center', gap: 10, alignItems: 'center', height: 40, width: '100%', paddingVertical: 28, backgroundColor: 'lightgrey'}}>
+              <Pressable onPress={()=>selectBorough('all')}>
+                <View style={{width: 100, height: 30, backgroundColor: 'white', borderRadius: 20, justifyContent: 'center' }}>
+                  <Text style={{textAlign: 'center', justifyContent: 'center', alignSelf: 'center', fontWeight: selectedBorough === 'all' ? 'bold' : 'normal'}}>All </Text>
+                </View>
+              </Pressable>
+              <Pressable onPress={()=>selectBorough('manhattan')}>
+                <View style={{width: 100, height: 30, backgroundColor: 'white', borderRadius: 20, justifyContent: 'center' }}>
+                  <Text style={{textAlign: 'center', justifyContent: 'center', alignSelf: 'center', fontWeight: selectedBorough === 'manhattan' ? 'bold' : 'normal'}}>Manhattan</Text>
+                </View>
+              </Pressable>
+              <Pressable onPress={()=>selectBorough('bronx')}>
+                <View style={{width: 100, height: 30, backgroundColor: 'white', borderRadius: 20, justifyContent: 'center' }}>
+                  <Text style={{textAlign: 'center', justifyContent: 'center', alignSelf: 'center', fontWeight: selectedBorough === 'bronx' ? 'bold' : 'normal'}}>Bronx</Text>
+                </View>
+              </Pressable>
+              <Pressable onPress={()=>selectBorough('brooklyn')}>
+                <View style={{width: 100, height: 30, backgroundColor: 'white', borderRadius: 20, justifyContent: 'center' }}>
+                  <Text style={{textAlign: 'center', justifyContent: 'center', alignSelf: 'center', fontWeight: selectedBorough === 'brooklyn' ? 'bold' : 'normal'}}>Brooklyn</Text>
+                </View>
+              </Pressable>
+              <Pressable onPress={()=>selectBorough('staten island')}>
+                <View style={{width: 100, height: 30, backgroundColor: 'white', borderRadius: 20, justifyContent: 'center' }}>
+                  <Text style={{textAlign: 'center', justifyContent: 'center', alignSelf: 'center', fontWeight: selectedBorough === 'staten island' ? 'bold' : 'normal'}}>Staten Island</Text>
+                </View>
+              </Pressable>
+              <Pressable onPress={()=>selectBorough('queens')}>
+                <View style={{width: 100, height: 30, backgroundColor: 'white', borderRadius: 20, justifyContent: 'center' }}>
+                  <Text style={{textAlign: 'center', justifyContent: 'center', alignSelf: 'center', fontWeight: selectedBorough === 'queens' ? 'bold' : 'normal'}}>Queens</Text>
+                </View>
+              </Pressable>
+            </View>
+
+          {/* Supervisors List Section */}
           <View style={{flexDirection:'row', flex:1, marginTop:0, justifyContent:'flex-start', width:'100%', height:'100%', flexWrap: 'wrap', alignItems:'flex-start', backgroundColor:''}}>
             
-            <ScrollView nestedScrollEnabled={true} scrollEnabled={true} showsVerticalScrollIndicator={false}  style={{width: '100%', height:'100%'}}>
-              <View style={{width:'80%', height: '100%', alignItems:'center', alignSelf:'center', justifyContent:'center', backgroundColor:''}}>
+            <ScrollView nestedScrollEnabled={true} scrollEnabled={true} showsVerticalScrollIndicator={true}  style={{width: '100%', height:'100%'}}>
+              <View style={{width:'80%', height: '100%', alignItems:'center', alignSelf:'center', justifyContent:'center',paddingTop: 21, backgroundColor:''}}>
                 {/* <ScrollView showsVerticalScrollIndicator={false}  style={{height:'100%',}}> */}
                 
-                  {supervisors.map((sup) => {
-                    return(
-                      <View style={{backgroundColor: 'red', width: '100%', borderRadius: 20, padding: 5, margin: 5}}>
-                        <Text style={{}}>{sup.name}</Text>
-                      </View>
-                    )
+                  {props.state.supervisors && props.state.supervisors.map((sup) => {
+                    //Check Each Borough Matches selectedBorough
+                    if (selectedBorough === 'all') {
+                      return(
+                        <View style={{
+                          backgroundColor: '#F9F9F9', borderRadius: 20, padding: 5, margin: 5, marginLeft: calculateMarginLeft(sup.role), width: calculateWidth(sup.role), 
+                          }}>
+                            <View style={{width: '100%'}}>
+                            <Pressable onPress={() => openSup(sup)}>
+                              <Text style={{}}>{supName(sup)}</Text>
+                            </Pressable>
+                          </View>
+                        </View>
+                        
+                      )
+                    }
+                    else if (sup.borough === selectedBorough) {
+                      return(
+                        <View style={{
+                          backgroundColor: '#F9F9F9', borderRadius: 20, padding: 5, margin: 5, marginLeft: calculateMarginLeft(sup.role), width: calculateWidth(sup.role), 
+                          }}>
+                            <View style={{width: '100%'}}>
+                            <Pressable onPress={() => openSup(sup)}>
+                              <Text style={{}}>{sup.name}</Text>
+                            </Pressable>
+                          </View>
+                        </View>
+                        
+                      )}
+
+                      return null
+                    
                   })
 
                   }
@@ -140,6 +345,10 @@ const { width, height } = useWindowDimensions();
           </View>
             
         </View>
+
+
+        
+
       </View>
   )
 }

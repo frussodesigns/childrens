@@ -26,7 +26,9 @@ import {useWindowDimensions, TouchableOpacity} from 'react-native';
 import NeuView from '../components/NeuView';
 import { LoadFonts } from '../presets';
 import { getData } from '../apiCalls';
+import { getStats } from '../apiCalls';
 import { ShowMenu } from '../hooks/useAppContext';
+import { fetchSupervisors } from '../apiCallsSupervisors';
 
 const specs = {
 groupings: [
@@ -95,7 +97,7 @@ const types = [
 "bool", "date", "date",
 "bool", "bool", "date", "date",
 "bool", "date", "date",
-"string", "bool"
+"supervisor", "bool"
 ]
 
 const obj = [
@@ -503,6 +505,50 @@ const [error, setError] = useState(false)
 const [results, setResults] = useState(0)
 const [pgLen, setPgLen] = useState(10)
 const [pgData, setPgData] = useState(0)
+const [topStats, setTopStats] = useState({
+  topRow: [
+    {
+      title: 'Entries',
+      change: 5/100,
+      entries: 748
+    },
+    {
+      title: 'Passports',
+      change: -5/100,
+      entries: 489
+    },
+    {
+      title: 'Social Security Cards',
+      change: 5/100,
+      entries: 548
+    },
+    {
+      title: "State ID's",
+      change: 8/100,
+      entries: 648
+    },
+  ],
+  overview: {
+    addedThisWeek: 120,
+    percent: 70/100
+  },
+  chart: {
+    xAxis: [
+      "January", "February", "March", "April", "May", "June"
+    ],
+    yAxis: [
+      120,
+      210,
+      240,
+      288,
+      340,
+      450
+    ]
+  }
+})
+const [dataFetched, setDataFetched] = useState(false)
+const [statsFetched, setStatsFetched] = useState(false)
+const [initialFetch, setInitialFetch] = useState(false)
 
 //initial data fetch *********************
 useEffect(() => {
@@ -521,7 +567,8 @@ onAuthStateChanged(auth, (user) => {
   if (user) {
     // User is signed in, see docs for a list of available properties
     // https://firebase.google.com/docs/reference/js/firebase.User
-    if (!state.docLogs) getData(pgLen, pgData, setError, setDocData, setResults, dispatch)
+    // setInitialFetch(true) //security concern ? can someone just inject true??
+    console.log(user)
   } else {
     // User is signed out
     console.log('not signed in')
@@ -529,6 +576,26 @@ onAuthStateChanged(auth, (user) => {
     router.push('/login')
   }
 })
+
+//Initial Fetch One Time Call Workaround (OnAuthStateChanged would fire 19x if directly inside)
+useEffect(() => {
+  console.log('initial fetch')
+  if (!dataFetched && !state.docLogs) {
+    setDataFetched(true)
+    getData(pgLen, pgData, setError, setDocData, setResults, dispatch)
+  }
+  if (!statsFetched && !state.docStats) 
+  {
+    setStatsFetched(true)
+    getStats(dispatch)
+
+
+  if (!state.supervisors){
+    fetchSupervisors(dispatch)
+  }
+  
+  }
+}, [user])
 
 useEffect(()=>{
   if (user) getData(pgLen, pgData, setError, setDocData, setResults, dispatch)
@@ -538,6 +605,29 @@ useEffect(() => {
   console.log('appContext: ' + state)
   console.log(state)
 }, [state])
+
+
+// Sets Top Stats
+useEffect(() => {
+
+  if (state.docStats){
+    console.log(state.docStats)
+    let tempStats = {...topStats}
+    tempStats.topRow[0].entries = state.docStats.numEntries
+    tempStats.topRow[0].change = 0
+    tempStats.topRow[1].entries = state.docStats.numPassports
+    tempStats.topRow[1].change = (tempStats.topRow[1].entries / tempStats.topRow[0].entries).toFixed(2)
+    tempStats.topRow[2].entries = state.docStats.numSocials
+    tempStats.topRow[2].change = (tempStats.topRow[2].entries / tempStats.topRow[0].entries).toFixed(2)
+    tempStats.topRow[3].entries = state.docStats.numStateId
+    tempStats.topRow[3].change = (tempStats.topRow[3].entries / tempStats.topRow[0].entries).toFixed(2)
+    tempStats.overview.addedThisWeek = state.docStats.pastMonth
+    setTopStats(tempStats)
+
+  }
+
+}, [state.docStats])
+
 
 useEffect(() => {
   width > 800 ? setPageBottom(60) : setPageBottom(200)
@@ -622,14 +712,15 @@ const buildTopRow = () => {
                 <Text numberOfLines={1} style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >{summaries.topRow[i].title.toUpperCase()}</Text>
               </View>
               <View style={{height:'1em', width:'1em', backgroundColor:'', alignSelf:'center', marginLeft:'auto', marginRight:0}}>
-                <SvgArrow style={{transform: [{ rotateZ: summaries.topRow[i].change>0?'-90deg':'90deg' }], color: summaries.topRow[i].change>0?'green':'red' }} />
+                <SvgArrow style={{transform: [{ rotateZ: topStats.topRow[i].change>0?'-90deg':'90deg' }], color: topStats.topRow[i].change>0?'green':'red' }} />
               </View>
               <View style={{height:'1em', backgroundColor:'', alignSelf:'center', margin:4, bottom:5, marginRight:20}}>
-                <Text style={{color: summaries.topRow[i].change>0?'green':'red', fontWeight: '', fontSize: 17}} >{summaries.topRow[i].change>0?"+"+summaries.topRow[i].change*100+'%':summaries.topRow[i].change*100+'%'}</Text>
+                {/* <Text style={{color: summaries.topRow[i].change>0?'green':'red', fontWeight: '', fontSize: 17}} >{summaries.topRow[i].change>0?"+"+summaries.topRow[i].change*100+'%':summaries.topRow[i].change*100+'%'}</Text> */}
+                <Text style={{color: topStats.topRow[i].change>0?'green':'red', fontWeight: '', fontSize: 17}} >{topStats.topRow[i].change>0?""+topStats.topRow[i].change*100+'%':topStats.topRow[i].change*100+'%'}</Text>
               </View>
             </View>
             <View style={{left: 11, margin: 10, marginTop: 0}}>
-              <Text style={{color:'black', fontWeight: '200', fontSize: 45}} >{summaries.topRow[i].entries}</Text>
+              <Text style={{color:'black', fontWeight: '200', fontSize: 45}} >{topStats.topRow[i].entries}</Text>
             </View>
             <View style={{left: 11, margin: 10}}>
               <Text onPress={()=>newLog()} style={{textDecorationLine: 'underline', fontWeight: '200', fontSize: 14}} >Add New Entry</Text>
@@ -664,7 +755,7 @@ return (
                 <AnimatedCircularProgress
                 size={150}
                 width={10}
-                fill={75}
+                fill={Math.round(topStats.overview.addedThisWeek / topStats.topRow[0].entries * 100)}
                 duration={2000}
                 rotation={0}
                 tintColor="#00e0ff"
@@ -673,7 +764,7 @@ return (
                   {
                       (fill) => (
                         <Text style={{fontSize:30, color:"#00e0ff"}}>
-                          { '75%' }
+                          {Math.round(topStats.overview.addedThisWeek / topStats.topRow[0].entries * 100)}%
                         </Text>
                       )
                     }
@@ -686,10 +777,10 @@ return (
           
               </View>
               <View style={{alignSelf:'center', marginTop:30}}>
-                  <Text style={{textAlign:'center'}}>Total Documents Added This Week:</Text>
+                  <Text style={{textAlign:'center'}}>Total Documents Added This Month:</Text>
               </View>
               <View style={{alignSelf:'center', marginTop:5}}>
-                  <Text style={{fontSize:40, fontWeight:'400'}}>120</Text>
+                  <Text style={{fontSize:40, fontWeight:'400'}}>{topStats.overview.addedThisWeek}</Text>
               </View>
               {/* <View style={{height:10}}></View> */}
               {/* <View style={{left: 11, margin: 10, marginTop: 0}}>
@@ -782,6 +873,7 @@ return (
       specs={specs} 
       types={types} 
       data={state.docLogs}
+      supervisors={state.supervisors}
       
       />
     
