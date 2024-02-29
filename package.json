@@ -6,9 +6,12 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@babel/preset-env": "^7.1.6",
+    "@babel/runtime": "^7.24.0",
     "@expo/webpack-config": "^18.0.1",
     "@shopify/react-native-skia": "0.1.172",
     "@types/react": "~18.0.27",
+    "asyncstorage-down": "^4.2.0",
     "dotenv": "^16.0.3",
     "expo": "^48.0.4",
     "expo-blur": "~12.2.2",
@@ -36,8 +39,10 @@
     "react-native-screens": "~3.20.0",
     "react-native-svg": "13.4.0",
     "react-native-web": "~0.18.7",
+    "react-test-renderer": "^18.2.0",
     "resize-observer-polyfill": "^1.5.1",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "webpack": "^5.1.0"
   },
   "devDependencies": {
     "@babel/core": "^7.19.3",
