@@ -219,21 +219,23 @@ const CustomMenu = ({setIsHovered, setReportsModalVisible, animationValue, winWi
             {/* <View>{isHovered ? <Text style={{textAlign:'center', color: 'red'}}>//hover detected!</Text> : null}</View> */}
             {/* gap: */}
             <View style={{flex:1}}></View>
+
+            {/* ::SIGNOUT BUTTON:: */}
             <Link href="/kingap">
-                <View style={{bottom: -200+(animationValue*100), flex:1, justifyContent:'center', alignContent:'center', width:'90%', height: 65, opacity: animationValue}}>
+                <View style={{bottom: -212+(animationValue*100), flex:1, justifyContent:'center', alignContent:'center', width:'90%', height: 65, opacity: animationValue}}>
                     <View style={[styles.neu, {backgroundColor: 'white', width: animationValue*140 + 45, height: animationValue*10 + 45, borderRadius: 65, marginLeft: 5, marginRight: 10, marginBottom: 0, position: 'absolute'}]}>
                     <View style={[styles.secondShadow, {flexDirection: 'row', padding:0, margin:0, flex: 1, borderRadius: 65, justifyContent: 'flex-start'}]}>
                         <View style={{backgroundColor:'rgb(242,242,242)', top: 5*animationValue, left: 5*animationValue, height: 45, width: 45, borderRadius: 65, }}></View>
                         <View style={{alignSelf: 'center', marginLeft:15}}>
-                        {animationValue > 0 && (
-                        <Text style={{alignSelf: 'center', textAlign: 'center', fontFamily: 'Rubik', color:'black', opacity: animationValue}}>Sign Out</Text>
-                        )}
+                            {animationValue > 0 && (
+                            <Text style={{alignSelf: 'center', textAlign: 'center', fontFamily: 'Rubik', color:'black', opacity: animationValue}}>Sign Out</Text>
+                            )}
                         </View>
                     </View>
                     </View>
                 </View>
             </Link>
-            {/* <Link href="/kingap"> */}
+            {/* ::ACCOUNT BUTTON:: */}
             <View style={{flex:1, justifyContent:'center', alignContent:'center', width:'90%', height: 65, backgroundColor: '', bottom: -20, left: -5}}>
                             
                 <TouchableOpacity onPress={activateAccountPage}>

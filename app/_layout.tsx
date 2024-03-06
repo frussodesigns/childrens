@@ -97,7 +97,7 @@ export default function Layout() {
   <View style={{flexDirection:'row', height:'100%', backgroundColor:''}}>
     
     {width < 800 || !desktopMenu ? null : <>
-    <Animated.View  style={[{width: `${interpolatedWidth}%`, maxWidth:'12.5em', zIndex:1}, styles.neu]}>
+    <Animated.View  style={[{width: `${interpolatedWidth}%`, maxWidth:'12.5em', minWidth:'3.5em', zIndex:1}, styles.neu]}>
         <CustomMenu setIsHovered={setIsHovered} setReportsModalVisible={setReportsModalVisible} animationValue={animation.value} winWidth={width} winHeight={height} />
     </Animated.View>
 
