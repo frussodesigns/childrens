@@ -972,7 +972,7 @@ const Homefinding = () => {
         <>
         {/* <ScrollView style={styles.page}> */}
             <View style={{flex:1, height:'100%', backgroundColor:''}}>
-                {/* <View  style={{borderRadius: 12, padding:0, margin:20, backgroundColor:'#F9F9F9', minWidth:200}} onLayout={onLayout}>
+                <View  style={{borderRadius: 12, padding:0, margin:20, backgroundColor:'#F9F9F9', minWidth:200}} onLayout={onLayout}>
                     <NeuView style={{borderRadius: 12, backgroundColor:'#F9F9F9', minWidth:200, width:'100%' }} onLayout={onLayout}>
                         <View style={{left: 11, margin: 10}}>
                             <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}}>HOMEFINDING</Text>
@@ -980,15 +980,15 @@ const Homefinding = () => {
 
                         
                     </NeuView>
-                </View> */}
+                </View>
 
                 {/* Table */}
-                <View style={{flex:1, flexDirection:'row', width: '100%', backgroundColor:'' , padding: 20, paddingTop:0, marginTop:18, gap: 20}} onLayout={tableLayout}>
+                <View style={{flex:1, flexDirection:'row', width: '100%', backgroundColor:'' , padding: 20, paddingTop:0, marginTop:0, gap: 20}} onLayout={tableLayout}>
                     <View style={[styles.neu, {flexDirection:'row', borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, display: 'flex', alignContent: 'center', justifyContent: 'center'}]}>
                         <View style={[styles.secondShadow, {flex:1, flexDirection:'column', borderRadius:12}]}>
                             {/* ::TITLE:: */}
                             <View style={{left: 11, margin: 10, flexDirection:'row'}}>
-                              <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}}>HOME FINDING</Text>
+                              {/* <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}}>HOME FINDING</Text> */}
                               <View style={{flex:1}}></View>
                               <Text style={{marginTop:3.5, marginRight:3}}>Filters:</Text>
                               <View 
