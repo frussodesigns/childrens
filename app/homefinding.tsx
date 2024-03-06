@@ -523,8 +523,8 @@ const Homefinding = () => {
             } else {
             // User is signed out
             console.log('not signed in')
-            // window.location.pathname = '/login'
-            // router.push('/login')
+            window.location.pathname = '/login'
+            router.push('/login')
             }
         })
 
