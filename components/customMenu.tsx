@@ -117,6 +117,8 @@ const CustomMenu = ({setIsHovered, setReportsModalVisible, animationValue, winWi
                     <Text style={{textAlign: 'center', fontFamily: 'Rubik', color:'grey'}}>{animationValue}</Text>
                 </NeuView>
             </Link> */}
+
+            {/* ::Vital Documents Button:: */}
             <View style={{height: '3em'}}>
                 <NeuView setIsHovered={setIsHovered} style={{width:'90%', height:20, borderRadius: 6, flex: 1, justifyContent: 'center', alignSelf: 'center', alignContent:'center', backgroundColor: 'white',  marginLeft: 10, marginRight: 10, marginTop: 10, }}>
                     <Link href="/documents" style={{justifyContent:'center', alignItems:'center', alignContent:'center'}}>
@@ -127,12 +129,13 @@ const CustomMenu = ({setIsHovered, setReportsModalVisible, animationValue, winWi
                     </Link>
                 </NeuView>
             </View>
+            {/* ::Homefinding Button:: */}
             <View style={{height: '3em'}}>
                 <NeuView setIsHovered={setIsHovered} style={{width:'90%', height:20, borderRadius: 6, flex: 1, justifyContent: 'center', alignSelf: 'center', alignContent:'center', backgroundColor: 'white',  marginLeft: 10, marginRight: 10, marginTop: 10, }}>
-                    <Link href="/" style={{justifyContent:'center', alignItems:'center', alignContent:'center'}}>
+                    <Link href="/homefinding" style={{justifyContent:'center', alignItems:'center', alignContent:'center'}}>
                         <View style={{position:'relative', height:'100%', width: '100%', alignSelf:'center', justifyContent:'center', alignItems:'center'}}>
                             <HandIcon style={{opacity: -animationValue+1*.6, position: 'absolute'}} />
-                            <Text style={{opacity: animationValue*.6, fontFamily: 'Rubik', position: 'absolute', alignSelf: 'center'}}>Adoption</Text>
+                            <Text style={{opacity: animationValue*.6, fontFamily: 'Rubik', position: 'absolute', alignSelf: 'center'}}>Homefinding</Text>
                         </View>
                     </Link>
                 </NeuView>

@@ -1,3 +1,5 @@
+import { getAuth, isSignInWithEmailLink, signInWithEmailLink, onAuthStateChanged } from "firebase/auth";
+
 import { 
     StyleSheet, 
     Text, 
@@ -7,7 +9,7 @@ import {
     ScrollView,
     Modal
 } from 'react-native'
-import { Link, Stack } from "expo-router";
+import { Link, Stack, useRouter } from "expo-router";
 import React, {useState} from 'react'
 import { useEffect } from 'react';
 import { FlatList } from 'react-native-gesture-handler';
@@ -26,6 +28,7 @@ import NeuView from '../components/NeuView';
 import { LoadFonts } from '../presets';
 import { getData } from '../apiCalls';
 import documents from './documents';
+import { Redirect } from 'expo-router';
 
 const specs = {
   groupings: [
@@ -490,11 +493,43 @@ const Index = () => {
   // });
   LoadFonts()
 
+  const auth = getAuth()
+  const user = auth.currentUser
+  const router = useRouter()
+
   const {height, width} = useWindowDimensions();
   const [pageBottom, setPageBottom] = useState(60)
   const [docData, setDocData] = useState(null)
   const [error, setError] = useState(false)
   const [results, setResults] = useState()
+
+  //initial data fetch *********************
+      useEffect(() => {
+        LoadFonts()
+        console.log(user)
+        // if (!state.docLogs && user) getData(pgLen, pgData, setError, setDocData, setResults, dispatch)
+        // else {
+        //   console.log('not logged in')
+        //   console.log(auth)
+        //   console.log(user)
+        // }
+
+    }, [user])
+
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        // setInitialFetch(true) //security concern ? can someone just inject true??
+        router.push('/homefinding')
+        console.log(user)
+        } else {
+        // User is signed out
+        console.log('not signed in')
+        window.location.pathname = '/login'
+        router.push('/login')
+        }
+    })
 
   useEffect(() => {
     width > 800 ? setPageBottom(60) : setPageBottom(200)
@@ -502,7 +537,9 @@ const Index = () => {
 
   //initial data fetch
   useEffect(() => {
+    
     getData(15, 0, setError, setDocData, setResults)
+    
 
   }, [])
 
@@ -588,148 +625,149 @@ const Index = () => {
     return topRowContent
   }
 
-  return (
-    <View style={{height:'100%', width:'100%'}}>
-    <ScrollView style={styles.page}>
+  // return <Redirect href="/login" />;
+  // return (
+  //   <View style={{height:'100%', width:'100%'}}>
+  //   <ScrollView style={styles.page}>
       
-      {/* First Row */}
-      <View style={{flexDirection:'row',flexWrap:'wrap', width: '100%', backgroundColor:'', height: '', padding: 20, gap: 20}}>
-        {buildTopRow()}
-      </View>
+  //     {/* First Row */}
+  //     <View style={{flexDirection:'row',flexWrap:'wrap', width: '100%', backgroundColor:'', height: '', padding: 20, gap: 20}}>
+  //       {buildTopRow()}
+  //     </View>
 
-      {/* Second Row */}
-      <View style={{flexDirection:'row', width: '100%', backgroundColor:'', height: '', padding: 20, paddingTop:0, gap: 20, flexWrap:'wrap', }}>
-        <View style={[{borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, minWidth:200,}]}>
-          <NeuView style={{flex:1, borderRadius:12}}>
-            <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
-                <View style={{left: 11, margin: 10}}>
-                  <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >OVERVIEW</Text>
-                </View>
-                <View style={{alignSelf:'center', marginTop:30}}>
-                  <AnimatedCircularProgress
-                  size={150}
-                  width={10}
-                  fill={75}
-                  duration={2000}
-                  rotation={0}
-                  tintColor="#00e0ff"
-                  onAnimationComplete={() => console.log('onAnimationComplete')}
-                  backgroundColor="#7795b5">
-                    {
-                        (fill) => (
-                          <Text style={{fontSize:30, color:"#00e0ff"}}>
-                            { '75%' }
-                          </Text>
-                        )
-                      }
-                  </AnimatedCircularProgress>
-                  {/* <WithSkiaWeb 
-                    opts={{ locateFile: (file) => `https://cdn.jsdelivr.net/npm/canvaskit-wasm@${version}/bin/full/${file}` }}
-                    getComponent={() => import('../components/Breathe')}
-                    fallback={<Text>Loading Skia...</Text>}
-                  /> */}
+  //     {/* Second Row */}
+  //     <View style={{flexDirection:'row', width: '100%', backgroundColor:'', height: '', padding: 20, paddingTop:0, gap: 20, flexWrap:'wrap', }}>
+  //       <View style={[{borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, minWidth:200,}]}>
+  //         <NeuView style={{flex:1, borderRadius:12}}>
+  //           <View style={{flexDirection:'column', width: '100%', height: '80%'}}>
+  //               <View style={{left: 11, margin: 10}}>
+  //                 <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >OVERVIEW</Text>
+  //               </View>
+  //               <View style={{alignSelf:'center', marginTop:30}}>
+  //                 <AnimatedCircularProgress
+  //                 size={150}
+  //                 width={10}
+  //                 fill={75}
+  //                 duration={2000}
+  //                 rotation={0}
+  //                 tintColor="#00e0ff"
+  //                 onAnimationComplete={() => console.log('onAnimationComplete')}
+  //                 backgroundColor="#7795b5">
+  //                   {
+  //                       (fill) => (
+  //                         <Text style={{fontSize:30, color:"#00e0ff"}}>
+  //                           { '75%' }
+  //                         </Text>
+  //                       )
+  //                     }
+  //                 </AnimatedCircularProgress>
+  //                 {/* <WithSkiaWeb 
+  //                   opts={{ locateFile: (file) => `https://cdn.jsdelivr.net/npm/canvaskit-wasm@${version}/bin/full/${file}` }}
+  //                   getComponent={() => import('../components/Breathe')}
+  //                   fallback={<Text>Loading Skia...</Text>}
+  //                 /> */}
             
-                </View>
-                <View style={{alignSelf:'center', marginTop:30}}>
-                    <Text style={{textAlign:'center'}}>Total Documents Added This Week:</Text>
-                </View>
-                <View style={{alignSelf:'center', marginTop:5}}>
-                    <Text style={{fontSize:40, fontWeight:'400'}}>120</Text>
-                </View>
-                {/* <View style={{height:10}}></View> */}
-                {/* <View style={{left: 11, margin: 10, marginTop: 0}}>
-                  <Text style={{color:'black', fontWeight: '200', fontSize: 45}} >748</Text>
-                </View> */}
+  //               </View>
+  //               <View style={{alignSelf:'center', marginTop:30}}>
+  //                   <Text style={{textAlign:'center'}}>Total Documents Added This Week:</Text>
+  //               </View>
+  //               <View style={{alignSelf:'center', marginTop:5}}>
+  //                   <Text style={{fontSize:40, fontWeight:'400'}}>120</Text>
+  //               </View>
+  //               {/* <View style={{height:10}}></View> */}
+  //               {/* <View style={{left: 11, margin: 10, marginTop: 0}}>
+  //                 <Text style={{color:'black', fontWeight: '200', fontSize: 45}} >748</Text>
+  //               </View> */}
                 
-            </View>
-          </NeuView>
-        </View>
+  //           </View>
+  //         </NeuView>
+  //       </View>
 
-        <View style={{borderRadius: 12, backgroundColor:'#F9F9F9', flex: 2, minWidth:300 }} onLayout={graphLayout}>
-          <NeuView style={{flex:1, borderRadius:12}}>
-            <View style={{flexDirection:'column', width: '100%', height: '100%'}}>
-                <View style={{left: 11, margin: 10}}>
-                  <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >CHART</Text>
-                </View>
-                <View style={{width:'100%', height:'80%', backgroundColor:'', flex:1, alignContent:'center'}}>
-                  <MyChart data={data} width={graphWidth} />
-                  {/* <LineChart /> */}
-                  {/* <WithSkiaWeb
-                    opts={{ locateFile: (file) => `https://cdn.jsdelivr.net/npm/canvaskit-wasm@${version}/bin/full/${file}` }}
-                    getComponent={() => import("../components/LineChart")}
-                    fallback={<Text>Loading Skia...</Text>}
-                  /> */}
-                </View>
-            </View>
-          </NeuView>
-        </View>
-      </View>
+  //       <View style={{borderRadius: 12, backgroundColor:'#F9F9F9', flex: 2, minWidth:300 }} onLayout={graphLayout}>
+  //         <NeuView style={{flex:1, borderRadius:12}}>
+  //           <View style={{flexDirection:'column', width: '100%', height: '100%'}}>
+  //               <View style={{left: 11, margin: 10}}>
+  //                 <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >CHART</Text>
+  //               </View>
+  //               <View style={{width:'100%', height:'80%', backgroundColor:'', flex:1, alignContent:'center'}}>
+  //                 <MyChart data={data} width={graphWidth} />
+  //                 {/* <LineChart /> */}
+  //                 {/* <WithSkiaWeb
+  //                   opts={{ locateFile: (file) => `https://cdn.jsdelivr.net/npm/canvaskit-wasm@${version}/bin/full/${file}` }}
+  //                   getComponent={() => import("../components/LineChart")}
+  //                   fallback={<Text>Loading Skia...</Text>}
+  //                 /> */}
+  //               </View>
+  //           </View>
+  //         </NeuView>
+  //       </View>
+  //     </View>
 
-      {/* Table */}
-      <View style={{flexDirection:'row', width: '100%', backgroundColor:'', height: '70vh', padding: 20, paddingTop:0, gap: 20}} onLayout={tableLayout}>
-        <View style={[styles.neu, {flexDirection:'row', borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, display: 'flex', alignContent: 'center', justifyContent: 'center'}]}>
-          <View style={[styles.secondShadow, {flex:1, flexDirection:'row', borderRadius:12}]}>
-            <View style={{flexDirection:'column', width: '100%'}}>
-              <View style={{left: 11, margin: 10}}>
-                <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >DATA</Text>
-              </View>
-              {docData &&
-              <MyTable obj={docData} columns={columns} width='100%' height='90%' sc={4} sr={0} handlePress={handlePress} viewWidth={tableWidth} />
-              }
-            </View>
-          </View>
-        </View>
-      </View>
+  //     {/* Table */}
+  //     <View style={{flexDirection:'row', width: '100%', backgroundColor:'', height: '70vh', padding: 20, paddingTop:0, gap: 20}} onLayout={tableLayout}>
+  //       <View style={[styles.neu, {flexDirection:'row', borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, display: 'flex', alignContent: 'center', justifyContent: 'center'}]}>
+  //         <View style={[styles.secondShadow, {flex:1, flexDirection:'row', borderRadius:12}]}>
+  //           <View style={{flexDirection:'column', width: '100%'}}>
+  //             <View style={{left: 11, margin: 10}}>
+  //               <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}} >DATA</Text>
+  //             </View>
+  //             {docData &&
+  //             <MyTable obj={docData} columns={columns} width='100%' height='90%' sc={4} sr={0} handlePress={handlePress} viewWidth={tableWidth} />
+  //             }
+  //           </View>
+  //         </View>
+  //       </View>
+  //     </View>
 
-      <View style={{height:60}}></View>
-    </ScrollView>
-    <View style={{height: 0}}>
+  //     <View style={{height:60}}></View>
+  //   </ScrollView>
+  //   <View style={{height: 0}}>
 
-    {/* Table Page Navigation */}
-    {width < 800 ? null :
-    <View style={{flexDirection:'row', backgroundColor: '', width: '100%', height: 40, bottom: 60, justifyContent: 'center', gap: 20 }}>
-          <View style={[styles.neu, {cursor: 'pointer', borderRadius: 100, backgroundColor:'#F9F9F9', width: '40px', height: '100%', alignSelf: 'center', justifyContent: 'center',}]}>
-            <View style={{width:'40%', height:'40%', alignSelf:'center'}}>
-              <SvgArrow style={{transform: [{ rotateZ: '-180deg' }], color:'grey' }} />
-            </View>
-          </View>
-          <View style={[styles.neu, {borderRadius: 100, backgroundColor:'#F9F9F9', width: '100px', height: '100%', alignSelf: 'center', alignItems:'center', justifyContent:'center'}]}>
-            <Text>1 / {results}</Text>
-          </View>
-          <View style={[styles.neu, {cursor: 'pointer', borderRadius: 100, backgroundColor:'#F9F9F9', width: '40px', height: '100%', alignSelf: 'center', justifyContent: 'center',}]}>
-            <View style={{width:'40%', height:'40%', alignSelf:'center'}}>
-              <SvgArrow style={{transform: [{ rotateZ: '0deg' }], color:'grey' }} />
-            </View>
-          </View>
-    </View>
-    }
-    </View>
+  //   {/* Table Page Navigation */}
+  //   {width < 800 ? null :
+  //   <View style={{flexDirection:'row', backgroundColor: '', width: '100%', height: 40, bottom: 60, justifyContent: 'center', gap: 20 }}>
+  //         <View style={[styles.neu, {cursor: 'pointer', borderRadius: 100, backgroundColor:'#F9F9F9', width: '40px', height: '100%', alignSelf: 'center', justifyContent: 'center',}]}>
+  //           <View style={{width:'40%', height:'40%', alignSelf:'center'}}>
+  //             <SvgArrow style={{transform: [{ rotateZ: '-180deg' }], color:'grey' }} />
+  //           </View>
+  //         </View>
+  //         <View style={[styles.neu, {borderRadius: 100, backgroundColor:'#F9F9F9', width: '100px', height: '100%', alignSelf: 'center', alignItems:'center', justifyContent:'center'}]}>
+  //           <Text>1 / {results}</Text>
+  //         </View>
+  //         <View style={[styles.neu, {cursor: 'pointer', borderRadius: 100, backgroundColor:'#F9F9F9', width: '40px', height: '100%', alignSelf: 'center', justifyContent: 'center',}]}>
+  //           <View style={{width:'40%', height:'40%', alignSelf:'center'}}>
+  //             <SvgArrow style={{transform: [{ rotateZ: '0deg' }], color:'grey' }} />
+  //           </View>
+  //         </View>
+  //   </View>
+  //   }
+  //   </View>
 
-    <Modal
-      transparent
-      visible={modalVisible}
-      animationType="fade"
-      onRequestClose={() => {
-        setModalVisible(false);
+  //   <Modal
+  //     transparent
+  //     visible={modalVisible}
+  //     animationType="fade"
+  //     onRequestClose={() => {
+  //       setModalVisible(false);
         
-      }}
-    >
-      <DocumentModal 
-        newEntry={newEntry}
-        modalId={modalId} 
-        index={indexPressed}
-        setModalVisible={setModalVisible} 
-        columns={columns} 
-        specs={specs} 
-        types={types} 
-        data={docData}
+  //     }}
+  //   >
+  //     <DocumentModal 
+  //       newEntry={newEntry}
+  //       modalId={modalId} 
+  //       index={indexPressed}
+  //       setModalVisible={setModalVisible} 
+  //       columns={columns} 
+  //       specs={specs} 
+  //       types={types} 
+  //       data={docData}
         
-        />
+  //       />
       
-    </Modal>
+  //   </Modal>
     
-    </View>
-  )
+  //   </View>
+  // )
 }
 
 export default Index

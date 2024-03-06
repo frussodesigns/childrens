@@ -43,6 +43,7 @@ export default function success() {
         // attacks, ask the user to provide the associated email again. For example:
         // email = window.prompt('Please provide your email for confirmation');
         console.log('email missing')
+        router.push('/login')
       }
       // The client SDK will parse the code from the link for you.
       signInWithEmailLink(auth, email, window.location.href)
@@ -129,11 +130,13 @@ export default function success() {
                             </View>
                           </NeuView>
                          
+                          <Link href='/homefinding'>
                           <NeuView cursor={'pointer'} shadowColor={'rgba(255, 255, 255, 0.28)'} style={{width: 120, height: 120, backgroundColor: 'rgba(255, 255, 255, 0.28)', borderRadius: 20, alignSelf:'center', alignItems:'center', justifyContent:'center'}}>
                             <View style={{width:'80%', backgroundColor:'', alignSelf:'center'}}>
-                              <Text style={{fontSize:20, fontFamily: 'Rubik', color:'white', textAlign:'center', flex: 1, flexWrap:'wrap'}}>Adoption Database</Text>
+                              <Text style={{fontSize:20, fontFamily: 'Rubik', color:'white', textAlign:'center', flex: 1, flexWrap:'wrap'}}>Home Finding</Text>
                             </View>
                           </NeuView>
+                          </Link>
                          
                           <NeuView cursor={'pointer'} shadowColor={'rgba(255, 255, 255, 0.28)'} style={{width: 120, height: 120, backgroundColor: 'rgba(255, 255, 255, 0.28)', borderRadius: 20, alignSelf:'center', alignItems:'center', justifyContent:'center'}}>
                             <View style={{width:'80%', backgroundColor:'', alignSelf:'center'}}>
