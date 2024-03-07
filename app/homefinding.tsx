@@ -531,8 +531,8 @@ const Homefinding = () => {
             } else {
             // User is signed out
             console.log('not signed in')
-            // window.location.pathname = '/login'
-            // router.push('/login')
+            window.location.pathname = '/login'
+            router.push('/login')
             }
         })
 
@@ -1026,7 +1026,100 @@ const Homefinding = () => {
                               <View style={{width:10}}></View>
                             </View>
 
-                            {/* ::TABLE:: */}
+                            <View style={{flex:1,flexDirection:'row'}}>
+                            {/* ::STICKY:: */}
+                                  <View style={{height:'100%', width:200, backgroundColor:'', marginRight:-14}}>
+                                  <ScrollView horizontal={false} showsHorizontalScrollIndicator={false}>
+                                    <View>
+                                    {/* ::TOP ROW:: */}
+                                    <View style={{
+                                      alignSelf: 'center',
+                                      marginBottom:2,
+                                      width: '98%',
+                                      height: '2em',
+                                      backgroundColor:'rgb(242,242,242)',
+                                      borderTopLeftRadius:20,
+                                      borderBottomLeftRadius:20,
+                                      flexDirection:'row',
+                                      // cursor: 'pointer'
+                                    }}>
+                                      <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:100}}>
+                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Household:'}</Text>
+                                      </ScrollView>
+                                      {/* <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Document Completion:'}</Text>
+                                      </ScrollView>
+                                      <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Document Submission:'}</Text>
+                                      </ScrollView>
+                                      <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Financial Viability:'}</Text>
+                                      </ScrollView>
+                                      <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Academics:'}</Text>
+                                      </ScrollView>
+                                      <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Creativity:'}</Text>
+                                      </ScrollView>
+                                      <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Athletics:'}</Text>
+                                      </ScrollView> */}
+                                    </View>
+                                    {/* ::TABLE CONTENT:: */}
+                                  <View onLayout={onLayoutHeight} style={{flex:1, backgroundColor:'', height:tableHeight}}>
+                                      <ScrollView showsVerticalScrollIndicator={false} style={{
+                                        flex:1,
+                                        minHeight:tableHeight,
+                                        height:tableHeight,
+                                        maxHeight:tableHeight
+                                      }}>
+                                      <View style={{marginTop: 5, backgroundColor:''}}>
+                                        {dummyData.map((item, key) => 
+
+                                          <View style={{
+                                            flex:1,
+                                            alignSelf: 'center',
+                                            marginBottom:5,
+                                            width: '98%',
+                                            minHeight: '2em',
+                                            backgroundColor:'rgb(242,242,242)',
+                                            borderTopLeftRadius:20,
+                                            borderBottomLeftRadius:20,
+                                            flexDirection:'row',
+                                            cursor: 'pointer'
+                                          }}>
+                                              <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:100}}>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.title}</Text>
+                                              </ScrollView>
+                                              {/* <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Documents}</Text>
+                                              </ScrollView>
+                                              <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.DocumentSubmission/10 + "/10"}</Text>
+                                              </ScrollView>
+                                              <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.FinancialViability/10 + "/10"}</Text>
+                                              </ScrollView>
+                                              <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Academics/10 + "/10"}</Text>
+                                              </ScrollView>
+                                              <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Creativity/10 + "/10"}</Text>
+                                              </ScrollView>
+                                              <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Athletics/10 + "/10"}</Text>
+                                              </ScrollView> */}
+                                            </View>
+                                        )}
+                                      
+                                      </View>
+                                      </ScrollView>
+                                  </View>
+                                  </View>
+                                  </ScrollView>
+                                  </View>
+
+                            {/* ::HORIZ-SCROLL:: */}
                                   <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
                                     <View>
                                     {/* ::TOP ROW:: */}
@@ -1036,15 +1129,13 @@ const Homefinding = () => {
                                       width: '98%',
                                       height: '2em',
                                       backgroundColor:'rgb(242,242,242)',
-                                      borderRadius:20,
-                                      borderBottomRightRadius:0,
-                                      borderBottomLeftRadius:0,
+                                      borderTopRightRadius:20,
                                       flexDirection:'row',
                                       // cursor: 'pointer'
                                     }}>
-                                      <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:100}}>
+                                      {/* <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:100}}>
                                         <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Last Name:'}</Text>
-                                      </ScrollView>
+                                      </ScrollView> */}
                                       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
                                         <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Document Completion:'}</Text>
                                       </ScrollView>
@@ -1065,56 +1156,59 @@ const Homefinding = () => {
                                       </ScrollView>
                                     </View>
                                     {/* ::TABLE CONTENT:: */}
-                            <View onLayout={onLayoutHeight} style={{flex:1, backgroundColor:'', height:tableHeight}}>
-                                <ScrollView showsVerticalScrollIndicator={false} style={{
-                                  flex:1,
-                                  minHeight:tableHeight,
-                                  height:tableHeight,
-                                  maxHeight:tableHeight
-                                }}>
-                                <View style={{marginTop: 5, backgroundColor:''}}>
-                                  {dummyData.map((item, key) => 
+                                  <View onLayout={onLayoutHeight} style={{flex:1, backgroundColor:'', height:tableHeight}}>
+                                      <ScrollView showsVerticalScrollIndicator={false} style={{
+                                        flex:1,
+                                        minHeight:tableHeight,
+                                        height:tableHeight,
+                                        maxHeight:tableHeight
+                                      }}>
+                                      <View style={{marginTop: 5, backgroundColor:''}}>
+                                        {dummyData.map((item, key) => 
 
-                                    <View style={{
-                                      flex:1,
-                                      alignSelf: 'center',
-                                      marginBottom:5,
-                                      width: '98%',
-                                      minHeight: '2em',
-                                      backgroundColor:'rgb(242,242,242)',
-                                      borderRadius:30,
-                                      flexDirection:'row',
-                                      cursor: 'pointer'
-                                    }}>
-                                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:100}}>
-                                          <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.title}</Text>
-                                        </ScrollView>
-                                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                          <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Documents}</Text>
-                                        </ScrollView>
-                                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                          <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.DocumentSubmission/10 + "/10"}</Text>
-                                        </ScrollView>
-                                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                          <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.FinancialViability/10 + "/10"}</Text>
-                                        </ScrollView>
-                                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                          <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Academics/10 + "/10"}</Text>
-                                        </ScrollView>
-                                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                          <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Creativity/10 + "/10"}</Text>
-                                        </ScrollView>
-                                        <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                          <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Athletics/10 + "/10"}</Text>
-                                        </ScrollView>
+                                          <View style={{
+                                            flex:1,
+                                            alignSelf: 'center',
+                                            marginBottom:5,
+                                            width: '98%',
+                                            minHeight: '2em',
+                                            backgroundColor:'rgb(242,242,242)',
+                                            borderTopRightRadius:30,
+                                            borderBottomRightRadius:30,
+                                            flexDirection:'row',
+                                            cursor: 'pointer'
+                                          }}>
+                                              {/* <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:100}}>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.title}</Text>
+                                              </ScrollView> */}
+                                              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Documents}</Text>
+                                              </ScrollView>
+                                              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.DocumentSubmission/10 + "/10"}</Text>
+                                              </ScrollView>
+                                              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.FinancialViability/10 + "/10"}</Text>
+                                              </ScrollView>
+                                              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Academics/10 + "/10"}</Text>
+                                              </ScrollView>
+                                              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Creativity/10 + "/10"}</Text>
+                                              </ScrollView>
+                                              <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Athletics/10 + "/10"}</Text>
+                                              </ScrollView>
+                                            </View>
+                                        )}
+                                      
                                       </View>
-                                  )}
-                                 
-                                </View>
-                                </ScrollView>
+                                      </ScrollView>
+                                  </View>
+                                  </View>
+                                  </ScrollView>
+
                             </View>
-                            </View>
-                            </ScrollView>
                             
 
                             {/* {state.docLogs &&
@@ -1124,6 +1218,11 @@ const Homefinding = () => {
                         </View>
                     </View>
                 </View>
+                {width > 800 ? null :
+                  <View style={{backgroundColor: '', height:88, width: '100%'}}>
+
+                  </View>
+                }
             </View>
         {/* </ScrollView> */}
         </>

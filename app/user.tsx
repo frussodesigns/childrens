@@ -9,7 +9,7 @@ import MyTable from '../components/table';
 import { LoadFonts } from '../presets';
 
 
-const Reports = () => {
+const User = () => {
 
     const { state, dispatch } = useAppContext()
 
@@ -78,7 +78,7 @@ const Reports = () => {
                 <View  style={{borderRadius: 12, padding:0, marginHorizontal:20, marginTop:5, backgroundColor:'#F9F9F9', minWidth:200}} onLayout={onLayout}>
                     <NeuView style={{borderRadius: 12, backgroundColor:'#F9F9F9', minWidth:200, width:'100%' }} onLayout={onLayout}>
                         <View style={{left: 11, margin: 10}}>
-                            <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}}>REPORT GENERATOR</Text>
+                            <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}}>MY ACCOUNT</Text>
                         </View>
                     </NeuView>
                 </View>
@@ -86,7 +86,7 @@ const Reports = () => {
                 <View  style={{borderRadius: 12, padding:0, marginHorizontal:20, marginTop:10, backgroundColor:'#F9F9F9', minWidth:200}} onLayout={onLayout}>
                     <NeuView style={{borderRadius: 12, backgroundColor:'#F9F9F9', minWidth:200, width:'100%' }} onLayout={onLayout}>
                         <View style={{left: 11, margin: 10}}>
-                            <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}}>COMING SOON</Text>
+                            <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}}>{'email: '+ user.email}</Text>
                         </View>
                     </NeuView>
                 </View>
@@ -150,7 +150,7 @@ const Reports = () => {
 //   )
 }
 
-export default Reports
+export default User
 
 const styles = StyleSheet.create({
     page: {

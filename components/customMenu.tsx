@@ -25,7 +25,7 @@
     //Account pg needs to lock animation at full
     //Create scroll view and controls for acct modal
 
-const CustomMenu = ({setIsHovered, setReportsModalVisible, animationValue, winWidth, winHeight}) => {
+const CustomMenu = ({setIsHovered, setReportsModalVisible, animationValue, winWidth, winHeight, user}) => {
     LoadFonts
     const auth = getAuth()
     
@@ -265,6 +265,9 @@ const CustomMenu = ({setIsHovered, setReportsModalVisible, animationValue, winWi
 
                                     {animationValue > 0 && (
                                     <Text style={{alignSelf: 'center', textAlign: 'center', fontFamily: 'Rubik', color:'black', opacity: animationValue}}>Account</Text>
+                                    )}
+                                    {accountAnimation.value > 0 && (
+                                    <Text style={{alignSelf: 'left', textAlign: 'center', fontFamily: 'Rubik', color:'black', opacity: animationValue}}>{'email: ' + user.email}</Text>
                                     )}
 
                                 </View>
