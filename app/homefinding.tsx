@@ -3,7 +3,7 @@ import {useWindowDimensions, TouchableOpacity, ScrollView} from 'react-native';
 import { Link, Stack, useRouter, useFocusEffect, Redirect } from "expo-router";
 import { getAuth, isSignInWithEmailLink, signInWithEmailLink, onAuthStateChanged } from "firebase/auth";
 import { useAppContext } from '../hooks/useAppContext';
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import NeuView from '../components/NeuView'
 import MyTable from '../components/table';
 import { LoadFonts } from '../presets';
@@ -489,6 +489,21 @@ const Homefinding = () => {
       setTableHeight(height);
     };
 
+    // Scroll Sync /////////////////////
+    const scrollView1Ref = useRef(null);
+    const scrollView2Ref = useRef(null);
+
+    const handleScrollView1Scroll = (event) => {
+      // const offsetY = event.nativeEvent.contentOffset.y;
+      scrollView2Ref.current.scrollTo({ y: event.nativeEvent.contentOffset.y, animated: false });
+    };
+  
+    const handleScrollView2Scroll = (event) => {
+      // const offsetY = event.nativeEvent.contentOffset.y;
+      scrollView1Ref.current.scrollTo({ y: event.nativeEvent.contentOffset.y, animated: false });
+    };
+    // Scroll Sync ///////////////////////
+
 
 
     //   Table:
@@ -509,7 +524,7 @@ const Homefinding = () => {
             // console.log(width)
           };
 
-      //initial data fetch *********************
+      //Auth initial data fetch *********************
         useEffect(() => {
             LoadFonts()
             console.log(user)
@@ -531,8 +546,8 @@ const Homefinding = () => {
             } else {
             // User is signed out
             console.log('not signed in')
-            window.location.pathname = '/login'
-            router.push('/login')
+            // window.location.pathname = '/login'
+            // router.push('/login')
             }
         })
 
@@ -1067,11 +1082,15 @@ const Homefinding = () => {
                                     </View>
                                     {/* ::TABLE CONTENT:: */}
                                   <View onLayout={onLayoutHeight} style={{flex:1, backgroundColor:'', height:tableHeight}}>
-                                      <ScrollView showsVerticalScrollIndicator={false} style={{
+                                      <ScrollView showsVerticalScrollIndicator={false} 
+                                      ref={scrollView2Ref}
+                                      onScroll={handleScrollView2Scroll}
+                                      style={{
                                         flex:1,
                                         minHeight:tableHeight,
                                         height:tableHeight,
-                                        maxHeight:tableHeight
+                                        maxHeight:tableHeight,
+                                        backgroundColor:'blue'
                                       }}>
                                       <View style={{marginTop: 5, backgroundColor:''}}>
                                         {dummyData.map((item, key) => 
@@ -1157,11 +1176,15 @@ const Homefinding = () => {
                                     </View>
                                     {/* ::TABLE CONTENT:: */}
                                   <View onLayout={onLayoutHeight} style={{flex:1, backgroundColor:'', height:tableHeight}}>
-                                      <ScrollView showsVerticalScrollIndicator={false} style={{
+                                      <ScrollView showsVerticalScrollIndicator={false} 
+                                      ref={scrollView1Ref}
+                                      onScroll={handleScrollView1Scroll}
+                                      style={{
                                         flex:1,
                                         minHeight:tableHeight,
                                         height:tableHeight,
-                                        maxHeight:tableHeight
+                                        maxHeight:tableHeight,
+                                        backgroundColor:'red'
                                       }}>
                                       <View style={{marginTop: 5, backgroundColor:''}}>
                                         {dummyData.map((item, key) => 

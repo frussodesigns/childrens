@@ -1,6 +1,6 @@
 import { LOGIN_SUCCESS_URL } from '@env'
 import { getAuth, sendSignInLinkToEmail, onAuthStateChanged } from "firebase/auth"
-import { StyleSheet, View, Text, ImageBackground, TextInput, Button, Pressable, TouchableOpacity, Modal } from 'react-native'
+import { StyleSheet, View, Text, ImageBackground, TextInput, Button, Pressable, TouchableOpacity, Modal, useWindowDimensions } from 'react-native'
 import { BlurView } from 'expo-blur';
 import { useFonts } from 'expo-font';
 import { Link, Stack, useRouter, useFocusEffect, Redirect } from "expo-router";
@@ -14,6 +14,8 @@ export default function index() {
     const [fontsLoaded] = useFonts({
         'Rubik': require('../../assets/fonts/Rubik-Regular.ttf'),
       });
+    const {width} = useWindowDimensions();
+
 
     const [height, setHeight] = useState()
     const [error, setError] = useState(false)
@@ -69,6 +71,7 @@ export default function index() {
     const login = () => {
         console.log('submitted')
         console.log(email)
+        // setSuccess(true)
         sendSignInLinkToEmail(auth, email, actionCodeSettings)
             .then(() => {
                 // The link was successfully sent. Inform the user.
@@ -110,12 +113,20 @@ export default function index() {
             setSuccess(false);
             }}
             >
-        <ResponsiveModal small={true} setModalVisible={setSuccess}>
-          <Text style={[styles.sectionTitle, {marginTop:30, color:'green'}]}>E-Mail Successfully Sent:</Text>
-          <Text style={{color: 'green'}}>Check your E-Mail for your login link.</Text>
-        </ResponsiveModal>
+        {width > 800 ?
+          <ResponsiveModal small={true} setModalVisible={setSuccess}>
+            <Text style={[styles.sectionTitle, {marginTop:30, color:'green'}]}>E-Mail Successfully Sent:</Text>
+            <Text style={{color: 'green'}}>Check your E-Mail for your login link.</Text>
+          </ResponsiveModal>
+        :
+          <ResponsiveModal small={false} setModalVisible={setSuccess} maxHeight={"18%"}>
+            <Text style={[styles.sectionTitle, {marginTop:30, color:'green'}]}>E-Mail Successfully Sent:</Text>
+            <Text style={{color: 'green'}}>Check your E-Mail for your login link.</Text>
+          </ResponsiveModal>
+        }
       </Modal>
 
+        {width > 800 ?
         <ImageBackground source={require("../../assets/image.jpg")} style={{width:'100%', height:'100%', justifyContent:'center', alignItems:'center'}}>
             <View style={{backgroundColor:'rgba(255, 255, 255, 0.28)', width: height, minWidth:350, maxWidth:450, height: '70%', minHeight:350, maxHeight:450, borderRadius:16, justifyContent:'center'}}>
             <BlurView intensity={40} onLayout={onLayout} style={{backgroundColor:'', width: height, minWidth:350, maxWidth:450, height: '100%', minHeight:350, maxHeight:450, borderRadius:16, justifyContent:'center'}}>
@@ -158,6 +169,50 @@ export default function index() {
             </BlurView>
             </View>
         </ImageBackground>
+        :
+        <ImageBackground source={require("../../assets/image.jpg")} style={{width:'100%', height:'100%', justifyContent:'center', alignItems:'center'}}>
+            <View style={{backgroundColor:'rgba(255, 255, 255, 0.28)', height: height, minWidth:350, maxWidth:450, width: '70%', minHeight:350, maxHeight:450, borderRadius:16, justifyContent:'center'}}>
+            <BlurView intensity={40} onLayout={onLayout} style={{backgroundColor:'', width: '100%', minWidth:350, maxWidth:450, height: '100%', minHeight:350, maxHeight:450, borderRadius:16, justifyContent:'center'}}>
+                <View style={{width:'55%', height:'100%', justifyContent:'center', alignSelf:'center', flexDirection:'column', flexWrap:'wrap', backgroundColor:''}}>
+                    <View style={{width:'100%',  backgroundColor:'', justifyContent:'end', alignItems:'center'}}>
+                        <Text style={{fontSize:25, fontFamily: 'Rubik', color:'white'}}>Login</Text>
+                        <View style={{height:30}}/>
+                    </View>
+                    <View style={{ backgroundColor:''}}>
+                        <View style={{width:'100%',}}>
+                            <Text style={styles.text}>E-Mail:</Text>
+                            <TextInput textContentType='emailAddress' value={email} onChangeText={setEmail} style={{backgroundColor:'#F9F9F9', paddingLeft: 10, height:'2em', borderRadius: 5, width:'100%',}} />
+                            <View style={{height:20}}/>
+                        </View>
+                        {/* <View style={{width:'100%', backgroundColor:''}}>
+                            <Text style={styles.text}>Password:</Text>
+                            <TextInput secureTextEntry={true} textContentType='password' style={{backgroundColor:'#F9F9F9', paddingLeft: 10, height:'2em', borderRadius: 5, width:'100%',}} />
+                            <View style={{height:20}}/>
+                        </View> */}
+                        <View style={{height:10}}></View>
+                        <Pressable onPress={() => login()} style={{height:40}}>
+                            <View style={[styles.neu, {cursor: 'pointer', backgroundColor:'#6ac1fc', borderRadius:90, height:40, width:'60%', alignSelf:'center', alignItems:'center', justifyContent:'center'}]}>
+                                <Text style={[styles.text, {alignSelf:'center', marginTop:5}]}>Submit</Text>
+
+                            </View>
+                        </Pressable>
+
+                        {error &&
+                            <View style={{width: '100%', borderRadius:2, borderColor:'red', borderWidth:2, alignSelf:'center', marginTop:20}}>
+                                <Text style={{margin:10, alignSelf:'center', color:'red', textAlign:'center'}}>Error: Entered Username Does Not Exist.</Text>
+                            </View>
+                        }
+                    </View>
+                    <View style={{ alignItems:'center', justifyContent:'center', backgroundColor:''}}>
+                        
+                    </View>
+
+
+                </View>
+            </BlurView>
+            </View>
+        </ImageBackground>
+        }
     </View>
   )
 }

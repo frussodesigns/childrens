@@ -45,6 +45,20 @@ const User = () => {
 
     }, [user])
 
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+        // User is signed in, see docs for a list of available properties
+        // https://firebase.google.com/docs/reference/js/firebase.User
+        // setInitialFetch(true) //security concern ? can someone just inject true??
+        console.log(user)
+        } else {
+        // User is signed out
+        console.log('not signed in')
+        window.location.pathname = '/login'
+        router.push('/login')
+        }
+    })
+
     ///////////////////////
 
 

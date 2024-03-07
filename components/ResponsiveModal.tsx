@@ -22,7 +22,7 @@ export default function ResponsiveModal(props) {
 
   return (
     <View style={{width:'100%', height:'100%', backgroundColor:'rgba(255, 255, 255, 0.8)'}}>
-        <View style={[styles.modalContainer, styles.neu, {backgroundColor:'white', width: modWidth, minWidth: modMinWidth, height: modHeight}]}>
+        <View style={[styles.modalContainer, styles.neu, {backgroundColor:'white', maxHeight: props.maxHeight ? props.maxHeight : null, width: modWidth, minWidth: modMinWidth, height: modHeight}]}>
           
           {/* Top Bar: */}
           <View style={[styles.neu, {backgroundColor:'#F9F9F9', height: 40, width: '100%', padding:0, margin:0, marginBottom:'auto', flexDirection: 'row', borderTopLeftRadius:10, borderTopRightRadius:10,}]}>

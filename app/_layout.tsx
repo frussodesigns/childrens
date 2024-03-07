@@ -128,7 +128,7 @@ export default function Layout() {
     
   </View>
 
-    {width > 800 || auth == false ? null : 
+    {width > 800 || !user ? null : 
     <View style={{height:0, bottom:90}}>
       <View  style={[{width:'90%', height:90, backgroundColor:'#F9F9F9', bottom: 10, left: '5%', borderRadius:20, zIndex:1, position:'fixed'}, styles.neu]}>
           <MobileMenu/>
