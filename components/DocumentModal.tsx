@@ -41,7 +41,7 @@ export default function DocumentModal(props) {
     console.log("Form javascript object loaded")
     console.log(props.data)
     console.log(props.index)
-    console.log(props.data[props.data.length - 1])
+    // console.log(props.data[props.data.length - 1])
     const keys = Object.keys(props.data[props.data.length - 1])
     setProperties(keys)
     console.log(properties)

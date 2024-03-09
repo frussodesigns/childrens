@@ -10,6 +10,7 @@ import { LoadFonts } from '../presets';
 import DocumentModal from '../components/DocumentModal';
 import { SyncedScrollViewContext, syncedScrollViewState } from '../contexts/SyncedScrollViewContext.js'
 import { SyncedScrollView } from '../components/SyncedScrollView';
+import { FontAwesome } from '@expo/vector-icons';
 
     const specs = {
     groupings: [
@@ -1077,7 +1078,7 @@ const Homefinding = () => {
 
         {/* <ScrollView style={styles.page}> */}
             <View style={{flex:1, height:'100%', backgroundColor:''}}>
-                <View  style={{borderRadius: 12, padding:0, margin:20, backgroundColor:'#F9F9F9', minWidth:200}} onLayout={onLayout}>
+                <View  style={{borderRadius: 12, padding:0, margin:20, backgroundColor:'#F9F9F9', minWidth:200,}} onLayout={onLayout}>
                     <NeuView style={{borderRadius: 12, backgroundColor:'#F9F9F9', minWidth:200, width:'100%' }} onLayout={onLayout}>
                         <View style={{left: 11, margin: 10}}>
                             <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}}>HOMEFINDING</Text>
@@ -1090,54 +1091,81 @@ const Homefinding = () => {
                 {/* Table */}
                 <View style={{flex:1, flexDirection:'row', width: '100%', backgroundColor:'' , padding: 20, paddingTop:0, marginTop:0, gap: 20}} onLayout={tableLayout}>
                     <View style={[styles.neu, {flexDirection:'row', borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, display: 'flex', alignContent: 'center', justifyContent: 'center'}]}>
-                        <View style={[styles.secondShadow, {flex:1, flexDirection:'column', borderRadius:12}]}>
+                        <View style={[styles.secondShadow, {flex:1, flexDirection:'column', borderRadius:12, alignItems:'center'}]}>
                             {/* ::TITLE:: */}
-                            <View style={{left: 11, margin: 10, flexDirection:'row'}}>
-                              {/* <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}}>HOME FINDING</Text> */}
-                              {width > 800 && <View style={{flex:1}}></View>}
-                            {/* ::FILTERS:: */}
-                              <Text style={{marginTop:3.5, marginRight:3}}>Filters:</Text>
-                              <View 
-                              style={{
-                                      alignSelf: 'center',
-                                      paddingHorizontal:10,
-                                      marginLeft:10,
-                                      marginBottom:5,
-                                      width: '',
-                                      height: '2em',
-                                      backgroundColor:'lightgrey',
-                                      borderRadius:30,
-                                      flexDirection:'row',
-                                      cursor: 'pointer',
-                                      top: -1
-                                    }}>
-                                      <Text style={{marginTop:5}}>Potential Homes</Text>
-                              </View>
-                              <View 
-                              style={{
-                                      alignSelf: 'center',
-                                      paddingHorizontal:10,
-                                      marginLeft:10,
-                                      marginBottom:5,
-                                      width: '',
-                                      height: '2em',
-                                      backgroundColor:'lightgrey',
-                                      borderRadius:30,
-                                      flexDirection:'row',
-                                      cursor: 'pointer',
-                                      top: -1
-                                    }}>
-                                      <Text style={{marginTop:5}}>Confirmed Homes</Text>
-                              </View>
-                              <View style={{width:10}}></View>
-                            </View>
+                            <View style={{flex:1, maxWidth:'100%', flexDirection:'column'}}>
                             
+                              <View style={{marginVertical: 10, flexDirection:'row'}}>
+
+                              {/* SEARCH */}
+                             
+                             {/* search icon... */}
+                              <View style={{marginLeft:15, marginTop: 8, height:12, aspectRatio:1, backgroundColor:'', alignItems:'center', justifyContent:'center'}}>
+                                <FontAwesome name="search" size={20} color="black" />
+                              </View>
+                              
+                              {/* search bar... */}
+                              {width > 800 && 
+                              <View style={{marginLeft:5, flex: 1, height: 30, backgroundColor:'rgb(242,242,242)', borderRadius:20, justifyContent:'center' }}>
+                                <Text style={{marginLeft:20}}>Search</Text>
+                              </View>
+                              }
+                              
+
+                                {/* spacer */}
+                                {width && <View style={{flex:1}}></View>}
+                                
+                                {/* FILTERS */}
+                                <Text style={{marginTop:3.5, marginRight:20 }}>Results: 200</Text>
+                                {/* {width > 800 && <View style={{flex:1}}></View>} */}
+                                <Text style={{marginTop:3.5, marginRight:3}}>Filters:</Text>
+                                <View 
+                                style={{
+                                        alignSelf: 'center',
+                                        paddingHorizontal:10,
+                                        marginLeft:10,
+                                        marginBottom:5,
+                                        width: '',
+                                        height: 30,
+                                        backgroundColor:'lightgrey',
+                                        borderRadius:30,
+                                        flexDirection:'row',
+                                        cursor: 'pointer',
+                                        top: -1,
+                                        borderWidth:2,
+                                        borderColor:'black',
+                                        justifyContent:'center',
+                                        alignItems:'center'
+                                      }}>
+                                        <Text style={{}}>Potential Homes</Text>
+                                </View>
+                                <View 
+                                style={{
+                                        alignSelf: 'center',
+                                        paddingHorizontal:10,
+                                        marginLeft:10,
+                                        marginBottom:5,
+                                        width: '',
+                                        height: 30,
+                                        backgroundColor:'rgb(242,242,242)',
+                                        borderRadius:30,
+                                        flexDirection:'row',
+                                        cursor: 'pointer',
+                                        top: -1,
+                                        justifyContent:'center',
+                                        alignItems:'center'
+                                      }}>
+                                        <Text style={{}}>Confirmed Homes</Text>
+                                </View>
+                                <View style={{width:10}}></View>
+                              </View>
+                              
                             {/* ::THE TABLE:: */}
-                            <View style={{flex:1,flexDirection:'row'}}>
-                            {/* ::STICKY:: */}
+                            <View style={{flex:1,flexDirection:'row', backgroundColor:''}}>
+                            {/* ::STICKY COLUMN:: */}
                                   <View style={{height:'100%', width:200, backgroundColor:'', marginRight:-14}}>
                                   <ScrollView horizontal={false} showsHorizontalScrollIndicator={false}>
-                                    <View>
+                                    <View >
                                     {/* ::TOP ROW:: */}
                                     <View style={{
                                       alignSelf: 'center',
@@ -1172,7 +1200,7 @@ const Homefinding = () => {
                                         <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Athletics:'}</Text>
                                       </ScrollView> */}
                                     </View>
-                                    {/* ::TABLE CONTENT:: */}
+                            {/* ::STICKY COLUMN, SCROLLING:: */}
                                   <View onLayout={onLayoutHeight} style={{flex:1, backgroundColor:'', height:tableHeight}}>
                                       <Animated.ScrollView showsVerticalScrollIndicator={false} 
                                       // _id={2}
@@ -1268,7 +1296,7 @@ const Homefinding = () => {
                                         <Text numberOfLines={1} style={{marginLeft:20, marginTop:5, fontSize: width > 800 ? null : 15}}>{'Athletics:'}</Text>
                                       </ScrollView>
                                     </View>
-                                    {/* ::TABLE CONTENT:: */}
+                                    {/* ::SCROLLING, MAIN CONTENT:: */}
                                   <View onLayout={onLayoutHeight} style={{flex:1, backgroundColor:'', height:tableHeight}}>
                                       <Animated.ScrollView showsVerticalScrollIndicator={false} 
                                       // _id={1}
@@ -1283,8 +1311,8 @@ const Homefinding = () => {
                                       }}>
                                       <View style={{marginTop: 5, backgroundColor:''}}>
                                         {dummyData.map((item, key) => 
-
-                                          <View style={{
+                                          
+                                          <TouchableOpacity  onPress={() => handlePress(item.id, item.id)}  style={{
                                             flex:1,
                                             alignSelf: 'center',
                                             marginBottom:5,
@@ -1317,7 +1345,7 @@ const Homefinding = () => {
                                               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
                                                 <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.Athletics/10 + "/10"}</Text>
                                               </ScrollView>
-                                            </View>
+                                            </TouchableOpacity>
                                         )}
                                       
                                       </View>
@@ -1327,6 +1355,7 @@ const Homefinding = () => {
                                   </ScrollView>
 
                             </View>
+                            </View> 
                             
 
                             {/* {state.docLogs &&
