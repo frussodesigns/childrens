@@ -1,5 +1,5 @@
 import React, {Component, useEffect, useState, useRef} from 'react'
-import { View, Text, ScrollView, Pressable } from 'react-native'
+import { View, Text, ScrollView, Pressable, Animated } from 'react-native'
 // import { ScrollView } from 'react-native-gesture-handler'
 
 const MyTable = ({obj, columns, width, height, sc, sr, handlePress, viewWidth}) => {
@@ -72,7 +72,7 @@ const MyTable = ({obj, columns, width, height, sc, sr, handlePress, viewWidth}) 
                   )}
           
         </View>
-        <ScrollView showsVerticalScrollIndicator={false}
+        <Animated.ScrollView showsVerticalScrollIndicator={false}
           ref={scrollView1Ref}
           onScroll={handleScrollView1Scroll}
           scrollEventThrottle={3} // optional, for smoother scrolling
@@ -98,7 +98,7 @@ const MyTable = ({obj, columns, width, height, sc, sr, handlePress, viewWidth}) 
                 </View>
             )}
         </View>
-        </ScrollView>
+        </Animated.ScrollView>
       </View>
     </ScrollView>
     
@@ -113,7 +113,7 @@ const MyTable = ({obj, columns, width, height, sc, sr, handlePress, viewWidth}) 
                   )}
           
         </View>
-        <ScrollView showsVerticalScrollIndicator={false}
+        <Animated.ScrollView showsVerticalScrollIndicator={false}
         ref={scrollView2Ref}
         onScroll={handleScrollView2Scroll}
         scrollEventThrottle={3} // optional, for smoother scrolling
@@ -152,7 +152,7 @@ const MyTable = ({obj, columns, width, height, sc, sr, handlePress, viewWidth}) 
                 </View>
             )}
         </View>
-        </ScrollView>
+        </Animated.ScrollView>
       </View>
     </ScrollView>
     {/* </ScrollView> */}

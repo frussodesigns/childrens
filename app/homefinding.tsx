@@ -1,5 +1,5 @@
-import { StyleSheet, Text, View } from 'react-native'
-import {useWindowDimensions, TouchableOpacity, ScrollView} from 'react-native';
+import { StyleSheet, Text, View, Modal } from 'react-native'
+import {useWindowDimensions, TouchableOpacity, ScrollView, Animated} from 'react-native';
 import { Link, Stack, useRouter, useFocusEffect, Redirect } from "expo-router";
 import { getAuth, isSignInWithEmailLink, signInWithEmailLink, onAuthStateChanged } from "firebase/auth";
 import { useAppContext } from '../hooks/useAppContext';
@@ -7,11 +7,14 @@ import React, { useState, useEffect, useRef } from 'react'
 import NeuView from '../components/NeuView'
 import MyTable from '../components/table';
 import { LoadFonts } from '../presets';
+import DocumentModal from '../components/DocumentModal';
+import { SyncedScrollViewContext, syncedScrollViewState } from '../contexts/SyncedScrollViewContext.js'
+import { SyncedScrollView } from '../components/SyncedScrollView';
 
     const specs = {
     groupings: [
       {
-        section: "Child Info",
+        section: "Household Info",
         fields: 4
       },
       {
@@ -51,7 +54,7 @@ import { LoadFonts } from '../presets';
     }
     
     const columns = [
-    "CIN", 
+    "Name", 
     "Firstname", 
     "Middlename", 
     "Lastname", 
@@ -479,10 +482,10 @@ const Homefinding = () => {
     const [firstWidth, setWidth] = useState(0);
     const [tableWidth, setTWidth] = useState(0);
     const onLayout = (event) => {
-        const { width } = event.nativeEvent.layout;
-        setWidth(width);
-        // console.log(width)
-      };
+      const { width } = event.nativeEvent.layout;
+      setWidth(width);
+      // console.log(width)
+    };
 
     const onLayoutHeight = (event) => {
       const { height } = event.nativeEvent.layout;
@@ -492,6 +495,9 @@ const Homefinding = () => {
     // Scroll Sync /////////////////////
     const scrollView1Ref = useRef(null);
     const scrollView2Ref = useRef(null);
+
+    let firstRef: ScrollView | null;
+    let secondRef: ScrollView | null;
 
     const handleScrollView1Scroll = (event) => {
       // const offsetY = event.nativeEvent.contentOffset.y;
@@ -504,20 +510,23 @@ const Homefinding = () => {
     };
     // Scroll Sync ///////////////////////
 
+    //Modal State //////////////
+    const [modalVisible, setModalVisible] = useState(false)
+    const [newEntry, setNewEntry] = useState(false)
+    const [modalId, setModalId] = useState(-1)
+    const [indexPressed, setIndexPressed] = useState(0)  
+    
+    const handlePress = (id, index) => {
+        setNewEntry(false)
+        setModalVisible(true)
+        setModalId(id)
+        setIndexPressed(index)
+    }
+    ////////////////////////////
 
 
     //   Table:
-        const [modalVisible, setModalVisible] = useState(false)
-        const [newEntry, setNewEntry] = useState(false)
-        const [modalId, setModalId] = useState(-1)
-        const [indexPressed, setIndexPressed] = useState(0)  
 
-        const handlePress = (id, index) => {
-            setNewEntry(false)
-            setModalVisible(true)
-            setModalId(id)
-            setIndexPressed(index)
-        }
         const tableLayout = (event) => {
             const { width } = event.nativeEvent.layout;
             setTWidth(width);
@@ -554,6 +563,7 @@ const Homefinding = () => {
     //  Dummy Data
     const dummyData = [
       {
+        id: 1,
         title:'Jones Family',
         Documents:100,
         DocumentSubmission:100,
@@ -565,6 +575,7 @@ const Homefinding = () => {
         subtitle:'subtitle'
       },
       {
+        id:2,
         title:'Jones Family',
         Documents:100,
         DocumentSubmission:100,
@@ -576,6 +587,7 @@ const Homefinding = () => {
         subtitle:'subtitle'
       },
       {
+        id:3,
         title:'Jones Family',
         Documents:100,
         DocumentSubmission:100,
@@ -836,8 +848,10 @@ const Homefinding = () => {
     const homefinding = {
         Confirmed: [
             {
+                status: 'confirmed',
                 basics: {
                     _id: 'id-num',
+                    Lastname: 'Jones',
                     Parents: ['Mom Example', 'Dad Example'],
                     Adults: ['Older Brother Example'],
                     Pets: ['Pet Example'],
@@ -847,6 +861,7 @@ const Homefinding = () => {
                     financialViability: 10,
                     creativity: 10,
                     athletics: 10,
+                    academics: 10,
 
                 },
                 Documents: {
@@ -854,21 +869,66 @@ const Homefinding = () => {
                         receipt: true,
                         dateOfSubmission: '11/11/2011'
                     },
-                    ss: {},
-                    lease: {},
-                    marriageCertificate: {},
-                    passport: {},
-                    driversLicense: {},
-                    cableBill: {},
-                    phoneBill: {},
-                    income: {},
-                    w2: {},
-                    electricBill: {},
-                    carInsurance: {},
-                    carRegistration: {},
-                    vaccines: {},
-                    selClearance: {},
-                    fingerprints: {},
+                    ss: {
+                      receipt: true,
+                      dateOfSubmission: '11/11/2011'
+                    },
+                    lease: {
+                      receipt: true,
+                      dateOfSubmission: '11/11/2011'
+                    },
+                    marriageCertificate: {
+                      receipt: true,
+                      dateOfSubmission: '11/11/2011'
+                    },
+                    passport: {
+                      receipt: true,
+                      dateOfSubmission: '11/11/2011'
+                    },
+                    driversLicense: {
+                      receipt: true,
+                      dateOfSubmission: '11/11/2011'
+                    },
+                    cableBill: {
+                      receipt: true,
+                      dateOfSubmission: '11/11/2011'
+                    },
+                    phoneBill: {
+                      receipt: true,
+                      dateOfSubmission: '11/11/2011'
+                    },
+                    income: {
+                      receipt: true,
+                      dateOfSubmission: '11/11/2011'
+                    },
+                    w2: {
+                      receipt: true,
+                      dateOfSubmission: '11/11/2011'
+                    },
+                    electricBill: {
+                      receipt: true,
+                      dateOfSubmission: '11/11/2011'
+                    },
+                    carInsurance: {
+                      receipt: true,
+                      dateOfSubmission: '11/11/2011'
+                    },
+                    carRegistration: {
+                      receipt: true,
+                      dateOfSubmission: '11/11/2011'
+                    },
+                    vaccines: {
+                      receipt: true,
+                      dateOfSubmission: '11/11/2011'
+                    },
+                    selClearance: {
+                      receipt: true,
+                      dateOfSubmission: '11/11/2011'
+                    },
+                    fingerprints: {
+                      receipt: true,
+                      dateOfSubmission: '11/11/2011'
+                    },
                     //...
                 },
                 Questionnaire: [],
@@ -984,7 +1044,37 @@ const Homefinding = () => {
     }
 
     return(
-        <>
+      <SyncedScrollViewContext.Provider value={syncedScrollViewState}>
+      
+        {/* ::MODAL:: */}
+
+        <Modal
+          transparent
+          visible={modalVisible}
+          animationType="fade"
+          onRequestClose={() => {
+            setModalVisible(false);
+            
+          }}
+        >
+          <DocumentModal 
+            newEntry={newEntry}
+            modalId={modalId} 
+            index={indexPressed}
+            setModalVisible={setModalVisible} 
+            columns={columns} 
+            specs={specs} 
+            types={types} 
+            data={state.docLogs}
+            supervisors={state.supervisors}
+            
+            />
+          
+        </Modal>
+
+        {/* ::MODAL:: */}
+
+
         {/* <ScrollView style={styles.page}> */}
             <View style={{flex:1, height:'100%', backgroundColor:''}}>
                 <View  style={{borderRadius: 12, padding:0, margin:20, backgroundColor:'#F9F9F9', minWidth:200}} onLayout={onLayout}>
@@ -1004,7 +1094,8 @@ const Homefinding = () => {
                             {/* ::TITLE:: */}
                             <View style={{left: 11, margin: 10, flexDirection:'row'}}>
                               {/* <Text style={{color:'grey', fontWeight: 'bold', fontSize: 17, fontFamily: 'Rubik'}}>HOME FINDING</Text> */}
-                              <View style={{flex:1}}></View>
+                              {width > 800 && <View style={{flex:1}}></View>}
+                            {/* ::FILTERS:: */}
                               <Text style={{marginTop:3.5, marginRight:3}}>Filters:</Text>
                               <View 
                               style={{
@@ -1040,7 +1131,8 @@ const Homefinding = () => {
                               </View>
                               <View style={{width:10}}></View>
                             </View>
-
+                            
+                            {/* ::THE TABLE:: */}
                             <View style={{flex:1,flexDirection:'row'}}>
                             {/* ::STICKY:: */}
                                   <View style={{height:'100%', width:200, backgroundColor:'', marginRight:-14}}>
@@ -1049,17 +1141,17 @@ const Homefinding = () => {
                                     {/* ::TOP ROW:: */}
                                     <View style={{
                                       alignSelf: 'center',
-                                      marginBottom:2,
+                                      marginBottom:0.5,
                                       width: '98%',
-                                      height: '2em',
+                                      height: width > 800 ? '2em' : '2.5em',
                                       backgroundColor:'rgb(242,242,242)',
                                       borderTopLeftRadius:20,
-                                      borderBottomLeftRadius:20,
+                                      // borderBottomLeftRadius:20,
                                       flexDirection:'row',
                                       // cursor: 'pointer'
                                     }}>
                                       <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:100}}>
-                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Household:'}</Text>
+                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop: 5, fontSize: width > 800 ? null : 18}}>{'Household:'}</Text>
                                       </ScrollView>
                                       {/* <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
                                         <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Document Completion:'}</Text>
@@ -1082,33 +1174,35 @@ const Homefinding = () => {
                                     </View>
                                     {/* ::TABLE CONTENT:: */}
                                   <View onLayout={onLayoutHeight} style={{flex:1, backgroundColor:'', height:tableHeight}}>
-                                      <ScrollView showsVerticalScrollIndicator={false} 
+                                      <Animated.ScrollView showsVerticalScrollIndicator={false} 
+                                      // _id={2}
                                       ref={scrollView2Ref}
+                                      // ref={ref => (firstRef = ref)}
                                       onScroll={handleScrollView2Scroll}
                                       style={{
                                         flex:1,
                                         minHeight:tableHeight,
                                         height:tableHeight,
                                         maxHeight:tableHeight,
-                                        backgroundColor:'blue'
+                                        backgroundColor:''
                                       }}>
                                       <View style={{marginTop: 5, backgroundColor:''}}>
                                         {dummyData.map((item, key) => 
 
-                                          <View style={{
+                                          <TouchableOpacity onPress={() => handlePress(item.id, item.id)} style={{
                                             flex:1,
                                             alignSelf: 'center',
                                             marginBottom:5,
                                             width: '98%',
-                                            minHeight: '2em',
+                                            minHeight: width > 800 ? '2em' : '2.5em',
                                             backgroundColor:'rgb(242,242,242)',
                                             borderTopLeftRadius:20,
                                             borderBottomLeftRadius:20,
                                             flexDirection:'row',
-                                            cursor: 'pointer'
+                                            // cursor: 'pointer'
                                           }}>
                                               <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:100}}>
-                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.title}</Text>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5, fontSize: width > 800 ? null : 18}}>{item.title}</Text>
                                               </ScrollView>
                                               {/* <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
                                                 <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Documents}</Text>
@@ -1128,11 +1222,11 @@ const Homefinding = () => {
                                               <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
                                                 <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Athletics/10 + "/10"}</Text>
                                               </ScrollView> */}
-                                            </View>
+                                            </TouchableOpacity>
                                         )}
                                       
                                       </View>
-                                      </ScrollView>
+                                      </Animated.ScrollView>
                                   </View>
                                   </View>
                                   </ScrollView>
@@ -1144,9 +1238,9 @@ const Homefinding = () => {
                                     {/* ::TOP ROW:: */}
                                     <View style={{
                                       alignSelf: 'center',
-                                      marginBottom:2,
+                                      marginBottom:.5,
                                       width: '98%',
-                                      height: '2em',
+                                      height: width > 800 ? '2em' : '2.5em',
                                       backgroundColor:'rgb(242,242,242)',
                                       borderTopRightRadius:20,
                                       flexDirection:'row',
@@ -1156,27 +1250,28 @@ const Homefinding = () => {
                                         <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Last Name:'}</Text>
                                       </ScrollView> */}
                                       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Document Completion:'}</Text>
+                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop: 5, fontSize: width > 800 ? null : 15}}>{'Document Completion:'}</Text>
                                       </ScrollView>
                                       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Document Submission:'}</Text>
+                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5, fontSize: width > 800 ? null : 15}}>{'Document Submission:'}</Text>
                                       </ScrollView>
                                       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Financial Viability:'}</Text>
+                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5, fontSize: width > 800 ? null : 15}}>{'Financial Viability:'}</Text>
                                       </ScrollView>
                                       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Academics:'}</Text>
+                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5, fontSize: width > 800 ? null : 15}}>{'Academics:'}</Text>
                                       </ScrollView>
                                       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Creativity:'}</Text>
+                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5, fontSize: width > 800 ? null : 15}}>{'Creativity:'}</Text>
                                       </ScrollView>
                                       <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{'Athletics:'}</Text>
+                                        <Text numberOfLines={1} style={{marginLeft:20, marginTop:5, fontSize: width > 800 ? null : 15}}>{'Athletics:'}</Text>
                                       </ScrollView>
                                     </View>
                                     {/* ::TABLE CONTENT:: */}
                                   <View onLayout={onLayoutHeight} style={{flex:1, backgroundColor:'', height:tableHeight}}>
-                                      <ScrollView showsVerticalScrollIndicator={false} 
+                                      <Animated.ScrollView showsVerticalScrollIndicator={false} 
+                                      // _id={1}
                                       ref={scrollView1Ref}
                                       onScroll={handleScrollView1Scroll}
                                       style={{
@@ -1184,7 +1279,7 @@ const Homefinding = () => {
                                         minHeight:tableHeight,
                                         height:tableHeight,
                                         maxHeight:tableHeight,
-                                        backgroundColor:'red'
+                                        backgroundColor:''
                                       }}>
                                       <View style={{marginTop: 5, backgroundColor:''}}>
                                         {dummyData.map((item, key) => 
@@ -1194,7 +1289,7 @@ const Homefinding = () => {
                                             alignSelf: 'center',
                                             marginBottom:5,
                                             width: '98%',
-                                            minHeight: '2em',
+                                            minHeight: width > 800 ? '2em' : '2.5em',
                                             backgroundColor:'rgb(242,242,242)',
                                             borderTopRightRadius:30,
                                             borderBottomRightRadius:30,
@@ -1205,28 +1300,28 @@ const Homefinding = () => {
                                                 <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.title}</Text>
                                               </ScrollView> */}
                                               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Documents}</Text>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.Documents + '%'}</Text>
                                               </ScrollView>
                                               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.DocumentSubmission/10 + "/10"}</Text>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.DocumentSubmission/10 + "/10"}</Text>
                                               </ScrollView>
                                               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.FinancialViability/10 + "/10"}</Text>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.FinancialViability/10 + "/10"}</Text>
                                               </ScrollView>
                                               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Academics/10 + "/10"}</Text>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.Academics/10 + "/10"}</Text>
                                               </ScrollView>
                                               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Creativity/10 + "/10"}</Text>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.Creativity/10 + "/10"}</Text>
                                               </ScrollView>
                                               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Athletics/10 + "/10"}</Text>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.Athletics/10 + "/10"}</Text>
                                               </ScrollView>
                                             </View>
                                         )}
                                       
                                       </View>
-                                      </ScrollView>
+                                      </Animated.ScrollView>
                                   </View>
                                   </View>
                                   </ScrollView>
@@ -1248,7 +1343,8 @@ const Homefinding = () => {
                 }
             </View>
         {/* </ScrollView> */}
-        </>
+        
+        </SyncedScrollViewContext.Provider>
     )
 
 //   return (

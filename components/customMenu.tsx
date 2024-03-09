@@ -267,7 +267,7 @@ const CustomMenu = ({setIsHovered, setReportsModalVisible, animationValue, winWi
                                     <Text style={{alignSelf: 'center', textAlign: 'center', fontFamily: 'Rubik', color:'black', opacity: animationValue}}>Account</Text>
                                     )}
                                     {accountAnimation.value > 0 && (
-                                    <Text style={{alignSelf: 'left', textAlign: 'center', fontFamily: 'Rubik', color:'black', opacity: animationValue}}>{'email: ' + user.email}</Text>
+                                    <Text style={{alignSelf: 'left', textAlign: 'center', fontFamily: 'Rubik', color:'black', opacity: animationValue}}>{user ? 'email: ' + user.email : 'not signed in'}</Text>
                                     )}
 
                                 </View>
