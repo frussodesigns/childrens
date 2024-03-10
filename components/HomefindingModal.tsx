@@ -8,10 +8,10 @@ import ResponsiveModal from './ResponsiveModal';
 import NeuView from './NeuView';
 import { LoadFonts, color2 } from '../presets';
 import CustomButton from './customButton';
-import { postFormData, patchFormData } from '../apiCalls';
+import { postHomeFormData, patchFormData } from '../apiCalls';
 import AutocompleteDropdown from './AutocompleteDropdown';
 
-export default function DocumentModal(props) {
+export default function HomefindingModal(props) {
   
   const { state, dispatch } = useAppContext()
   
@@ -137,25 +137,26 @@ export default function DocumentModal(props) {
     return true
   }
 
-  const confirmCIN = () => {
-    console.log(formData.cIN)
+  // legacy from docModal
+  // const confirmCIN = () => {
+  //   console.log(formData.cIN)
 
-    if (!formData.cIN) {
-      setError("'CIN' must have a value")
-      return false
-    }
-    else return true
-  }
+  //   if (!formData.cIN) {
+  //     setError("'CIN' must have a value")
+  //     return false
+  //   }
+  //   else return true
+  // }
 
   const submitForm = async () => {
 
-    const cinValid = confirmCIN()
+    // const cinValid = confirmCIN()
     const datesValid = checkDates()
 
 
-    if (!datesValid || !cinValid) return
+    if (!datesValid) return
 
-    if (props.newEntry == true) postFormData(formData, setError, setConfirmation, dispatch, state)
+    if (props.newEntry == true) postHomeFormData(formData, setError, setConfirmation, dispatch, state)
 
     if (props.newEntry == false) patchFormData(formData, setError, setConfirmation, dispatch, state)
 

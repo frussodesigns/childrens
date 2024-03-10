@@ -98,6 +98,7 @@ export async function patchFormData(formData, setError, setConfirmation, dispatc
 
 }
 
+//document page:
 export async function postFormData(formData, setError, setConfirmation, dispatch, state) {
   const response = await fetch('http://localhost:4000/api/documents/', {
     method: 'POST', // PUT or PATCH (or DELETE)
@@ -128,6 +129,42 @@ export async function postFormData(formData, setError, setConfirmation, dispatch
       type: "UPDATE", 
       payload: {
         docLogs: [json, ...state.docLogs]
+      }
+    })
+    // maybe reset form
+  }
+}
+
+export async function postHomeFormData(formData, setError, setConfirmation, dispatch, state) {
+  const response = await fetch('http://localhost:4000/api/homefinding/', {
+    method: 'POST', // PUT or PATCH (or DELETE)
+    body: JSON.stringify(formData),
+    headers: {
+        'Content-Type': 'application/json'
+    }
+  })
+
+  let json = await response.json()
+
+  if (!response.ok) {
+    setError(json.error)	
+    console.log(json.error)
+    return true
+  }
+
+  if (response.ok) {
+    setError(null)
+    setConfirmation(true)
+    console.log(json)
+    json = {
+      _id: 0,
+      ...json
+    }
+    console.log(json)
+    dispatch({
+      type: "UPDATE", 
+      payload: {
+        homeLogs: [json, ...state.docLogs]
       }
     })
     // maybe reset form
