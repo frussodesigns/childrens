@@ -77,7 +77,7 @@ import { FontAwesome } from '@expo/vector-icons';
       _id: 1,
       status: 'Confirmed',
       numAdults: 2,
-      lastName: 'Russo',
+      lastName: 'Ellis',
       parent1: 'Freddy',
       parent2: 'Lexi',
       birthCertificates: true,
@@ -109,13 +109,13 @@ import { FontAwesome } from '@expo/vector-icons';
       notes: '',
       dateOfFirstContact: '1/1/2021',
       dateOfConfirmation: '1/8/2021',
-      documentCompletion: 100,
+      documentCompletion: 80,
     
       }, 
       {
       id: 0,
       _id: 1,
-      status: 'Confirmed',
+      status: 'Potential',
       numAdults: 2,
       lastName: 'Russo',
       parent1: 'Freddy',
@@ -155,7 +155,7 @@ import { FontAwesome } from '@expo/vector-icons';
       {
       id: 0,
       _id: 1,
-      status: 'Confirmed',
+      status: 'Potential',
       numAdults: 2,
       lastName: 'Russo',
       parent1: 'Freddy',
@@ -1303,7 +1303,8 @@ const Homefinding = () => {
     const [tableHeight, setTableHeight] = useState(0);
     const [firstWidth, setWidth] = useState(0);
     const [tableWidth, setTWidth] = useState(0);
-    const [testData, setTestData] = useState(obj)
+    const [testData, setTestData] = useState([])
+    const [filter, setFilter] = useState('Potential')
     const onLayout = (event) => {
       const { width } = event.nativeEvent.layout;
       setWidth(width);
@@ -1675,6 +1676,7 @@ const Homefinding = () => {
 
     // Filter
 
+    //Original Data Plan
     const homefinding = {
         Confirmed: [
             {
@@ -1873,6 +1875,34 @@ const Homefinding = () => {
         },
     }
 
+    //Filtration System
+
+    const filterData = (data, filter) => {
+
+      let sorted = []
+
+      console.log('filterData')
+
+      for (let item in data) {
+        console.log(Object.keys(data[item]));
+        let currObj = data[item];
+        if (currObj.status && currObj.status === filter) {
+          sorted.push(currObj);
+        }
+      }
+
+      setTestData(sorted)
+      console.log(testData)
+      return sorted
+    }
+
+    useEffect(() => {
+      console.log('filter changed')
+      filterData(obj, filter)
+      console.log(testData)
+    }, [filter])
+    
+
     return(
       <SyncedScrollViewContext.Provider value={syncedScrollViewState}>
       
@@ -1975,7 +2005,7 @@ const Homefinding = () => {
                                 <Text style={{marginTop:3.5, marginRight:20 }}>Results: 200</Text>
                                 {/* {width > 800 && <View style={{flex:1}}></View>} */}
                                 <Text style={{marginTop:3.5, marginRight:3}}>Filters:</Text>
-                                <View 
+                                <TouchableOpacity onPress={()=>setFilter('Potential')}
                                 style={{
                                         alignSelf: 'center',
                                         paddingHorizontal:10,
@@ -1983,19 +2013,19 @@ const Homefinding = () => {
                                         marginBottom:5,
                                         width: '',
                                         height: 30,
-                                        backgroundColor:'lightgrey',
+                                        backgroundColor: filter == 'Potential' ? 'lightgrey' : 'rgb(242,242,242)',
                                         borderRadius:30,
                                         flexDirection:'row',
                                         cursor: 'pointer',
                                         top: -1,
-                                        borderWidth:2,
+                                        borderWidth: filter == 'Potential' ? 2 : 0,
                                         borderColor:'black',
                                         justifyContent:'center',
                                         alignItems:'center'
                                       }}>
                                         <Text style={{}}>Potential Homes</Text>
-                                </View>
-                                <View 
+                                </TouchableOpacity>
+                                <TouchableOpacity onPress={() => setFilter('Confirmed')}
                                 style={{
                                         alignSelf: 'center',
                                         paddingHorizontal:10,
@@ -2003,16 +2033,18 @@ const Homefinding = () => {
                                         marginBottom:5,
                                         width: '',
                                         height: 30,
-                                        backgroundColor:'rgb(242,242,242)',
+                                        backgroundColor: filter == 'Confirmed' ?  'lightgrey' : 'rgb(242,242,242)',
                                         borderRadius:30,
                                         flexDirection:'row',
                                         cursor: 'pointer',
                                         top: -1,
+                                        borderWidth: filter == 'Confirmed' ? 2 : 0,
+                                        borderColor:'black',
                                         justifyContent:'center',
                                         alignItems:'center'
                                       }}>
                                         <Text style={{}}>Confirmed Homes</Text>
-                                </View>
+                                </TouchableOpacity>
                                 <View style={{width:10}}></View>
                               </View>
                               
@@ -2071,7 +2103,7 @@ const Homefinding = () => {
                                         backgroundColor:''
                                       }}>
                                       <View style={{marginTop: 5, backgroundColor:''}}>
-                                        {testData.map((item, key) => 
+                                        {testData && testData.map((item, key) => 
 
                                           <TouchableOpacity onPress={() => handlePress(item.id, item.id)} style={{
                                             flex:1,
@@ -2166,7 +2198,7 @@ const Homefinding = () => {
                                         backgroundColor:''
                                       }}>
                                       <View style={{marginTop: 5, backgroundColor:''}}>
-                                        {testData.map((item, key) => 
+                                        {testData && testData.map((item, key) => 
                                           
                                           <TouchableOpacity  onPress={() => handlePress(item.id, item.id)}  style={{
                                             flex:1,
