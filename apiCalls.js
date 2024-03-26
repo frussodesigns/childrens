@@ -141,7 +141,7 @@ export async function patchFormData(formData, setError, setConfirmation, dispatc
 }
 
 export async function patchHomefindingFormData(formData, setError, setConfirmation, dispatch, state) {
-  const response = await fetch (appApi + 'homefinding/update', {
+  const response = await fetch (appApi + '/homefinding/update', {
     method: 'PATCH',
     body: JSON.stringify(formData),
     headers: {
