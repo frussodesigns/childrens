@@ -8,8 +8,11 @@ import ResponsiveModal from './ResponsiveModal';
 import NeuView from './NeuView';
 import { LoadFonts, color2 } from '../presets';
 import CustomButton from './customButton';
-import { postHomeFormData, patchFormData } from '../apiCalls';
+import { postHomeFormData, patchHomefindingFormData, remove } from '../apiCalls';
 import AutocompleteDropdown from './AutocompleteDropdown';
+import {Picker} from '@react-native-picker/picker';
+import ConfirmRemovalModal from './ConfirmRemovalModal';
+import SuccessModal from './SuccessModal';
 
 export default function HomefindingModal(props) {
   
@@ -23,6 +26,8 @@ export default function HomefindingModal(props) {
   const [confirmation, setConfirmation] = useState(false)
   const [autocompleteActive, setAutocompleteActive] = useState()
   const [caseWorkerID, setCaseWorkerID] = useState(null)
+  const [status, setStatus] = useState('Potential')
+  const [confirmModalVisible, setConfirmModalVisible] = useState(false)
   // const [formData, setFormData] = useState(()=>{
   //   const initialFormData = {};
   //   props.columns.forEach((columnName) => {
@@ -41,6 +46,7 @@ export default function HomefindingModal(props) {
     console.log("Form javascript object loaded")
     console.log(props.data)
     console.log(props.index)
+    console.log(props.modalId)
     console.log(props.data[props.data.length - 1])
     const keys = Object.keys(props.data[props.data.length - 1])
     setProperties(keys)
@@ -59,7 +65,7 @@ export default function HomefindingModal(props) {
         const newObj = {}
 
         if (props.types[i-1] == 'bool') newObj[newName] = false
-        else if (props.types[i-1] == 'status') newObj[newName] = 'In Progress'
+        else if (props.types[i-1] == 'status') newObj[newName] = 'Potential'
         else newObj[newName] = ''
 
         setFormData(formData => ({...formData, ...newObj}))
@@ -137,6 +143,25 @@ export default function HomefindingModal(props) {
     return true
   }
 
+  const checkStatus = () => {
+    const arr = Object.keys(formData)
+
+    for (let i = 0; i < arr.length; i++) {
+      const formInput = formData[arr[i+1]]
+      
+      if(props.types[i] === 'status'){
+
+        if (formInput === 'Potential' || formInput === 'Confirmed' || formInput === 'InProgress' || formInput === 'Cancelled') {}
+        else {
+          setError('Status must either be "Potential" or "Confirmed"')
+          console.log('error')
+          return false
+        }
+      }
+    }
+    return true
+  }
+
   // legacy from docModal
   // const confirmCIN = () => {
   //   console.log(formData.cIN)
@@ -152,13 +177,14 @@ export default function HomefindingModal(props) {
 
     // const cinValid = confirmCIN()
     const datesValid = checkDates()
+    const statusValid = checkStatus()
 
 
-    if (!datesValid) return
+    if (!datesValid || !statusValid) return
 
     if (props.newEntry == true) postHomeFormData(formData, setError, setConfirmation, dispatch, state)
 
-    if (props.newEntry == false) patchFormData(formData, setError, setConfirmation, dispatch, state)
+    if (props.newEntry == false) patchHomefindingFormData(formData, setError, setConfirmation, dispatch, state)
 
   }
 
@@ -225,6 +251,36 @@ export default function HomefindingModal(props) {
           </View>
         )
         }
+        else if (props.types[count] === 'status'){
+          if (!caseWorkerID) setCaseWorkerID(id+1)
+        localGroup.push(
+          <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
+            <View style={{backgroundColor:'', height:60, alignSelf:'center', width: '80%'}}>
+              <Text>{props.columns[count] + ':'}</Text>
+              <View style={{height:5}}/>
+              {/* <TextInput value={formData[properties[id+1]]} 
+                onChangeText={text => onChange(text, id+1)} 
+                onFocus={(e) => autocomplete('caseWorkers', null, true)}
+                onBlur={(e) => { setTimeout(() => autocomplete('caseWorkers', null, false), 200)}}
+                style={{backgroundColor:color2, paddingLeft: 10, height:'2em', borderRadius: 5, width:'100%'}} 
+                /> */}
+              <Picker
+                style={{backgroundColor:color2, paddingLeft: 10, height:'2em', borderRadius: 5, width:'100%', borderWidth:0 }}
+                selectedValue={status}
+                onValueChange={(value, index) =>
+                  {setStatus(value)
+                  onChange(value, id+1)}
+                }>
+                <Picker.Item label="Potential" value="Potential" />
+                <Picker.Item label="Confirmed" value="Confirmed" />
+                <Picker.Item label="In Progress" value="InProgress" />
+                <Picker.Item label="Cancelled" value="Cancelled" />
+              </Picker>
+              <View style={{height:10}}></View>
+            </View>
+          </View>
+        )
+        }
         else {
         localGroup.push(
           <View style={{width:'50%', minWidth:250, height:'', backgroundColor:'', justifyContent:'center', alignContent:'center', alignSelf:'flex-start'}}>
@@ -259,15 +315,51 @@ export default function HomefindingModal(props) {
     return (formContent)
   }
 
+  const confirmDeletion = async () => {
+    const ok = await remove(props.data[props.index], setError, setConfirmation, state, dispatch)
+    if (ok == true){
+      setConfirmModalVisible(false)
+    }
+    setConfirmation
+  }
+
   return (
     <>
+      <Modal
+        transparent
+        visible={confirmModalVisible}
+        animationType="fade"
+        onRequestClose={() => setConfirmModalVisible(false)}
+        >
+            <ConfirmRemovalModal numSelected={props.index} confirm={() => confirmDeletion()} cancel={() => setConfirmModalVisible(false)} />
+        </Modal>
+
+        <Modal
+        transparent
+        visible={confirmation}
+        animationType="fade"
+        onRequestClose={() => setConfirmation(false)}
+        >
+            <SuccessModal cancel={setConfirmation} />
+        </Modal>
+
       <ResponsiveModal setModalVisible={props.setModalVisible}>
 
               <View style={{height:20}}></View> {/* <= Top Gap */}
               {formDataInit ? <View style={{width:'100%', backgroundColor:''}}>{buildTable()}</View> : null}
               <View style={{height:80, width:150, alignSelf:'center', justifyContent:'center'}}>
                 {/* <Button title="Submit" ></Button> */}
+                <View style={{height:18}} />
                 <CustomButton title="Submit" onPress={() => submitForm()} color='#8183FF' />
+                <View style={{height:10}} />
+                <View style={{backgroundColor:'', justifyContent:'center', alignItems:'center'}}>
+                  <Pressable style={{}} activeOpacity={1} onPress={()=>{setConfirmModalVisible(true)}}>
+                    <View style={{cursor: 'pointer', width: 140, height:30, marginTop:-2, marginRight:0, borderRadius:15, backgroundColor:'rgba(245, 0, 0, 0.6)', alignItems:'center', justifyContent:'center'}}>
+                        <Text style={{color:'white'}}>Remove Household</Text>
+                    </View>
+                  </Pressable>
+                <View style={{height:10}}></View>
+                </View>
               </View>
               
       </ResponsiveModal>

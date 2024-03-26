@@ -9,6 +9,7 @@
     "@babel/preset-env": "^7.1.6",
     "@babel/runtime": "^7.24.0",
     "@expo/webpack-config": "^18.0.1",
+    "@react-native-picker/picker": "2.4.8",
     "@shopify/react-native-skia": "0.1.172",
     "@types/react": "~18.0.27",
     "asyncstorage-down": "^4.2.0",

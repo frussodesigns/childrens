@@ -2,17 +2,16 @@ import { StyleSheet, Text, View, Modal } from 'react-native'
 import {useWindowDimensions, TouchableOpacity, ScrollView, Animated} from 'react-native';
 import { Link, Stack, useRouter, useFocusEffect, Redirect } from "expo-router";
 import { getAuth, isSignInWithEmailLink, signInWithEmailLink, onAuthStateChanged } from "firebase/auth";
-import { useAppContext } from '../hooks/useAppContext';
+import { useAppContext } from '../hooks/useAppContext.js';
 import React, { useState, useEffect, useRef } from 'react'
-import NeuView from '../components/NeuView'
-import MyTable from '../components/table';
-import { LoadFonts } from '../presets';
-import HomefindingModal from '../components/HomefindingModal';
+import NeuView from '../components/NeuView.js'
+import MyTable from '../components/table.js';
+import { LoadFonts } from '../presets.js';
+import HomefindingModal from '../components/HomefindingModal.js';
 import { SyncedScrollViewContext, syncedScrollViewState } from '../contexts/SyncedScrollViewContext.js'
-import { SyncedScrollView } from '../components/SyncedScrollView';
+import { SyncedScrollView } from '../components/SyncedScrollView.js';
 import { FontAwesome } from '@expo/vector-icons';
-import { getHomefindingData } from '../apiCalls';
-import SvgArrow from '../assets/arrow';
+import { getHomefindingData } from '../apiCalls.js';
 
     const specs = {
     groupings: [
@@ -1411,11 +1410,8 @@ const Homefinding = () => {
     //Initial Fetch One Time Call Workaround (OnAuthStateChanged would fire 19x if directly inside)
     useEffect(() => {
       console.log('initial fetch')
-      if (!dataFetched && !state.homefindingLogs) {
+      if (!dataFetched && !state.docLogs) {
         getHomefindingData(pgLen, pgData, setError, setDocData, setResults, dispatch)
-        setDataFetched(true)
-      }
-      if (state.homefindingLogs){
         setDataFetched(true)
       }
       if (!statsFetched && !state.docStats) 
@@ -1437,85 +1433,9 @@ const Homefinding = () => {
 
     useEffect(() => {
       console.log(state.homefindingLogs)
-      
-      filterData(convertServerData(state.homefindingLogs), filter)
+      filterData(state.homefindingLogs, filter)
     }, [state.homefindingLogs])
     
-    const convertServerData = (data) => {
-      let convertedData = []
-
-      for (let item in data) {
-        console.log(Object.keys(data[item]));
-        const newItem = {
-          // index: item,
-          _id: data[item]._id,
-          id: data[item].id,
-          status: data[item].status,
-          numAdults: data[item].basics.numAdults,
-          lastName: data[item].basics.lastname,
-          parent1: data[item].basics.parent1.firstname,
-          parent2: data[item].basics.parent2.firstname,
-          birthCertificates: data[item].documents.birthCertificates.receipt,
-          ss: data[item].documents.ss.receipt,
-          lease: data[item].documents.lease.receipt,
-          marriageCertificate: data[item].documents.marriageCertificate.receipt,
-          passports: data[item].documents.passport.receipt,
-          driversLicenses: data[item].documents.driversLicense.receipt,
-          cableBill: data[item].documents.cableBill.receipt,
-          phoneBill: data[item].documents.phoneBill.receipt,
-          income: data[item].documents.income.receipt,
-          w2s: data[item].documents.w2.receipt,
-          elecBill: data[item].documents.electricBill.receipt,
-          carInsurance: data[item].documents.carInsurance.receipt,
-          carRegistration: data[item].documents.carRegistration.receipt,
-          vaccines: data[item].documents.vaccines.receipt,
-          selClearance: data[item].documents.selClearance.receipt,
-          fingerprints: data[item].documents.fingerprints.receipt,
-          submissionOfDocuments: data[item].viabilityScore.submissionOfDocuments,
-          financialViability: data[item].viabilityScore.financialViability,
-          creativity: data[item].viabilityScore.creativity,
-          athletics: data[item].viabilityScore.athletics,
-          academics: data[item].viabilityScore.academics,
-          questCreativity: data[item].questionnaire.questCreativity,
-          questAthletics: data[item].questionnaire.questAthletics,
-          questAcademics: data[item].questionnaire.questAcademics,
-          recruiter: data[item].recruitmentData.recruiter[0],
-          location: data[item].recruitmentData.location[0],
-          notes: data[item].recruitmentData.note,
-          dateOfFirstContact: data[item].recruitmentData.dateOfFirstContact,
-          dateOfConfirmation: data[item].recruitmentData.dateOfConfirmation,
-          documentCompletion: null,
-        
-          }
-
-          convertedData.push(newItem)
-        
-      }
-
-      return convertedData
-    }
-
-    const calculateDocCompletion = (item) => {
-      let submittedCount = 0
-      if (item.birthCertificates == true) submittedCount++
-      if (item.ss == true) submittedCount++
-      if (item.lease == true) submittedCount++
-      if (item.marriageCertificate == true) submittedCount++
-      if (item.passports == true) submittedCount++
-      if (item.driversLicenses == true) submittedCount++
-      if (item.cableBill == true) submittedCount++
-      if (item.phoneBill == true) submittedCount++
-      if (item.income == true) submittedCount++
-      if (item.w2s == true) submittedCount++
-      if (item.elecBill == true) submittedCount++
-      if (item.carInsurance == true) submittedCount++
-      if (item.carRegistration == true) submittedCount++
-      if (item.vaccines == true) submittedCount++
-      if (item.selClearance == true) submittedCount++
-      if (item.fingerprints == true) submittedCount++
-
-      return ((submittedCount / 16) * 100)
-    }
 
     ////////////////////////////////
 
@@ -2081,7 +2001,7 @@ const Homefinding = () => {
     //on filter change
     useEffect(() => {
       console.log('filter changed')
-      filterData(convertServerData(state.homefindingLogs), filter)
+      filterData(state.homefindingLogs, filter)
       console.log(testData)
     }, [filter])
     
@@ -2131,10 +2051,6 @@ const Homefinding = () => {
                 </View>
 
                 {/* Table */}
-                {!dataFetched ?
-                <View style={{justifyContent: 'center', alignItems: 'center'}}>
-                  <Text style={{marginTop: '20%'}}>Loading</Text>
-                </View> :
                 <View style={{flex:1, flexDirection:'row', width: '100%', backgroundColor:'' , padding: 20, paddingTop:0, marginTop:0, gap: 20}} onLayout={tableLayout}>
                     <View style={[styles.neu, {flexDirection:'row', borderRadius: 12, backgroundColor:'#F9F9F9', flex: 1, display: 'flex', alignContent: 'center', justifyContent: 'center'}]}>
                         <View style={[styles.secondShadow, {flex:1, flexDirection:'column', borderRadius:12, alignItems:'center'}]}>
@@ -2189,7 +2105,7 @@ const Homefinding = () => {
                                 
                                 
                                 {/* FILTERS */}
-                                <Text style={{marginTop:3.5, marginRight:20 }}>{testData.length > 0 && 'Results: ' + testData.length}</Text>
+                                <Text style={{marginTop:3.5, marginRight:20 }}>Results: 200</Text>
                                 {/* {width > 800 && <View style={{flex:1}}></View>} */}
                                 <Text style={{marginTop:3.5, marginRight:3}}>Filters:</Text>
                                 <TouchableOpacity onPress={()=>setFilter('Potential')}
@@ -2292,7 +2208,7 @@ const Homefinding = () => {
                                       <View style={{marginTop: 5, backgroundColor:''}}>
                                         {testData && testData.map((item, key) => 
 
-                                          <TouchableOpacity onPress={() => handlePress(item.id, key)} style={{
+                                          <TouchableOpacity onPress={() => handlePress(item.id, item.id)} style={{
                                             flex:1,
                                             alignSelf: 'center',
                                             marginBottom:5,
@@ -2305,7 +2221,7 @@ const Homefinding = () => {
                                             // cursor: 'pointer'
                                           }}>
                                               <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:100}}>
-                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5, fontSize: width > 800 ? null : 18}}>{item.lastName}</Text>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop:5, fontSize: width > 800 ? null : 18}}>{item.basics.lastname}</Text>
                                               </ScrollView>
                                               {/* <ScrollView horizontal={false} showsHorizontalScrollIndicator={false} style={{width:180}}>
                                                 <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.Documents}</Text>
@@ -2387,7 +2303,7 @@ const Homefinding = () => {
                                       <View style={{marginTop: 5, backgroundColor:''}}>
                                         {testData && testData.map((item, key) => 
                                           
-                                          <TouchableOpacity  onPress={() => handlePress(item.id, key)}  style={{
+                                          <TouchableOpacity  onPress={() => handlePress(item.id, item.id)}  style={{
                                             flex:1,
                                             alignSelf: 'center',
                                             marginBottom:5,
@@ -2403,22 +2319,22 @@ const Homefinding = () => {
                                                 <Text numberOfLines={1} style={{marginLeft:20, marginTop:5}}>{item.title}</Text>
                                               </ScrollView> */}
                                               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{calculateDocCompletion(item) + '%'}</Text>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.viabilityScore.submissionOfDocuments && item.viabilityScore.submissionOfDocuments + '%'}</Text>
                                               </ScrollView>
                                               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.submissionOfDocuments && item.submissionOfDocuments + "/10"}</Text>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.viabilityScore.submissionOfDocuments && item.viabilityScore.submissionOfDocuments + "/10"}</Text>
                                               </ScrollView>
                                               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.financialViability && item.financialViability + "/10"}</Text>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.viabilityScore.financialViability && item.viabilityScore.financialViability + "/10"}</Text>
                                               </ScrollView>
                                               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.academics && item.academics + "/10"}</Text>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.viabilityScore.academics && item.viabilityScore.academics + "/10"}</Text>
                                               </ScrollView>
                                               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.creativity && item.creativity + "/10"}</Text>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.viabilityScore.creativity && item.viabilityScore.creativity + "/10"}</Text>
                                               </ScrollView>
                                               <ScrollView horizontal={true} showsHorizontalScrollIndicator={false} style={{width:180}}>
-                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.athletics && item.athletics + "/10"}</Text>
+                                                <Text numberOfLines={1} style={{marginLeft:20, marginTop: width > 800 ? 5: 8, fontSize: width > 800 ? null : 18}}>{item.viabilityScore.athletics && item.viabilityScore.athletics + "/10"}</Text>
                                               </ScrollView>
                                             </TouchableOpacity>
                                         )}
@@ -2430,39 +2346,16 @@ const Homefinding = () => {
                                   </ScrollView>
 
                             </View>
-
-                          {/* Table Page Navigation */}
-                          {width < 800 ? null :
-                            <View style={{flexDirection:'row', backgroundColor: '', width: '100%', height: 40, bottom: 60, justifyContent: 'center', gap: 20 }}>
-                                  <TouchableOpacity onPress={() => decPage()}>
-                                    <View style={[styles.neu, {cursor: 'pointer', borderRadius: 100, backgroundColor:'#F9F9F9', width: '40px', height: '100%', alignSelf: 'center', justifyContent: 'center',}]}>
-                                      <View style={{width:'40%', height:'40%', alignSelf:'center'}}>
-                                        <SvgArrow style={{transform: [{ rotateZ: '-180deg' }], color:'grey' }} />
-                                      </View>
-                                    </View>
-                                  </TouchableOpacity>
-                                  <View style={[styles.neu, {borderRadius: 100, backgroundColor:'#F9F9F9', width: '100px', height: '100%', alignSelf: 'center', alignItems:'center', justifyContent:'center'}]}>
-                                    <Text>{pgData+1} / { results && Math.ceil(results/pgLen)}</Text>
-                                  </View>
-                                  <TouchableOpacity onPress={() => incPage()}>
-                                    <View style={[styles.neu, {cursor: 'pointer', borderRadius: 100, backgroundColor:'#F9F9F9', width: '40px', height: '100%', alignSelf: 'center', justifyContent: 'center',}]}>
-                                      <View style={{width:'40%', height:'40%', alignSelf:'center'}}>
-                                        <SvgArrow style={{transform: [{ rotateZ: '0deg' }], color:'grey' }} />
-                                      </View>
-                                    </View>
-                                  </TouchableOpacity>
-                            </View>
-                            }
-
-
                             </View> 
-         
+                            
 
+                            {/* {state.docLogs &&
+                            <MyTable obj={state.docLogs} columns={columns} width='100%' height='90%' sc={4} sr={0} handlePress={handlePress} viewWidth={tableWidth} />
+                            } */}
+                        {/* </View> */}
                         </View>
                     </View>
                 </View>
-                // Loading
-                }
                 {width > 800 ? null :
                   <View style={{backgroundColor: '', height:88, width: '100%'}}>
 
