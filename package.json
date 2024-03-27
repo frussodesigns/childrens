@@ -26,6 +26,7 @@
     "expo-status-bar": "~1.4.2",
     "firebase": "^9.21.0",
     "fs": "^0.0.1-security",
+    "moti": "^0.28.1",
     "node": "20.2.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "react": "18.2.0",

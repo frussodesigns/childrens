@@ -26,10 +26,13 @@ import {useWindowDimensions} from 'react-native';
 import {useState, useEffect} from "react"
 import ReportsModal from "../components/ReportsModal";
 import { useReactPath } from "../hooks/useReactPath";
+import { useAppContext } from "../hooks/useAppContext";
+import Loader from "../components/Loader";
 
 
 
 export default function Layout() {
+  // const { state, dispatch } = useAppContext()
   const auth = getAuth()
   const user = auth.currentUser
   const {height, width} = useWindowDimensions();
@@ -39,6 +42,7 @@ export default function Layout() {
   const [isHovered, setIsHovered] = useState(false)
   const [menuWidth, setMenuWidth] = useState('20%')
   const [desktopMenu, setDesktopMenu] = useState(true)
+  const [loaded, setLoaded] = useState(false)
 
   const startValue = 3.8; // The starting percent value
   const endValue = 20; // The ending percent value
@@ -95,10 +99,14 @@ export default function Layout() {
   
 
   return (<>
+     {loaded == false && 
+     <Loader loaded={loaded} setLoaded={setLoaded} />
+          }
   <View style={{flexDirection:'row', height:'100%', backgroundColor:''}}>
     
     {width < 800 || !desktopMenu ? null : <>
-    <Animated.View  style={[{width: `${interpolatedWidth}%`, maxWidth:'12.5em', minWidth:'3.5em', zIndex:1}, styles.neu]}>
+    
+    <Animated.View  style={[{width: `${interpolatedWidth}%`, maxWidth:'12.5em', minWidth:'3.5em', zIndex:.5}, styles.neu]}>
         <CustomMenu setIsHovered={setIsHovered} setReportsModalVisible={setReportsModalVisible} animationValue={animation.value} winWidth={width} winHeight={height} user={user} />
     </Animated.View>
 
@@ -116,6 +124,8 @@ export default function Layout() {
     </Link> */}
     </>
     }
+
+    
 
     <View  style={{backgroundColor: '', flex: 1}}>
       <View style={{height:'100%', backgroundColor:'rgb(242,242,242)'}}>
@@ -147,6 +157,8 @@ export default function Layout() {
             >
             <ReportsModal setModalVisible={setReportsModalVisible} />
         </Modal>
+
+      
 
     </>
   )
